@@ -1,0 +1,3 @@
+/*
+ Custom javascript code for Boral pages
+*/
