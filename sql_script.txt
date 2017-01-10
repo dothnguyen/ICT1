@@ -1,189 +1,242 @@
-﻿CREATE
-  TABLE daily
-  (
-    daily_id       int NOT NULL ,
-    d_created_date DATE ,
-    d_comments     VARCHAR (60) ,
-    d_checklist1   VARCHAR (30) ,
-    d_checklist2   VARCHAR (30) ,
-    d_checklist3   VARCHAR (30) ,
-    d_checklist4   VARCHAR (30) ,
-    d_checklist5   VARCHAR (30) ,
-    d_checklist6   VARCHAR (30) ,
-    d_checklist7   VARCHAR (30) ,
-    d_checklist8   VARCHAR (30) ,
-    d_checklist9   VARCHAR (30) ,
-    site_alloc_id  int NOT NULL
-  ) ;
-ALTER TABLE daily ADD CONSTRAINT daily_PK PRIMARY KEY ( daily_id ) ;
+﻿--
+-- Table structure for table `daily`
+--
 
+CREATE TABLE `daily` (
+  `daily_id` int(11) NOT NULL,
+  `d_created_date` date DEFAULT NULL,
+  `d_comments` varchar(60) DEFAULT NULL,
+  `d_checklist1` varchar(30) DEFAULT NULL,
+  `d_checklist2` varchar(30) DEFAULT NULL,
+  `d_checklist3` varchar(30) DEFAULT NULL,
+  `d_checklist4` varchar(30) DEFAULT NULL,
+  `d_checklist5` varchar(30) DEFAULT NULL,
+  `d_checklist6` varchar(30) DEFAULT NULL,
+  `d_checklist7` varchar(30) DEFAULT NULL,
+  `d_checklist8` varchar(30) DEFAULT NULL,
+  `d_checklist9` varchar(30) DEFAULT NULL,
+  `site_alloc_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `monthly`
+--
 
-CREATE
-  TABLE monthly
-  (
-    monthly_id     int NOT NULL ,
-    m_created_date DATE ,
-    m_comments     VARCHAR (60) ,
-    m_checklist1   VARCHAR (30) ,
-    m_checklist2   VARCHAR (30) ,
-    m_checklist3   VARCHAR (30) ,
-    m_checklist4   VARCHAR (30) ,
-    m_checklist5   VARCHAR (30) ,
-    m_checklist6   VARCHAR (30) ,
-    m_checklist7   VARCHAR (30) ,
-    m_checklist8   VARCHAR (30) ,
-    m_checklist9   VARCHAR (30) ,
-    site_alloc_id  int NOT NULL
-  ) ;
-ALTER TABLE monthly ADD CONSTRAINT monthly_PK PRIMARY KEY ( monthly_id ) ;
+CREATE TABLE `monthly` (
+  `monthly_id` int(11) NOT NULL,
+  `m_created_date` date DEFAULT NULL,
+  `m_comments` varchar(60) DEFAULT NULL,
+  `m_checklist1` varchar(30) DEFAULT NULL,
+  `m_checklist2` varchar(30) DEFAULT NULL,
+  `m_checklist3` varchar(30) DEFAULT NULL,
+  `m_checklist4` varchar(30) DEFAULT NULL,
+  `m_checklist5` varchar(30) DEFAULT NULL,
+  `m_checklist6` varchar(30) DEFAULT NULL,
+  `m_checklist7` varchar(30) DEFAULT NULL,
+  `m_checklist8` varchar(30) DEFAULT NULL,
+  `m_checklist9` varchar(30) DEFAULT NULL,
+  `site_alloc_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `representative_allocated`
+--
 
+CREATE TABLE `representative_allocated` (
+  `site_alloc_id` int(11) NOT NULL,
+  `site_rep_allocated_date` date DEFAULT NULL,
+  `site_rep_active_status` varchar(60) DEFAULT NULL,
+  `site_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE
-  TABLE representative_allocated
-  (
-    site_alloc_id          int NOT NULL ,
-    site_rep_allocated_date DATE ,
-    site_rep_active_status  VARCHAR (60) ,
-    site_id                 int NOT NULL ,
-    user_id                 int NOT NULL
-  ) ;
-ALTER TABLE representative_allocated ADD CONSTRAINT representative_allocated_PK
-PRIMARY KEY ( site_alloc_id ) ;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `site`
+--
 
+CREATE TABLE `site` (
+  `site_id` int(11) NOT NULL,
+  `site_name` varchar(30) NOT NULL,
+  `site_created_date` date DEFAULT NULL,
+  `address` varchar(100) DEFAULT NULL,
+  `telephone` varchar(12) DEFAULT NULL,
+  `manager_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- --------------------------------------------------------
 
-CREATE
-  TABLE site
-  (
-    site_id           int NOT NULL ,
-    site_name         VARCHAR (30) NOT NULL ,
-    site_created_date DATE
-  ) ;
-ALTER TABLE site ADD CONSTRAINT site_PK PRIMARY KEY ( site_id ) ;
+--
+-- Table structure for table `User_tbl`
+--
 
+CREATE TABLE `User_tbl` (
+  `user_id` int(11) NOT NULL,
+  `firstname` varchar(30) DEFAULT NULL,
+  `lastname` varchar(30) DEFAULT NULL,
+  `username` varchar(30) NOT NULL,
+  `password` varchar(32) NOT NULL,
+  `email` varchar(30) DEFAULT NULL,
+  `role` varchar(10) DEFAULT NULL,
+  `manager_id` int(11) DEFAULT NULL,
+  `last_login` date DEFAULT NULL,
+  `created_date` date DEFAULT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `User_tbl`
+--
 
+INSERT INTO `User_tbl` (`user_id`, `firstname`, `lastname`, `username`, `password`, `email`, `role`, `manager_id`, `last_login`, `created_date`) VALUES
+(5, 'Ravi', 'Malapati', 'ravi', '88a9c0747954ee74cdeade4075e0d1b8', 'ravitejamalapati@gmail.com', 'manager', NULL, NULL, '2017-01-10'),
+(6, 'Shanil', 'Frank', 'shane', '4318de693209a2ffa147ee056f54a943', 'shanilfrank@gmail.com', 'user', 5, NULL, '2017-01-10'),
+(7, 'Sukhbir', 'Singbal', 'sukhbir', '0d57046b583ab6a64ea1eae5080f0626', 'sukhbirsinghbal@gmail.com', 'user', 5, NULL, '2017-01-10');
 
-CREATE
-  TABLE user_tbl
-  (
-    user_id      int NOT NULL ,
-    username     VARCHAR (30) NOT NULL ,
-    password     VARCHAR (30) NOT NULL ,
-    email        VARCHAR (30) ,
-    created_date DATE ,
-    last_login   DATE ,
-    manager_id   int NOT NULL
-  ) ;
-ALTER TABLE user_tbl ADD CONSTRAINT user_PK PRIMARY KEY ( user_id ) ;
+-- --------------------------------------------------------
 
+--
+-- Table structure for table `weekly`
+--
 
+CREATE TABLE `weekly` (
+  `weekly_id` int(11) NOT NULL,
+  `w_created_date` date DEFAULT NULL,
+  `w_comments` varchar(60) DEFAULT NULL,
+  `w_checklist1` varchar(30) DEFAULT NULL,
+  `w_checklist2` varchar(30) DEFAULT NULL,
+  `w_checklist3` varchar(30) DEFAULT NULL,
+  `w_checklist4` varchar(30) DEFAULT NULL,
+  `w_checklist5` varchar(30) DEFAULT NULL,
+  `w_checklist6` varchar(30) DEFAULT NULL,
+  `w_checklist7` varchar(30) DEFAULT NULL,
+  `w_checklist8` varchar(30) DEFAULT NULL,
+  `w_checklist9` varchar(30) DEFAULT NULL,
+  `site_alloc_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Indexes for dumped tables
+--
 
-CREATE
-  TABLE weekly
-  (
-    weekly_id      int NOT NULL ,
-    w_created_date DATE ,
-    w_comments     VARCHAR (60) ,
-    w_checklist1   VARCHAR (30) ,
-    w_checklist2   VARCHAR (30) ,
-    w_checklist3   VARCHAR (30) ,
-    w_checklist4   VARCHAR (30) ,
-    w_checklist5   VARCHAR (30) ,
-    w_checklist6   VARCHAR (30) ,
-    w_checklist7   VARCHAR (30) ,
-    w_checklist8   VARCHAR (30) ,
-    w_checklist9   VARCHAR (30) ,
-    site_alloc_id  int NOT NULL
-  ) ;
-ALTER TABLE weekly ADD CONSTRAINT weekly_PK PRIMARY KEY ( weekly_id ) ;
+--
+-- Indexes for table `daily`
+--
+ALTER TABLE `daily`
+  ADD PRIMARY KEY (`daily_id`),
+  ADD KEY `daily_representative_allocated_FK` (`site_alloc_id`);
 
+--
+-- Indexes for table `monthly`
+--
+ALTER TABLE `monthly`
+  ADD PRIMARY KEY (`monthly_id`),
+  ADD KEY `monthly_representative_allocated_FK` (`site_alloc_id`);
 
+--
+-- Indexes for table `representative_allocated`
+--
+ALTER TABLE `representative_allocated`
+  ADD PRIMARY KEY (`site_alloc_id`),
+  ADD KEY `representative_allocated_site_FK` (`site_id`),
+  ADD KEY `representative_allocated_user_FK` (`user_id`);
 
+--
+-- Indexes for table `site`
+--
+ALTER TABLE `site`
+  ADD PRIMARY KEY (`site_id`),
+  ADD KEY `site_user_FK` (`manager_id`);
 
+--
+-- Indexes for table `User_tbl`
+--
+ALTER TABLE `User_tbl`
+  ADD PRIMARY KEY (`user_id`),
+  ADD KEY `user_user_FK` (`manager_id`);
 
+--
+-- Indexes for table `weekly`
+--
+ALTER TABLE `weekly`
+  ADD PRIMARY KEY (`weekly_id`),
+  ADD KEY `weekly_representative_allocated_FK` (`site_alloc_id`);
 
-ALTER TABLE daily ADD CONSTRAINT daily_representative_allocated_FK FOREIGN KEY
-( site_alloc_id ) REFERENCES representative_allocated ( site_alloc_id ) ;
+--
+-- AUTO_INCREMENT for dumped tables
+--
 
+--
+-- AUTO_INCREMENT for table `daily`
+--
+ALTER TABLE `daily`
+  MODIFY `daily_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `monthly`
+--
+ALTER TABLE `monthly`
+  MODIFY `monthly_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `representative_allocated`
+--
+ALTER TABLE `representative_allocated`
+  MODIFY `site_alloc_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `site`
+--
+ALTER TABLE `site`
+  MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `User_tbl`
+--
+ALTER TABLE `User_tbl`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
+--
+-- AUTO_INCREMENT for table `weekly`
+--
+ALTER TABLE `weekly`
+  MODIFY `weekly_id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- Constraints for dumped tables
+--
 
+--
+-- Constraints for table `daily`
+--
+ALTER TABLE `daily`
+  ADD CONSTRAINT `daily_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
+--
+-- Constraints for table `monthly`
+--
+ALTER TABLE `monthly`
+  ADD CONSTRAINT `monthly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
-ALTER TABLE monthly ADD CONSTRAINT monthly_representative_allocated_FK FOREIGN
-KEY ( site_alloc_id ) REFERENCES representative_allocated ( site_alloc_id ) ;
+--
+-- Constraints for table `representative_allocated`
+--
+ALTER TABLE `representative_allocated`
+  ADD CONSTRAINT `representative_allocated_site_FK` FOREIGN KEY (`site_id`) REFERENCES `site` (`site_id`),
+  ADD CONSTRAINT `representative_allocated_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user_tbl` (`user_id`);
 
+--
+-- Constraints for table `site`
+--
+ALTER TABLE `site`
+  ADD CONSTRAINT `site_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `user_tbl` (`user_id`);
 
+--
+-- Constraints for table `User_tbl`
+--
+ALTER TABLE `User_tbl`
+  ADD CONSTRAINT `user_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `user_tbl` (`user_id`);
 
-
-ALTER TABLE representative_allocated ADD CONSTRAINT
-representative_allocated_site_FK FOREIGN KEY ( site_id ) REFERENCES site (
-site_id ) ;
-
-
-
-
-ALTER TABLE representative_allocated ADD CONSTRAINT
-representative_allocated_user_FK FOREIGN KEY ( user_id ) REFERENCES user_tbl (
-user_id ) ;
-
-
-ALTER TABLE user_tbl ADD CONSTRAINT user_user_FK FOREIGN KEY ( manager_id )
-REFERENCES user_tbl ( user_id ) ;
-
-
-
-
-ALTER TABLE weekly ADD CONSTRAINT weekly_representative_allocated_FK FOREIGN
-KEY ( site_alloc_id ) REFERENCES representative_allocated ( site_alloc_id ) ;
-
-
-
-
--- NguyenDo updated 10/01/2017
-
--- Modify USER_TBL, add a column for FirstName and LastName
-ALTER TABLE USER_TBL ADD firstname varchar(30);
-ALTER TABLE USER_TBL ADD lastname varchar(30);
-
--- let the ID auto-incremental
-ALTER TABLE `user_tbl` CHANGE `user_id` `user_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `daily` CHANGE `daily_id` `daily_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `monthly` CHANGE `monthly_id` `monthly_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `representative_allocated` CHANGE `site_alloc_id` `site_alloc_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `site` CHANGE `site_id` `site_id` INT(11) NOT NULL AUTO_INCREMENT;
-
-ALTER TABLE `weekly` CHANGE `weekly_id` `weekly_id` INT(11) NOT NULL AUTO_INCREMENT;
-
--- manager_id is nullable
-ALTER TABLE `user_tbl` CHANGE `manager_id` `manager_id` INT(11) NULL;
-
--- change password to be 32 chars
-ALTER TABLE `User_tbl` CHANGE `password` `password` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
-
--- add some users
-
--- manager
-INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date)
-            VALUES('Ravi', 'Malapati', 'ravi', md5('ravi01'), 'ravitejamalapati@gmail.com', NOW());
-
--- representatives
-INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date, manager_id)
-            VALUES('Shanil', 'Frank', 'shane', md5('shane01'), 'shanilfrank@gmail.com', NOW(), 5);
-
-INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date, manager_id)
-            VALUES('Sukhbir', 'Singbal', 'sukhbir', md5('sukhbir01'), 'sukhbirsinghbal@gmail.com', NOW(), 5);
-
-
--- NguyenDo updated 10/01/2017 : 14:20
--- add role column to user_tbl
-ALTER TABLE USER_TBL ADD role varchar(10);
+--
+-- Constraints for table `weekly`
+--
+ALTER TABLE `weekly`
+  ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
