@@ -1,8 +1,7 @@
 <?php
     // check for login
     require_once "db.php";
-    require_once "customer_functions.php";
-    require_once "other_functions.php";
+    require_once "user_functions.php";
 
     session_start();
 
@@ -38,7 +37,7 @@
                 // check email and password
                 $conn = db_connect();
 
-                $ret = check_customer($conn, $email, $pwd);
+                $ret = check_user($conn, $email, $pwd);
 
                 if (!ret) {
                     array_push($msg, "Invalid email address or password.");
@@ -78,47 +77,15 @@
     <title>Login</title>
 </head>
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
-    <div class="container">
-        <button type="button" class="navbar-toggle pull-right" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <div class="navbar-header">
-            <a href="#" class="navbar-brand">MATRIX Chocolates</a>
-        </div>
 
-        <div class="navbar-ex1-collapse navbar-collapse collapse" role="navigation">
-            <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">HOME</a></li>
-                <li><a href="#">HOW TO ORDER</a></li>
-                <li><a href="#">CONTACT US</a></li>
-                <li><a href="#">Log in</a></li>
-            </ul>
-        </div>
-    </div>
-</nav>
-
-<div class="container">
-    <div class="row">
-        <div class="col-xs-12">
-            <ul class="breadcrumb">
-                <li><a href="index.php">Home</a></li>
-                <li class="active">Login</li>
-
-            </ul>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-offset-3 col-sm-6">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="panel-title">Login </h2>
-                </div>
+<div class="container login-container">
+    <div class="row ">
+        <div class="col-xs-12 col-sm-offset-3 col-sm-6 ">
+            <div class="panel panel-default login-panel">
                 <div class="panel-body">
+
+                    <img src="images/logo.png" class="img-responsive center-block logo-img">
+
                     <form class="form-horizontal" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post">
                         <?php if (!empty($msg))  { ?>
                         <div class="alert alert-danger">
@@ -129,28 +96,19 @@
                         </div>
                         <?php }?>
                         <div class="form-group">
-                            <label for="inputEmail" class="col-sm-2 control-label">Email</label>
-                            <div class="col-sm-10">
+                            <label for="inputEmail" class="col-sm-3 control-label">Email</label>
+                            <div class="col-sm-9">
                                 <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword" class="col-sm-2 control-label">Password</label>
-                            <div class="col-sm-10">
+                            <label for="inputPassword" class="col-sm-3 control-label">Password</label>
+                            <div class="col-sm-9">
                                 <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password">
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="checkRemember"> Remember me
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-8">
+                            <div class="col-sm-offset-3 col-sm-6">
                                 <button type="submit" class="btn btn-default btn-block" name="login">Login</button>
                             </div>
                         </div>
@@ -160,11 +118,6 @@
         </div>
     </div>
 </div>
-
-</div>
-
-<br><br><br><br><br><br><br>
-<footer class="container center">Copyright Matrix Chocolates - 2016</footer>
 
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
