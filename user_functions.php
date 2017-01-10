@@ -12,15 +12,15 @@ require_once ("db.php");
 /**
  * Check email and password to login
  * @param $conn
- * @param $cus_email
+ * @param $username
  * @param $cus_pwd
  *
  * @return true cus exist
  */
-function check_user($conn, $cus_email, $cus_pwd) {
+function check_user($conn, $username, $cus_pwd) {
     $encrypted_pwd = md5($cus_pwd);
 
-    $sql = "SELECT * FROM User_tbl WHERE username = '$cus_email' AND password = '$encrypted_pwd'";
+    $sql = "SELECT * FROM User_tbl WHERE username = '$username' AND password = '$encrypted_pwd'";
 
     //echo $sql;
 
@@ -39,11 +39,11 @@ function check_user($conn, $cus_email, $cus_pwd) {
 
 /**
  * @param $conn
- * @param $email
+ * @param $username
  * @return customer row
  */
-function get_user($conn, $email) {
-    $sql = "SELECT * FROM user_tbl WHERE email = '$email'";
+function get_user($conn, $username) {
+    $sql = "SELECT * FROM user_tbl WHERE username = '$username'";
 
     $ret = $conn->query($sql);
 

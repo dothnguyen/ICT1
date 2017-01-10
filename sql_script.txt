@@ -1,0 +1,184 @@
+﻿CREATE
+  TABLE daily
+  (
+    daily_id       int NOT NULL ,
+    d_created_date DATE ,
+    d_comments     VARCHAR (60) ,
+    d_checklist1   VARCHAR (30) ,
+    d_checklist2   VARCHAR (30) ,
+    d_checklist3   VARCHAR (30) ,
+    d_checklist4   VARCHAR (30) ,
+    d_checklist5   VARCHAR (30) ,
+    d_checklist6   VARCHAR (30) ,
+    d_checklist7   VARCHAR (30) ,
+    d_checklist8   VARCHAR (30) ,
+    d_checklist9   VARCHAR (30) ,
+    site_alloc_id  int NOT NULL
+  ) ;
+ALTER TABLE daily ADD CONSTRAINT daily_PK PRIMARY KEY ( daily_id ) ;
+
+
+
+
+CREATE
+  TABLE monthly
+  (
+    monthly_id     int NOT NULL ,
+    m_created_date DATE ,
+    m_comments     VARCHAR (60) ,
+    m_checklist1   VARCHAR (30) ,
+    m_checklist2   VARCHAR (30) ,
+    m_checklist3   VARCHAR (30) ,
+    m_checklist4   VARCHAR (30) ,
+    m_checklist5   VARCHAR (30) ,
+    m_checklist6   VARCHAR (30) ,
+    m_checklist7   VARCHAR (30) ,
+    m_checklist8   VARCHAR (30) ,
+    m_checklist9   VARCHAR (30) ,
+    site_alloc_id  int NOT NULL
+  ) ;
+ALTER TABLE monthly ADD CONSTRAINT monthly_PK PRIMARY KEY ( monthly_id ) ;
+
+
+
+
+CREATE
+  TABLE representative_allocated
+  (
+    site_alloc_id          int NOT NULL ,
+    site_rep_allocated_date DATE ,
+    site_rep_active_status  VARCHAR (60) ,
+    site_id                 int NOT NULL ,
+    user_id                 int NOT NULL
+  ) ;
+ALTER TABLE representative_allocated ADD CONSTRAINT representative_allocated_PK
+PRIMARY KEY ( site_alloc_id ) ;
+
+
+
+
+CREATE
+  TABLE site
+  (
+    site_id           int NOT NULL ,
+    site_name         VARCHAR (30) NOT NULL ,
+    site_created_date DATE
+  ) ;
+ALTER TABLE site ADD CONSTRAINT site_PK PRIMARY KEY ( site_id ) ;
+
+
+
+
+CREATE
+  TABLE user_tbl
+  (
+    user_id      int NOT NULL ,
+    username     VARCHAR (30) NOT NULL ,
+    password     VARCHAR (30) NOT NULL ,
+    email        VARCHAR (30) ,
+    created_date DATE ,
+    last_login   DATE ,
+    manager_id   int NOT NULL
+  ) ;
+ALTER TABLE user_tbl ADD CONSTRAINT user_PK PRIMARY KEY ( user_id ) ;
+
+
+
+
+CREATE
+  TABLE weekly
+  (
+    weekly_id      int NOT NULL ,
+    w_created_date DATE ,
+    w_comments     VARCHAR (60) ,
+    w_checklist1   VARCHAR (30) ,
+    w_checklist2   VARCHAR (30) ,
+    w_checklist3   VARCHAR (30) ,
+    w_checklist4   VARCHAR (30) ,
+    w_checklist5   VARCHAR (30) ,
+    w_checklist6   VARCHAR (30) ,
+    w_checklist7   VARCHAR (30) ,
+    w_checklist8   VARCHAR (30) ,
+    w_checklist9   VARCHAR (30) ,
+    site_alloc_id  int NOT NULL
+  ) ;
+ALTER TABLE weekly ADD CONSTRAINT weekly_PK PRIMARY KEY ( weekly_id ) ;
+
+
+
+
+
+
+ALTER TABLE daily ADD CONSTRAINT daily_representative_allocated_FK FOREIGN KEY
+( site_alloc_id ) REFERENCES representative_allocated ( site_alloc_id ) ;
+
+
+
+
+ALTER TABLE monthly ADD CONSTRAINT monthly_representative_allocated_FK FOREIGN
+KEY ( site_alloc_id ) REFERENCES representative_allocated ( site_alloc_id ) ;
+
+
+
+
+ALTER TABLE representative_allocated ADD CONSTRAINT
+representative_allocated_site_FK FOREIGN KEY ( site_id ) REFERENCES site (
+site_id ) ;
+
+
+
+
+ALTER TABLE representative_allocated ADD CONSTRAINT
+representative_allocated_user_FK FOREIGN KEY ( user_id ) REFERENCES user_tbl (
+user_id ) ;
+
+
+ALTER TABLE user_tbl ADD CONSTRAINT user_user_FK FOREIGN KEY ( manager_id )
+REFERENCES user_tbl ( user_id ) ;
+
+
+
+
+ALTER TABLE weekly ADD CONSTRAINT weekly_representative_allocated_FK FOREIGN
+KEY ( site_alloc_id ) REFERENCES representative_allocated ( site_alloc_id ) ;
+
+
+
+
+-- NguyenDo updated 10/01/2017
+
+-- Modify USER_TBL, add a column for FirstName and LastName
+ALTER TABLE USER_TBL ADD firstname varchar(30);
+ALTER TABLE USER_TBL ADD lastname varchar(30);
+
+-- let the ID auto-incremental
+ALTER TABLE `user_tbl` CHANGE `user_id` `user_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `daily` CHANGE `daily_id` `daily_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `monthly` CHANGE `monthly_id` `monthly_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `representative_allocated` CHANGE `site_alloc_id` `site_alloc_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `site` CHANGE `site_id` `site_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+ALTER TABLE `weekly` CHANGE `weekly_id` `weekly_id` INT(11) NOT NULL AUTO_INCREMENT;
+
+-- manager_id is nullable
+ALTER TABLE `user_tbl` CHANGE `manager_id` `manager_id` INT(11) NULL;
+
+-- change password to be 32 chars
+ALTER TABLE `User_tbl` CHANGE `password` `password` VARCHAR(32) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL;
+
+-- add some users
+
+-- manager
+INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date)
+            VALUES('Ravi', 'Malapati', 'ravi', md5('ravi01'), 'ravitejamalapati@gmail.com', NOW());
+
+-- representatives
+INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date, manager_id)
+            VALUES('Shanil', 'Frank', 'shane', md5('shane01'), 'shanilfrank@gmail.com', NOW(), 5);
+
+INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date, manager_id)
+            VALUES('Sukhbir', 'Singbal', 'sukhbir', md5('sukhbir01'), 'sukhbirsinghbal@gmail.com', NOW(), 5);

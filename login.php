@@ -2,6 +2,7 @@
     // check for login
     require_once "db.php";
     require_once "user_functions.php";
+    require_once "other_functions.php";
 
     session_start();
 
@@ -17,30 +18,26 @@
         if (isset($_POST['login'])) {
 
             // get login information
-            $email = test_input($_POST['inputEmail']);
+            $username = test_input($_POST['inputUsername']);
             $pwd = test_input($_POST['inputPassword']);
 
-            if (empty($email)) {
-                array_push($msg, "Please input your email.");
+            if (empty($username)) {
+                array_push($msg, "Please input your username.");
             }
 
             if (empty(($pwd))) {
                 array_push($msg, "Please input your password.");
             }
 
-            // check if email or pwd is valid or not
-            if (!empty($email) && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                array_push($msg, "Invalid email address.");
-            }
 
             if (empty($msg)) {
-                // check email and password
+                // check username and password
                 $conn = db_connect();
 
-                $ret = check_user($conn, $email, $pwd);
+                $ret = check_user($conn, $username, $pwd);
 
-                if (!ret) {
-                    array_push($msg, "Invalid email address or password.");
+                if (!$ret) {
+                    array_push($msg, "Invalid username or password.");
                 }
 
                 mysqli_close($conn);
@@ -51,7 +48,7 @@
                 // check email and password
                 $conn = db_connect();
                 // get user info
-                $cus_row = get_customer($conn, $email);
+                $cus_row = get_user($conn, $username);
                 mysqli_close($conn);
 
                 $_SESSION['logged_in'] = true;
@@ -96,9 +93,9 @@
                         </div>
                         <?php }?>
                         <div class="form-group">
-                            <label for="inputEmail" class="col-sm-3 control-label">Email</label>
+                            <label for="inputUsername" class="col-sm-3 control-label">Username</label>
                             <div class="col-sm-9">
-                                <input type="email" class="form-control" id="inputEmail" name="inputEmail" placeholder="Email">
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Username">
                             </div>
                         </div>
                         <div class="form-group">
