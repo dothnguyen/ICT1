@@ -182,3 +182,8 @@ INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_dat
 
 INSERT INTO USER_TBL(firstname, lastname, username, password, email, created_date, manager_id)
             VALUES('Sukhbir', 'Singbal', 'sukhbir', md5('sukhbir01'), 'sukhbirsinghbal@gmail.com', NOW(), 5);
+
+
+-- NguyenDo updated 10/01/2017 : 14:20
+-- add role column to user_tbl
+ALTER TABLE USER_TBL ADD role varchar(10);
