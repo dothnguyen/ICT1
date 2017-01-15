@@ -27,11 +27,13 @@
     <div class="container">
         <div  class="row">
             <div class="col-sm-12 col-md-3">
-                <div class="left-panel"></div>
+                <div class="left-panel text-center">
+                    <a href="" class="btn btn-primary btn-addnew">Add New</a>
+                </div>
             </div>
             <div class="col-sm-12 col-md-9">
                 <div class="right-panel">
-
+                    <div class="page-title"><span>Site List</span></div>
                 </div>
             </div>
         </div>

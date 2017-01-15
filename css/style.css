@@ -65,3 +65,21 @@ html, body {
 .left-panel {
     border: 1px solid red;
 }
+
+.btn-addnew {
+    margin-top: 20px;
+    margin-left: 20px;
+    margin-right: 20px;
+    display: block;
+    padding: 8px;
+}
+
+.right-panel {
+    border: 1px solid red;
+}
+
+.page-title {
+    margin: 10px;
+    font-size: 2em;
+    border-bottom: 1px solid black;
+}
