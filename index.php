@@ -9,6 +9,7 @@ session_start();
 // if not logged in -> redirect to login page
 if (!$_SESSION['logged_in']) {
     header("Location:login.php");
+    exit();
 }
 
 // get logged-in user info

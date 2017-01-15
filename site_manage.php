@@ -23,6 +23,22 @@
 <?php include_once 'header.php';?>
 <?php include_once 'nav.php';?>
 
+<section class="main-content">
+    <div class="container">
+        <div  class="row">
+            <div class="col-sm-12 col-md-3">
+                <div class="left-panel"></div>
+            </div>
+            <div class="col-sm-12 col-md-9">
+                <div class="right-panel">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/script.js"></script>

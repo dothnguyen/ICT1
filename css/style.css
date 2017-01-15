@@ -53,3 +53,15 @@ html, body {
     text-align:center;
 }
 /*ends*/
+
+.main-content,
+.main-content .container,
+.main-content .container .row,
+.main-content .container .row > div,
+.main-content .container .row > div > div {
+    min-height: 500px;
+}
+
+.left-panel {
+    border: 1px solid red;
+}
