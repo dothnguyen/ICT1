@@ -24,3 +24,32 @@ html, body {
     height: 200px;
     margin-bottom: 40px;
 }
+
+
+.header-logo {
+    width: 100px;
+    height: 100px;
+}
+
+.header .user-profile {
+    line-height: 50px;
+    font-size: 2em;
+}
+
+.header .date-time {
+    font-size: 1.6em;
+}
+
+/* For distributed nav items*/
+.navbar-nav {
+    display:table;
+    width:100%;
+    margin: 0;
+}
+
+.navbar-nav > li {
+    float:none;
+    display:table-cell;
+    text-align:center;
+}
+/*ends*/
