@@ -14,8 +14,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
 
     <title>Login</title>
 </head>
@@ -34,6 +34,72 @@
             <div class="col-sm-12 col-md-9">
                 <div class="right-panel">
                     <div class="page-title"><span>Site List</span></div>
+                    <div class="page-content">
+                        <div class="site-list-container">
+                            <table class="table-bordered table-striped table-hover site-table">
+                                <thead>
+                                    <td>No.</td>
+                                    <td>Site Information</td>
+                                    <td>Action</td>
+                                </thead>
+                                <tr>
+                                    <td>1.</td>
+                                    <td>
+                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
+                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-block btn-default">Edit</a>
+                                        <a href="#" class="btn btn-block btn-default">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>2.</td>
+                                    <td>
+                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
+                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-block btn-default">Edit</a>
+                                        <a href="#" class="btn btn-block btn-default">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>3.</td>
+                                    <td>
+                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
+                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-block btn-default">Edit</a>
+                                        <a href="#" class="btn btn-block btn-default">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>4.</td>
+                                    <td>
+                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
+                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-block btn-default">Edit</a>
+                                        <a href="#" class="btn btn-block btn-default">Delete</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>5.</td>
+                                    <td>
+                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
+                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-block btn-default">Edit</a>
+                                        <a href="#" class="btn btn-block btn-default">Delete</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

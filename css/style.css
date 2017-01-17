@@ -83,3 +83,13 @@ html, body {
     font-size: 2em;
     border-bottom: 1px solid black;
 }
+
+.page-content,
+.site-list-container,
+.site-table {
+    width: 100%;
+}
+
+.site-list-container {
+    padding: 8px;
+}
