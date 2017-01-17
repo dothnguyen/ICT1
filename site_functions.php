@@ -11,6 +11,8 @@ require_once ("db.php");
 /**
  * @param $managerId
  */
-function getSitesOfManager($managerId) {
+function get_sites_of_manager($conn, $managerId) {
     $sql = "SELECT * FROM site WHERE manager_id = $managerId";
+
+    return $conn->query($sql);
 }

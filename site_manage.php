@@ -6,6 +6,21 @@
  * Time: 12:17 PM
  */
 
+require_once "db.php";
+require_once "site_functions.php";
+
+session_start();
+
+$conn = db_connect();
+
+// get logged-in user info
+$login_user = $_SESSION['user_info'];
+
+$sites = get_sites_of_manager($conn, $login_user['user_id']);
+
+$idx = 0;
+
+mysqli_close($conn);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,7 +32,7 @@
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Login</title>
+    <title>Sites Management</title>
 </head>
 <body>
 <?php include_once 'header.php';?>
@@ -42,61 +57,27 @@
                                     <td>Site Information</td>
                                     <td>Action</td>
                                 </thead>
-                                <tr>
-                                    <td>1.</td>
-                                    <td>
-                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
-                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-block btn-default">Edit</a>
-                                        <a href="#" class="btn btn-block btn-default">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2.</td>
-                                    <td>
-                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
-                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-block btn-default">Edit</a>
-                                        <a href="#" class="btn btn-block btn-default">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>3.</td>
-                                    <td>
-                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
-                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-block btn-default">Edit</a>
-                                        <a href="#" class="btn btn-block btn-default">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>4.</td>
-                                    <td>
-                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
-                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-block btn-default">Edit</a>
-                                        <a href="#" class="btn btn-block btn-default">Delete</a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>5.</td>
-                                    <td>
-                                        <div><span>Redbank Plains Site</span>-<span>Tel: 03040203049</span></div>
-                                        <div><spa>Address: 31 Lawrie Drive, Redbank Plains, QLD 4301.</spa></div>
-                                    </td>
-                                    <td>
-                                        <a href="#" class="btn btn-block btn-default">Edit</a>
-                                        <a href="#" class="btn btn-block btn-default">Delete</a>
-                                    </td>
-                                </tr>
+                                <?php
+                                    foreach ($sites as $site) {
+                                ?>
+                                        <tr>
+                                            <td class="index-column"><?php echo ($idx + 1)?></td>
+                                            <td class="site-info-column">
+                                                <div>
+                                                    <div><strong><?php echo $site['site_name'];?></strong> - <span>Tel: <?php echo $site['telephone'];?></span></div>
+                                                    <div><spa>Address: <?php echo $site['address'];?></spa></div>
+                                                </div>
+                                            </td>
+                                            <td class="action-column">
+                                                <a href="#" class="btn btn-block btn-default">Edit</a>
+                                                <a href="#" class="btn btn-block btn-default">Delete</a>
+
+                                            </td>
+                                        </tr>
+                                <?php
+                                        $idx++;
+                                    }
+                                ?>
                             </table>
                         </div>
                     </div>

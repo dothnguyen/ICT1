@@ -240,3 +240,4 @@ ALTER TABLE `User_tbl`
 --
 ALTER TABLE `weekly`
   ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
+

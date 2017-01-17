@@ -33,7 +33,6 @@ $page_name = basename($_SERVER['PHP_SELF']);
 
     <?php if ($is_manager) {?>
         <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
-
             <ul class = "nav navbar-nav">
                 <?php if ($page_name == 'manager_home.php') {?>
                     <li class = "active"><a href = "manager_home.php">Reports</a></li>

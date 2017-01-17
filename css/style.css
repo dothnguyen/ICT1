@@ -41,16 +41,19 @@ html, body {
 }
 
 /* For distributed nav items*/
-.navbar-nav {
-    display:table;
-    width:100%;
-    margin: 0;
-}
-
-.navbar-nav > li {
-    float:none;
-    display:table-cell;
-    text-align:center;
+@media (min-width: 768px){
+    .navbar-nav {
+        margin: 0 auto;
+        display: table;
+        table-layout: auto;
+        float: none;
+        width: 100%;
+    }
+    .navbar-nav>li {
+        display: table-cell;
+        float: none;
+        text-align: center;
+    }
 }
 /*ends*/
 
@@ -88,8 +91,37 @@ html, body {
 .site-list-container,
 .site-table {
     width: 100%;
+    font-size: 1.1em;
+}
+
+.site-table > thead > * > * {
+    padding: 10px;
+    text-align: center;
+    background-color: #2b669a;
+    color: white;
 }
 
 .site-list-container {
     padding: 8px;
 }
+
+.index-column {
+    text-align: center;
+}
+
+.site-info-column {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.site-info-column > div > div {
+    line-height: 2.2em;
+}
+
+.action-column {
+    padding: 10px;
+}
+
+
