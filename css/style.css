@@ -57,16 +57,19 @@ html, body {
 }
 /*ends*/
 
-.main-content,
+/*.main-content,
 .main-content .container,
 .main-content .container .row,
 .main-content .container .row > div,
 .main-content .container .row > div > div {
     min-height: 500px;
-}
+}*/
 
-.left-panel {
-    border: 1px solid red;
+@media (min-width: 992px) {
+    .left-panel {
+        border: 1px solid red;
+        min-height: 500px;
+    }
 }
 
 .btn-addnew {

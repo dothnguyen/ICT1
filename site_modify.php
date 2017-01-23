@@ -8,6 +8,7 @@
 
 require_once "db.php";
 require_once "site_functions.php";
+require_once "other_functions.php";
 
 session_start();
 
@@ -94,12 +95,7 @@ if (isset($_POST['btnSave'])) {
 
 <section class="main-content">
     <div class="container">
-        <div class="col-sm-12 col-md-3">
-            <div class="left-panel text-center">
-
-            </div>
-        </div>
-        <div class="col-sm-12 col-md-9">
+        <div class="col-xs-12 col-md-9 col-md-push-3">
             <div class="right-panel">
                 <div class="page-title"><span>Add / Modify Site</span></div>
                 <div class="page-content">
@@ -138,10 +134,10 @@ if (isset($_POST['btnSave'])) {
                             <?php } ?>
                         </div>
                         <div class="form-group button-group">
-                            <div class="col-sm-offset-7 col-sm-2">
+                            <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
                                 <button type="submit" class="btn btn-default btn-block" name="btnSave">Save</button>
                             </div>
-                            <div class="col-sm-2">
+                            <div class="col-sm-3  col-xs-4">
                                 <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
                             </div>
                         </div>
@@ -152,5 +148,16 @@ if (isset($_POST['btnSave'])) {
                 </div>
             </div>
         </div>
+        <div class="col-xs-12 col-md-3 col-md-pull-9">
+            <div class="left-panel text-center">
+
+            </div>
+        </div>
     </div>
 </section>
+
+<script src="js/jquery-1.12.3.js"></script>
+<script src="js/bootstrap.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>
