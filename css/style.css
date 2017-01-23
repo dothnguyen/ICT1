@@ -82,7 +82,7 @@ html, body {
 }
 
 .page-title {
-    margin: 10px;
+    margin: 20px;
     font-size: 2em;
     border-bottom: 1px solid black;
 }
@@ -92,6 +92,15 @@ html, body {
 .site-table {
     width: 100%;
     font-size: 1.1em;
+}
+
+.page-content {
+    margin-top: 20px;
+}
+
+.page-content > form {
+    padding: 8px;
+    margin-top: 30px;
 }
 
 .site-table > thead > * > * {
@@ -122,6 +131,10 @@ html, body {
 
 .action-column {
     padding: 10px;
+}
+
+.button-group {
+    margin-top: 40px;
 }
 
 

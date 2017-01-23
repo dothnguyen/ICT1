@@ -43,7 +43,7 @@ mysqli_close($conn);
         <div  class="row">
             <div class="col-sm-12 col-md-3">
                 <div class="left-panel text-center">
-                    <a href="" class="btn btn-primary btn-addnew">Add New</a>
+                    <a href="site_modify.php?mode=new" class="btn btn-primary btn-addnew">Add New</a>
                 </div>
             </div>
             <div class="col-sm-12 col-md-9">
@@ -69,8 +69,8 @@ mysqli_close($conn);
                                                 </div>
                                             </td>
                                             <td class="action-column">
-                                                <a href="#" class="btn btn-block btn-default">Edit</a>
-                                                <a href="#" class="btn btn-block btn-default">Delete</a>
+                                                <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Edit</a>
+                                                <a href="site_modify.php?mode=delete&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Delete</a>
 
                                             </td>
                                         </tr>
