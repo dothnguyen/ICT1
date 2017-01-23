@@ -57,16 +57,19 @@ html, body {
 }
 /*ends*/
 
-.main-content,
+/*.main-content,
 .main-content .container,
 .main-content .container .row,
 .main-content .container .row > div,
 .main-content .container .row > div > div {
     min-height: 500px;
-}
+}*/
 
-.left-panel {
-    border: 1px solid red;
+@media (min-width: 992px) {
+    .left-panel {
+        border: 1px solid red;
+        min-height: 500px;
+    }
 }
 
 .btn-addnew {
@@ -82,7 +85,7 @@ html, body {
 }
 
 .page-title {
-    margin: 10px;
+    margin: 20px;
     font-size: 2em;
     border-bottom: 1px solid black;
 }
@@ -92,6 +95,15 @@ html, body {
 .site-table {
     width: 100%;
     font-size: 1.1em;
+}
+
+.page-content {
+    margin-top: 20px;
+}
+
+.page-content > form {
+    padding: 8px;
+    margin-top: 30px;
 }
 
 .site-table > thead > * > * {
@@ -122,6 +134,10 @@ html, body {
 
 .action-column {
     padding: 10px;
+}
+
+.button-group {
+    margin-top: 40px;
 }
 
 

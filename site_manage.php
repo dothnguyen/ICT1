@@ -41,12 +41,7 @@ mysqli_close($conn);
 <section class="main-content">
     <div class="container">
         <div  class="row">
-            <div class="col-sm-12 col-md-3">
-                <div class="left-panel text-center">
-                    <a href="" class="btn btn-primary btn-addnew">Add New</a>
-                </div>
-            </div>
-            <div class="col-sm-12 col-md-9">
+            <div class="col-xs-12  col-md-9 col-md-push-3">
                 <div class="right-panel">
                     <div class="page-title"><span>Site List</span></div>
                     <div class="page-content">
@@ -69,8 +64,8 @@ mysqli_close($conn);
                                                 </div>
                                             </td>
                                             <td class="action-column">
-                                                <a href="#" class="btn btn-block btn-default">Edit</a>
-                                                <a href="#" class="btn btn-block btn-default">Delete</a>
+                                                <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Edit</a>
+                                                <a href="site_modify.php?mode=delete&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Delete</a>
 
                                             </td>
                                         </tr>
@@ -81,6 +76,11 @@ mysqli_close($conn);
                             </table>
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-md-3 col-md-pull-9">
+                <div class="left-panel text-center">
+                    <a href="site_modify.php?mode=new" class="btn btn-primary btn-addnew">Add New</a>
                 </div>
             </div>
         </div>
