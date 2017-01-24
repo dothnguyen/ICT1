@@ -17,7 +17,7 @@ function get_sites_of_manager($conn, $managerId) {
     return $conn->query($sql);
 }
 
-<<<<<<< HEAD
+
 function get_representative($conn,$managerId){
 	$sql= "SELECT * FROM SITE S, USER_TBL U, REPRESENTATIVE_ALLOCATED R WHERE R.USER_ID = U.USER_ID AND R.SITE_ID = S.SITE_ID AND S.MANAGER_ID = $managerId";
 
@@ -37,7 +37,7 @@ function get_allsites($conn,$managerId){
 
 return $conn->query($sql);
 }
-=======
+
 /**
  * @param $conn
  * @param $site_id
@@ -79,4 +79,3 @@ function insert_site($conn, $site_name, $site_address, $site_tel, $manager_id) {
     return mysqli_query($conn, $sql);
 }
 
->>>>>>> origin/master
