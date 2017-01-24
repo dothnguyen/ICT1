@@ -19,15 +19,27 @@ function get_sites_of_manager($conn, $managerId) {
 
 
 function get_representative($conn,$managerId){
-	$sql= "SELECT * FROM SITE S, USER_TBL U, REPRESENTATIVE_ALLOCATED R WHERE R.USER_ID = U.USER_ID AND R.SITE_ID = S.SITE_ID AND S.MANAGER_ID = $managerId";
+	$sql= "SELECT * FROM User_tbl
+          left join representative_allocated
+              on representative_allocated.site_id = User_tbl.user_id
+          LEFT JOIN site 
+	          on site.site_id = representative_allocated.site_id
+    
+          WHERE User_tbl.manager_id = $managerId
+          AND (representative_allocated.site_rep_active_status is null 
+                OR representative_allocated.site_rep_active_status = 1)";
 
 return $conn->query($sql);
 }
 
-
-
+/**
+ * get all users managed by a manager
+ * @param $conn
+ * @param $managerId
+ * @return mixed
+ */
 function get_allusers($conn,$managerId){
-	$sql= "SELECT * FROM user_tbl where user_id!= $managerId";
+	$sql= "SELECT * FROM user_tbl where manager_id= $managerId";
 
 return $conn->query($sql);
 }
