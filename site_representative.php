@@ -67,8 +67,8 @@ mysqli_close($conn);
 													<div>
 														<strong>Name: <?php echo $represent['firstname'];?> <?php echo $represent['lastname']; ?> </strong>
 													</div>
-                                                    <div><strong>Site Allocated: <?php echo $represent['site_name'];?></strong> - <span>Tel: <?php echo $represent['telephone'];?></span></div>
-													<div><strong>Site Address: <?php echo $represent['address'];?></strong></div>
+                                                    <div><strong>Site Allocated: <?php echo $represent['site.site_name'];?></strong> - <span>Tel: <?php echo $represent['site.telephone'];?></span></div>
+													<div><strong>Site Address: <?php echo $represent['site.address'];?></strong></div>
                                                 </div>
                                             </td>
                                             <td class="action-column">

@@ -19,14 +19,14 @@ function get_sites_of_manager($conn, $managerId) {
 
 
 function get_representative($conn,$managerId){
-	$sql= "SELECT * FROM User_tbl
+	$sql= "SELECT *from user_tbl
           left join representative_allocated
               on representative_allocated.site_id = User_tbl.user_id
           LEFT JOIN site 
 	          on site.site_id = representative_allocated.site_id
     
           WHERE User_tbl.manager_id = $managerId
-          AND (representative_allocated.site_rep_active_status is null 
+		  AND (representative_allocated.site_rep_active_status is null 
                 OR representative_allocated.site_rep_active_status = 1)";
 
 return $conn->query($sql);

@@ -46,13 +46,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <li><a href = "site_manage.php">Site Manage</a></li>
                 <?php }?>
 				
-				<?php if ($page_name == 'site_representative.php') {?>
-                    <li class = "active"><a href = "site_representative.php">Site Representative</a></li>
-                <?php } else {?>
-                    <li><a href = "site_representative.php">Site Representative</a></li>
-                <?php }?>
-
-
+				
                 <?php if ($page_name == 'user_manage.php') {?>
                     <li class = "active"><a href = "user_manage.php">User Management</a></li>
                 <?php } else {?>
