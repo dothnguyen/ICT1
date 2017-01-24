@@ -17,6 +17,56 @@ function get_sites_of_manager($conn, $managerId) {
     return $conn->query($sql);
 }
 
+/**
+ * @param $conn
+ * @param $manager_id
+ */
+function get_unallocated_sites($conn, $manager_id) {
+    $sql = "SELECT * FROM site
+            WHERE manager_id = $manager_id
+                AND site_id NOT IN (SELECT site_id FROM representative_allocated
+                                        WHERE site_rep_active_status = 1)";
+
+    return $conn->query($sql);
+}
+
+/**
+ * @param $conn
+ * @param $allocated_id
+ */
+function get_allocation_info($conn, $allocate_id) {
+    $sql = "SELECT * FROM Site, representative_allocated
+             WHERE site.site_id = representative_allocated.site_id
+              AND representative_allocated.site_alloc_id = $allocate_id";
+
+    $ret = $conn->query($sql);
+
+    return $ret->fetch_assoc();
+}
+
+/**
+ * @param $conn
+ * @param $site_id
+ * @param $user_id
+ */
+function insert_site_allocation($conn, $site_id, $user_id) {
+    $sql = "INSERT INTO representative_allocated(site_rep_allocated_date, site_rep_active_status, site_id, user_id)
+              VALUES(NOW(), 1, $site_id, $user_id)";
+
+    return mysqli_query($conn, $sql);
+}
+
+/**
+ * @param $conn
+ * @param $allocate_id
+ */
+function deactivate_site_allocation($conn, $allocate_id) {
+    $sql = "UPDATE representative_allocated set site_rep_active_status = 0
+            WHERE site_alloc_id = $allocate_id";
+
+    return mysqli_query($conn, $sql);
+}
+
 
 function get_representative($conn,$managerId){
 	$sql= "SELECT *from user_tbl

@@ -52,6 +52,18 @@ function get_user($conn, $username) {
 
 /**
  * @param $conn
+ * @param $user_id
+ */
+function get_user_from_id($conn, $user_id) {
+    $sql = "SELECT * FROM user_tbl WHERE user_id = $user_id";
+
+    $ret = $conn->query($sql);
+
+    return $ret->fetch_assoc();
+}
+
+/**
+ * @param $conn
  * @param $cus_lname
  * @param $cus_fname
  * @param $cus_addr_num

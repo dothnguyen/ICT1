@@ -241,3 +241,12 @@ ALTER TABLE `User_tbl`
 ALTER TABLE `weekly`
   ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
+
+
+// get all user managed by a manager, with allocation information if any
+SELECT * FROM User_tbl a
+   LEFT JOIN (SELECT s.*, ra.user_id FROM site s, representative_allocated ra
+             WHERE s.site_id = ra.site_id
+             and ra.site_rep_active_status = 1) b
+   on a.user_id = b.user_id
+WHERE a.manager_id = 5
