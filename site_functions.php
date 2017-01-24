@@ -32,9 +32,14 @@ function get_representative($conn,$managerId){
     return $conn->query($sql);
 }
 
-
+/**
+ * get all users managed by a manager
+ * @param $conn
+ * @param $managerId
+ * @return mixed
+ */
 function get_allusers($conn,$managerId){
-	$sql= "SELECT * FROM user_tbl where user_id!= $managerId";
+	$sql= "SELECT * FROM user_tbl where manager_id= $managerId";
 
     return $conn->query($sql);
 }
