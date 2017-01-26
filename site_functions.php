@@ -126,6 +126,13 @@ function is_site_allocated($conn, $site_id) {
     return $ret->num_rows > 0;
 }
 
+function get_user_by_id($conn, $user_id){
+	$sql= "select *from user_tbl where user_id=$user_id";
+	 $ret = $conn->query($sql);
+
+    return $ret->fetch_assoc();
+}
+
 /**
  * @param $conn
  * @param $site_id
@@ -138,6 +145,13 @@ function modify_site($conn, $site_id, $site_name, $site_address, $site_tel) {
             WHERE site_id=$site_id";
 
     return mysqli_query($conn, $sql);
+}
+
+function modify_user($conn, $user_id, $firstname, $lastname, $email) {
+    $sql = "UPDATE user_tbl SET firstname='$firstname', lastname='$lastname', email='$email'
+            WHERE user_id=$user_id";
+
+   return mysqli_query($conn, $sql);
 }
 
 /**
@@ -153,6 +167,14 @@ function insert_site($conn, $site_name, $site_address, $site_tel, $manager_id) {
 
     return mysqli_query($conn, $sql);
 }
+function insert_user($conn, $firstname, $lastname, $email, $manager_id) {
+    $sql = "INSERT INTO user_tbl(firstname, lastname, email, manager_id, site_created_date) 
+                      VALUES('$firstname', '$lastname', '$email', $manager_id, NOW());";
+
+    return mysqli_query($conn, $sql);
+}
+
+
 
 /**
  * @param $conn

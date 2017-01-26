@@ -43,7 +43,7 @@ mysqli_close($conn);
         <div  class="row">
             <div class="col-sm-12 col-md-3">
                 <div class="left-panel text-center">
-                    <a href="/ict1/site_newrep.php" class="btn btn-primary btn-addnew">Add User</a>
+                    <a href="user_modify.php?mode=new" class="btn btn-primary btn-addnew">Add User</a>
                 </div>
             </div>
             <div class="col-sm-12 col-md-9">
@@ -64,6 +64,7 @@ mysqli_close($conn);
                                             <td class="index-column"><?php echo ($idx + 1)?></td>
                                             <td class="site-info-column">
                                                 <div>
+													
 													<div>
 														<strong>Name: <?php echo $represent['firstname'];?> <?php echo $represent['lastname']; ?> </strong>
 													</div>
@@ -77,12 +78,25 @@ mysqli_close($conn);
 														
 														<div><strong>Site Allocated: <?php echo $represent['site_name'];?></strong> - <span>Tel: <?php echo $represent['telephone'];?></span></div>
 														<div><strong>Site Address: <?php echo $represent['address'];?></strong></div>	
-														
+														<div> <strong>Last Login: <?php echo $represent['last_login'];?> </strong></div>
+														<div><strong>Created Date: <?php echo $represent['created_date'];?> </strong> </div>
+														 <td class="action-column">
+                                                <a href="user_modify.php?mode=modify&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default">Edit</a>
+                                               <a href="#" class="btn btn-block btn-default">Allocate</a>
 
-										<?php } else { echo 'Inactive'; } ?>
+                                            
+
+										<?php } else { echo 'Inactive'; ?> 
+										
+										
+										<?php } ?>
 														
 															 
-															 
+															  
+                                                
+                                                
+
+                                            </td>
 													   
 													   
 															</strong>
@@ -91,13 +105,10 @@ mysqli_close($conn);
 													</div>
                                                     
 													
+													
                                                 </div>
                                             </td>
-                                            <td class="action-column">
-                                                <a href="#" class="btn btn-block btn-default">Edit</a>
-                                                <a href="#" class="btn btn-block btn-default">Assign Site</a>
-
-                                            </td>
+                                            
                                         </tr>
                                 <?php
                                         $idx++;
