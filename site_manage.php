@@ -77,7 +77,7 @@ mysqli_close($conn);
                     </div>
                 </div>
             </div>
-            <div class="col-xs-12 col-md-3 col-md-pull-9">
+            <div class="col-xs-offset-2 col-xs-8 col-md-offset-0 col-md-3 col-md-pull-9">
                 <div class="left-panel text-center">
                     <a href="site_modify.php?mode=new" class="btn btn-primary btn-addnew">Add Site</a>
                 </div>

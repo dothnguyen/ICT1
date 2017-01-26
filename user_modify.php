@@ -57,8 +57,6 @@ if (isset($_POST['btnSave'])) {
         if ($mode == 'modify') {
             modify_user($conn, $user_id, $firstname, $lastname, $email,$username);
         } else if ($mode == 'new') {
-			
-		    
             insert_new_user($conn,$firstname, $lastname, $username, $email, $login_user['user_id']);
         }
 

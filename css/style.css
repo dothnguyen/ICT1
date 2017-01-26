@@ -40,6 +40,24 @@ html, body {
     font-size: 1.4em;
 }
 
+.navbar-collapse {
+    padding-right: 0px;
+    padding-left: 0px;
+    border-color: #1e2521;
+    background-color: #2aabd2;
+    color: #ffffff;
+}
+
+.navbar-default .navbar-nav li > a {
+    color: #fff;
+}
+
+.navbar-default .navbar-nav .active > a,
+.navbar-default .navbar-nav .active > a:hover{
+    background-color: #2b669a;
+    color: #fff;
+}
+
 /* For distributed nav items*/
 @media (min-width: 768px){
     .navbar-nav {
@@ -55,15 +73,24 @@ html, body {
         text-align: center;
     }
 }
+
+@media (min-width: 768px) and (max-width: 1000px) {
+    .collapse {
+        display: none !important;
+    }
+}
 /*ends*/
 
 
 @media (min-width: 992px) {
     .left-panel {
-        border: 1px solid red;
+        border: 1px solid #cce6ff;
+        background-color: #e6f2ff;
         min-height: 500px;
     }
 }
+
+
 
 .btn-addnew {
     margin-top: 20px;
@@ -71,11 +98,9 @@ html, body {
     margin-right: 20px;
     display: block;
     padding: 8px;
+    line-height: 40px;
 }
 
-.right-panel {
-    border: 1px solid red;
-}
 
 .page-title {
     margin: 20px;
@@ -102,8 +127,8 @@ html, body {
 .site-table > thead > * > * {
     padding: 10px;
     text-align: center;
-    background-color: #2b669a;
-    color: white;
+    background-color: #e6f2ff;
+    color: black;
 }
 
 .site-list-container {
@@ -127,6 +152,7 @@ html, body {
 
 .action-column {
     padding: 10px;
+    min-width: 100px;
 }
 
 .button-group {

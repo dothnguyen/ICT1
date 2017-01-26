@@ -17,8 +17,10 @@ $page_name = basename($_SERVER['PHP_SELF']);
 ?>
 
 <div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
 <nav class = "navbar navbar-default" role = "navigation">
-
     <div class = "navbar-header">
         <button type = "button" class = "navbar-toggle"
                 data-toggle = "collapse" data-target = "#example-navbar-collapse">
@@ -40,14 +42,14 @@ $page_name = basename($_SERVER['PHP_SELF']);
                     <li><a href = "manager_home.php">Reports</a></li>
                 <?php }?>
 
-                <?php if ($page_name == 'site_manage.php') {?>
+                <?php if ($page_name == 'site_manage.php' || $page_name == 'site_modify.php') {?>
                     <li class = "active"><a href = "site_manage.php">Site Management</a></li>
                 <?php } else {?>
                     <li><a href = "site_manage.php">Site Manage</a></li>
                 <?php }?>
 				
 				
-                <?php if ($page_name == 'user_manage.php') {?>
+                <?php if ($page_name == 'user_manage.php' || $page_name == 'user_modify.php') {?>
                     <li class = "active"><a href = "user_manage.php">User Management</a></li>
                 <?php } else {?>
                     <li><a href = "user_manage.php">User Manage</a></li>
@@ -70,4 +72,7 @@ $page_name = basename($_SERVER['PHP_SELF']);
 
 
 </nav>
+        </div>
+    </div>
+
 </div>
