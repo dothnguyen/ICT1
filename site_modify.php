@@ -27,28 +27,17 @@ $site_name = "";
 $site_addr = "";
 $site_tel = "";
 $site_id  = "";
+$active_status = "1";
+$is_allocated = false;
 
-// check if mode is modify,
-// then load the current site
-if ($mode == 'modify') {
-    $site_id = test_input($_REQUEST['site_id']);
-
-    $conn = db_connect();
-
-    $site_info = get_site_by_id($conn, $site_id);
-
-    $site_name  = $site_info['site_name'];
-    $site_addr = $site_info['address'];
-    $site_tel = $site_info['telephone'];
-
-    mysqli_close($conn);
-}
 
 // submitted
 if (isset($_POST['btnSave'])) {
     $site_name = test_input($_POST['txtSiteName']);
     $site_addr = test_input($_POST['txtAddress']);
     $site_tel = test_input($_POST['txtPhoneNumber']);
+
+    $site_id = test_input($_POST['site_id']);
 
     // validation
     if ($site_name == "") {
@@ -71,7 +60,38 @@ if (isset($_POST['btnSave'])) {
             insert_site($conn, $site_name, $site_addr, $site_tel, $login_user['user_id']);
         }
 
+        mysqli_close($conn);
+
         header("Location:site_manage.php");
+    }
+} else if (isset($_POST['btnRemove'])) {
+    // inactivate site
+    $site_id = test_input($_POST['site_id']);
+    $conn = db_connect();
+
+    inactivate_site($conn, $site_id);
+
+    mysqli_close($conn);
+
+    header("Location:site_manage.php");
+} else {
+    // check if mode is modify,
+    // then load the current site
+    if ($mode == 'modify') {
+        $site_id = test_input($_REQUEST['site_id']);
+
+        $conn = db_connect();
+
+        $site_info = get_site_by_id($conn, $site_id);
+
+        $site_name  = $site_info['site_name'];
+        $site_addr = $site_info['address'];
+        $site_tel = $site_info['telephone'];
+        $active_status = $site_info['active_status'];
+
+        // get site allocation
+        $is_allocated = is_site_allocated($conn, $site_id);
+
         mysqli_close($conn);
     }
 }
@@ -133,6 +153,7 @@ if (isset($_POST['btnSave'])) {
                                 </div>
                             <?php } ?>
                         </div>
+                        <?php if ($is_allocated) { ?>
                         <div class="form-group button-group">
                             <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
                                 <button type="submit" class="btn btn-default btn-block" name="btnSave">Save</button>
@@ -141,6 +162,21 @@ if (isset($_POST['btnSave'])) {
                                 <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
                             </div>
                         </div>
+                        <?php } else { ?>
+                            <div class="form-group button-group">
+                                <div class="col-sm-offset-2 col-sm-3 col-xs-offset-3 col-xs-3">
+                                    <button type="submit" class="btn btn-default btn-block" name="btnSave">Save</button>
+                                </div>
+
+                                <div class="col-sm-3 col-xs-3">
+                                    <button type="submit" class="btn btn-default btn-block" name="btnRemove">Remove</button>
+                                </div>
+
+                                <div class="col-sm-3  col-xs-3">
+                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
+                                </div>
+                            </div>
+                        <?php } ?>
 
                         <input type="hidden" name="mode" value="<?php echo $mode;?>"/>
                         <input type="hidden" name="site_id" value="<?php echo $site_id;?>"/>

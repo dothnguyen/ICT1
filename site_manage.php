@@ -65,7 +65,6 @@ mysqli_close($conn);
                                             </td>
                                             <td class="action-column">
                                                 <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Edit</a>
-                                                <a href="site_modify.php?mode=delete&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Delete</a>
 
                                             </td>
                                         </tr>

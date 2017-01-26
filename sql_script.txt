@@ -242,6 +242,11 @@ ALTER TABLE `weekly`
   ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
 
+-- add active status to the tables
+ALTER TABLE `User_tbl` ADD `active_status` INT(1) NOT NULL DEFAULT '1' AFTER `manager_id`;
+
+ALTER TABLE `site` ADD `active_status` INT(1) NOT NULL DEFAULT '1' AFTER `manager_id`;
+
 
 // get all user managed by a manager, with allocation information if any
 SELECT * FROM User_tbl a

@@ -12,7 +12,8 @@ require_once ("db.php");
  * @param $managerId
  */
 function get_sites_of_manager($conn, $managerId) {
-    $sql = "SELECT * FROM site WHERE manager_id = $managerId";
+    $sql = "SELECT * FROM site WHERE manager_id = $managerId
+    and active_status = 1";
 
     return $conn->query($sql);
 }
@@ -24,6 +25,7 @@ function get_sites_of_manager($conn, $managerId) {
 function get_unallocated_sites($conn, $manager_id) {
     $sql = "SELECT * FROM site
             WHERE manager_id = $manager_id
+                AND active_status = 1
                 AND site_id NOT IN (SELECT site_id FROM representative_allocated
                                         WHERE site_rep_active_status = 1)";
 
@@ -86,7 +88,7 @@ return $conn->query($sql);
  * @return mixed
  */
 function get_allusers($conn,$managerId){
-	$sql= "SELECT * FROM user_tbl where manager_id= $managerId";
+	$sql= "SELECT * FROM user_tbl where manager_id= $managerId and active_status = 1";
 
 return $conn->query($sql);
 }
@@ -113,6 +115,20 @@ function get_site_by_id($conn, $site_id) {
 /**
  * @param $conn
  * @param $site_id
+ */
+function is_site_allocated($conn, $site_id) {
+    $sql = "SELECT * FROM representative_allocated 
+            WHERE site_id = $site_id
+               AND site_rep_active_status = 1 ";
+
+    $ret = $conn->query($sql);
+
+    return $ret->num_rows > 0;
+}
+
+/**
+ * @param $conn
+ * @param $site_id
  * @param $site_name
  * @param $site_address
  * @param $site_tel
@@ -134,6 +150,18 @@ function modify_site($conn, $site_id, $site_name, $site_address, $site_tel) {
 function insert_site($conn, $site_name, $site_address, $site_tel, $manager_id) {
     $sql = "INSERT INTO site(site_name, address, telephone, manager_id, site_created_date) 
                       VALUES('$site_name', '$site_address', '$site_tel', $manager_id, NOW());";
+
+    return mysqli_query($conn, $sql);
+}
+
+/**
+ * @param $conn
+ * @param $site_id
+ * @return bool|mysqli_result
+ */
+function inactivate_site($conn, $site_id) {
+    $sql = "UPDATE site SET active_status = 0
+            WHERE site_id=$site_id";
 
     return mysqli_query($conn, $sql);
 }
