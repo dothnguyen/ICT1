@@ -31,6 +31,21 @@ html, body {
     height: 150px;
 }
 
+
+@media (max-width: 768px) {
+    .header .pull-right {
+        float: none!important;
+    }
+
+    .header .col-xs-12 {
+        text-align: center;
+    }
+
+    .header {
+        margin-bottom: 20px;
+    }
+}
+
 .header .user-profile {
     line-height: 50px;
     font-size: 1.4em;

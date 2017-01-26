@@ -41,12 +41,17 @@ mysqli_close($conn);
 <section class="main-content">
     <div class="container">
         <div  class="row">
-            <div class="col-xs-12  col-md-9 col-md-push-3">
+            <div class="col-xs-offset-2 col-xs-8 col-md-offset-0 col-md-3">
+                <div class="left-panel text-center">
+                    <a href="site_modify.php?mode=new" class="btn btn-primary btn-addnew">Add Site</a>
+                </div>
+            </div>
+            <div class="col-xs-12  col-md-9">
                 <div class="right-panel">
                     <div class="page-title"><span>Site List</span></div>
                     <div class="page-content">
                         <div class="site-list-container">
-                            <table class="table-bordered table-striped table-hover site-table">
+                            <table class="table-bordered table-striped table-hover table-responsive site-table">
                                 <thead>
                                     <td>No.</td>
                                     <td>Site Information</td>
@@ -75,11 +80,6 @@ mysqli_close($conn);
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div class="col-xs-offset-2 col-xs-8 col-md-offset-0 col-md-3 col-md-pull-9">
-                <div class="left-panel text-center">
-                    <a href="site_modify.php?mode=new" class="btn btn-primary btn-addnew">Add Site</a>
                 </div>
             </div>
         </div>
