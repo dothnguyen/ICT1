@@ -190,3 +190,7 @@ html, body {
 .action-column .eddo{
 	background-color: #2AABD2;
 }
+
+.left-panel{
+		border-radius: 10px;
+} 
