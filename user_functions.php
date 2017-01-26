@@ -26,7 +26,7 @@ function check_user($conn, $username, $cus_pwd) {
 
     $ret = $conn->query($sql);
 
-    $row = $ret->fetch_assoc();
+    $row = mysqli_fetch_assoc($ret);
 
     if ($row) {
         return true;
@@ -43,11 +43,11 @@ function check_user($conn, $username, $cus_pwd) {
  * @return customer row
  */
 function get_user($conn, $username) {
-    $sql = "SELECT * FROM user_tbl WHERE username = '$username'";
+    $sql = "SELECT * FROM User_tbl WHERE username = '$username'";
 
     $ret = $conn->query($sql);
 
-    return $ret->fetch_assoc();
+    return mysqli_fetch_assoc($ret);
 }
 
 /**
@@ -55,11 +55,11 @@ function get_user($conn, $username) {
  * @param $user_id
  */
 function get_user_from_id($conn, $user_id) {
-    $sql = "SELECT * FROM user_tbl WHERE user_id = $user_id";
+    $sql = "SELECT * FROM User_tbl WHERE user_id = $user_id";
 
     $ret = $conn->query($sql);
 
-    return $ret->fetch_assoc();
+    return mysqli_fetch_assoc($ret);
 }
 
 /**

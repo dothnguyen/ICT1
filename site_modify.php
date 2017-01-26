@@ -54,6 +54,7 @@ if (isset($_POST['btnSave'])) {
 
     if (empty($msg)) {
         $conn = db_connect();
+        
         if ($mode == 'modify') {
             modify_site($conn, $site_id, $site_name, $site_addr, $site_tel);
         } else if ($mode == 'new') {

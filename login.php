@@ -13,6 +13,8 @@
 
     } else {
 
+        $conn = db_connect();
+
         $msg = array();
 
         if (isset($_POST['login'])) {
@@ -25,14 +27,14 @@
                 array_push($msg, "Please input your username.");
             }
 
-            if (empty(($pwd))) {
+            if (empty($pwd)) {
                 array_push($msg, "Please input your password.");
             }
 
 
             if (empty($msg)) {
                 // check username and password
-                $conn = db_connect();
+
 
                 $ret = check_user($conn, $username, $pwd);
 
@@ -40,7 +42,7 @@
                     array_push($msg, "Invalid username or password.");
                 }
 
-                mysqli_close($conn);
+
             }
 
             if (empty($msg)) {
@@ -49,16 +51,18 @@
                 $conn = db_connect();
                 // get user info
                 $cus_row = get_user($conn, $username);
-                mysqli_close($conn);
+
 
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_info'] = $cus_row;
 
                 // login successful
                 // redirect to home page
-                header("Location:index.php");
+               header("Location:index.php");
             }
         }
+
+        mysqli_close($conn);
     }
 ?>
 <!DOCTYPE html>
