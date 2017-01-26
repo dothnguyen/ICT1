@@ -204,20 +204,14 @@ function insert_site($conn, $site_name, $site_address, $site_tel, $manager_id) {
  * @param $manager_id
  * @return bool|mysqli_result
  */
-function insert_user($conn, $firstname, $lastname, $email, $manager_id) {
-    $sql = "INSERT INTO User_tbl(firstname, lastname, email, manager_id, site_created_date) 
-                      VALUES('$firstname', '$lastname', '$email', $manager_id, NOW());";
 
-    return mysqli_query($conn, $sql);
-}
 
-<<<<<<< HEAD
 function insert_new_user($conn, $firstname, $lastname,$username, $generatepassword,$email, $manager_id){
 	
 	$sql="INSERT INTO user_tbl (firstname, lastname, username, password, email, manager_id, created_date)
 	values ('$firstname', '$lastname', '$generatepassword','$email','$username', $manager_id ,NOW());";
 	return mysqli_query($conn, $sql);
-=======
+}
 /**
  * @param $conn
  * @param $firstname
