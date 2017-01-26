@@ -174,6 +174,11 @@ function insert_user($conn, $firstname, $lastname, $email, $manager_id) {
     return mysqli_query($conn, $sql);
 }
 
+function insert_new_user($conn, $firstname, $lastname, $email, $username, $manager_id){
+	
+	$sql="INSERT INTO user_tbl (user_id,firstname, lastname, username,email, manager_id, created_date)
+	values ('default','$firstname', '$lastname', '$username', '$email', $manager_id ,NOW());";
+}
 
 
 /**

@@ -36,7 +36,7 @@ if (isset($_POST['btnSave'])) {
     $firstname = test_input($_POST['txtFirstName']);
     $lastname = test_input($_POST['txtLastName']);
     $email = test_input($_POST['txtEmail']);
-
+    $username= $_POST['txtUsername'];
     $user_id= test_input($_POST['user_id']);
 
     // validation
@@ -51,14 +51,15 @@ if (isset($_POST['btnSave'])) {
     if ($email == "") {
         $msg['email'] = "Email can not be empty.";
     }
-
+	
     if (empty($msg)) {
         $conn = db_connect();
         if ($mode == 'modify') {
-            modify_user($conn, $user_id, $firstname, $lastname, $email);
+            modify_user($conn, $user_id, $firstname, $lastname, $email,$username);
         } else if ($mode == 'new') {
-		
-            insert_user($conn,$firstname, $lastname, $email, $login_user['user_id']);
+			
+		    
+            insert_new_user($conn,$firstname, $lastname, $username, $email, $login_user['user_id']);
         }
 
         mysqli_close($conn);
@@ -88,6 +89,7 @@ if (isset($_POST['btnSave'])) {
         $firstname  = $user_info['firstname'];
         $lastname = $user_info['lastname'];
         $email = $user_info['email'];
+		$username=$user_info['username'];
         $active_status = $user_info['active_status'];
 
         // get site allocation
@@ -114,11 +116,14 @@ if (isset($_POST['btnSave'])) {
 <?php include_once 'header.php';?>
 <?php include_once 'nav.php';?>
 
+
+
+
 <section class="main-content">
     <div class="container">
         <div class="col-xs-12 col-md-9 col-md-push-3">
             <div class="right-panel">
-                <div class="page-title"><span>Add / Modify User</span></div>
+                <div class="page-title"><span>Add User</span></div>
                 <div class="page-content">
                     <form action="user_modify.php" class="form-horizontal" method="post">
                         <div class="form-group <?php if (!empty($msg['firstname'])) echo "has-error";?>">
@@ -148,6 +153,34 @@ if (isset($_POST['btnSave'])) {
                                 <input type="text" class="form-control" id="txtEmail" name="txtEmail" value="<?php echo $email ?>"/>
                             </div>
                        </div>
+					   
+					   
+					   
+					   <?php if ($mode=='new') { ?>
+					   
+					   <div class="form-group">
+					   <label for="txtUsername" class="col-sm-3 control-label">Username</label>
+					   <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtUsername" name="txtUsername"/>
+                            </div>
+					    </div>
+						
+						 <div class="form-group button-group">
+                                <div class="col-sm-offset-2 col-sm-3 col-xs-offset-3 col-xs-3">
+                                    <button type="submit" class="btn btn-default btn-block" name="btnSave">Add User</button>
+                                </div>
+
+                                
+                                <div class="col-sm-3  col-xs-3">
+                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
+                                </div>
+                            </div>
+						
+					   
+					   <?php }?>
+					   
+					   <?php if ($mode=='modify'){ ?>
+					   
                         <?php if ($is_allocated) { ?>
                         <div class="form-group button-group">
                             <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
@@ -172,6 +205,8 @@ if (isset($_POST['btnSave'])) {
                                 </div>
                             </div>
                         <?php } ?>
+						
+					   <?php } ?>
 
                         <input type="hidden" name="mode" value="<?php echo $mode;?>"/>
                         <input type="hidden" name="user_id" value="<?php echo $user_id;?>"/>
@@ -186,7 +221,6 @@ if (isset($_POST['btnSave'])) {
         </div>
     </div>
 </section>
-
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/script.js"></script>
