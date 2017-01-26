@@ -83,12 +83,16 @@ mysqli_close($conn);
                                                 </div>
                                             </td>
                                             <td class="action-column">
-                                                <a href="user_modify.php?mode=modify&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default">Edit</a>
+                                                <a href="user_modify.php?mode=modify&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default eddo">Edit</a>
                                                 <?php if ($represent['site_rep_active_status'] != '1') { ?>
-                                                    <a href="user_allocation.php?mode=new&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default">Allocate</a>
+												
+                                                    <a href="user_allocation.php?mode=new&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default allo">Allocate</a>
+												
                                                 <?php } else { ?>
-                                                    <a href="user_allocation.php?mode=modify&user_id=<?php echo $represent['user_id']?>&allocate_id=<?php echo $represent['site_alloc_id']?>" class="btn btn-block btn-default">Modify Allocation</a>
-                                                <?php } ?>
+													
+                                                    <a href="user_allocation.php?mode=modify&user_id=<?php echo $represent['user_id']?>&allocate_id=<?php echo $represent['site_alloc_id']?>" class="btn btn-block btn-default moddo">Modify Allocation</a>
+													
+												<?php } ?>
                                             </td>
                                             
                                         </tr>

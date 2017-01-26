@@ -69,7 +69,7 @@ mysqli_close($conn);
                                                 </div>
                                             </td>
                                             <td class="action-column">
-                                                <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default">Edit</a>
+                                                <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default eddo">Edit</a>
 
                                             </td>
                                         </tr>
