@@ -71,8 +71,8 @@ function deactivate_site_allocation($conn, $allocate_id) {
 
 
 function get_representative($conn,$managerId){
-	$sql= "SELECT * FROM User_tbl a
-           LEFT JOIN (SELECT s.*, ra.user_id, ra.site_rep_active_status FROM site s, representative_allocated ra
+	$sql= "SELECT a.*, b.site_name, b.site_rep_active_status, b.site_alloc_id FROM User_tbl a
+           LEFT JOIN (SELECT s.*, ra.user_id, ra.site_rep_active_status, ra.site_alloc_id FROM site s, representative_allocated ra
                      WHERE s.site_id = ra.site_id
                      and ra.site_rep_active_status = 1) b
                 on a.user_id = b.user_id

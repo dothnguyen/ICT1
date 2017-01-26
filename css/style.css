@@ -33,11 +33,11 @@ html, body {
 
 .header .user-profile {
     line-height: 50px;
-    font-size: 2em;
+    font-size: 1.4em;
 }
 
 .header .date-time {
-    font-size: 1.6em;
+    font-size: 1.4em;
 }
 
 /* For distributed nav items*/
@@ -57,13 +57,6 @@ html, body {
 }
 /*ends*/
 
-/*.main-content,
-.main-content .container,
-.main-content .container .row,
-.main-content .container .row > div,
-.main-content .container .row > div > div {
-    min-height: 500px;
-}*/
 
 @media (min-width: 992px) {
     .left-panel {

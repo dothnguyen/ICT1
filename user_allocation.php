@@ -13,7 +13,7 @@ require_once "other_functions.php";
 
 
 if (isset($_POST['btnCancel'])) {
-    header("Location:site_manage.php");
+    header("Location:user_manage.php");
 }
 
 session_start();

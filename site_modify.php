@@ -28,7 +28,7 @@ $site_addr = "";
 $site_tel = "";
 $site_id  = "";
 $active_status = "1";
-$is_allocated = false;
+$is_allocated = true;
 
 
 // submitted

@@ -35,9 +35,11 @@ $is_manager = $login_user['role'] == 'manager';
         <!-- User profile -->
         <div class="col-xs-12 col-sm-6 ">
             <div class="pull-right">
-                <div class="user-profile"><span class="fa fa-user" aria-hidden="true"><?php echo $login_user['firstname']. ' ' . $login_user['lastname'];?></span>
-                 <a href="logout.php"><span class="fa fa-sign-out"></span></a></div>
-                <div class="date-time"><?php echo date('Y-m-d H:i:s')?></div>
+                <div class="user-profile">
+                    <span class="fa fa-user" aria-hidden="true"></span>&nbsp;<span><?php echo $login_user['firstname']. ' ' . $login_user['lastname'];?></span>
+                    &nbsp;<a href="logout.php"><span class="fa fa-sign-out"></span></a>
+                </div>
+                <div class="date-time">Date: <?php echo date('Y-m-d')?></div>
             </div>
         </div>
     </div>

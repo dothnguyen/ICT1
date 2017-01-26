@@ -66,47 +66,29 @@ mysqli_close($conn);
                                                 <div>
 													
 													<div>
-														<strong>Name: <?php echo $represent['firstname'];?> <?php echo $represent['lastname']; ?> </strong>
+														<span>Name: <strong> <?php echo $represent['firstname'];?> <?php echo $represent['lastname']; ?></strong> </span>
 													</div>
 													<div>
-														<strong>Email: <?php echo $represent['email'];?>  </strong>
+														<span>Email: <?php echo $represent['email'];?>  </span>
 													</div>
 													<div>
-														<strong>Status: 
-														
-									<?php if ($represent['site_rep_active_status']=='1') { echo 'Active'; ?>
-														
-														<div><strong>Site Allocated: <?php echo $represent['site_name'];?></strong> - <span>Tel: <?php echo $represent['telephone'];?></span></div>
-														<div><strong>Site Address: <?php echo $represent['address'];?></strong></div>	
-														<div> <strong>Last Login: <?php echo $represent['last_login'];?> </strong></div>
-														<div><strong>Created Date: <?php echo $represent['created_date'];?> </strong> </div>
-														 <td class="action-column">
-                                                <a href="user_modify.php?mode=modify&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default">Edit</a>
-                                               <a href="#" class="btn btn-block btn-default">Allocate</a>
-
-                                            
-
-										<?php } else { echo 'Inactive'; ?> 
-										
-										
-										<?php } ?>
-														
-															 
-															  
-                                                
-                                                
-
-                                            </td>
-													   
-													   
-															</strong>
-														
-														
-													</div>
-                                                    
-													
-													
+                                                        <?php if ($represent['site_rep_active_status'] == '1') { ?>
+														<span>Status:
+									                    <?php  echo 'Is allocated to ';?><strong><?php  echo $represent['site_name'];?></strong>
+                                                        </span>
+                                                        <?php } else { ?>
+                                                            <span>Status: Available for allocation</span>
+                                                        <?php } ?>
+                                                    </div>
                                                 </div>
+                                            </td>
+                                            <td class="action-column">
+                                                <a href="user_modify.php?mode=modify&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default">Edit</a>
+                                                <?php if ($represent['site_rep_active_status'] != '1') { ?>
+                                                    <a href="user_allocation.php?mode=new&user_id=<?php echo $represent['user_id']?>" class="btn btn-block btn-default">Allocate</a>
+                                                <?php } else { ?>
+                                                    <a href="user_allocation.php?mode=modify&user_id=<?php echo $represent['user_id']?>&allocate_id=<?php echo $represent['site_alloc_id']?>" class="btn btn-block btn-default">Modify Allocation</a>
+                                                <?php } ?>
                                             </td>
                                             
                                         </tr>
