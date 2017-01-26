@@ -23,10 +23,10 @@ if (isset($_POST['btnCancel'])) {
 
 $mode = test_input($_REQUEST['mode']);
 
-$user_id= "";
+$user_id = "";
 $firstname = "";
 $lastname = "";
-$email  = "";
+$email = "";
 $active_status = "1";
 $is_allocated = false;
 
@@ -36,11 +36,11 @@ if (isset($_POST['btnSave'])) {
     $firstname = test_input($_POST['txtFirstName']);
     $lastname = test_input($_POST['txtLastName']);
     $email = test_input($_POST['txtEmail']);
-    $username= $_POST['txtUsername'];
-    $user_id= test_input($_POST['user_id']);
+    $username = test_input($_POST['txtUsername']);
+    $user_id = test_input($_POST['user_id']);
 
     // validation
-    if ($firstname== "") {
+    if ($firstname == "") {
         $msg['fist_name'] = "First name can not be empty.";
     }
 
@@ -51,13 +51,21 @@ if (isset($_POST['btnSave'])) {
     if ($email == "") {
         $msg['email'] = "Email can not be empty.";
     }
-	
+
+    if ($mode == 'new' && $username == '') {
+        $msg['username'] = 'Username can not be empty.';
+    }
+
     if (empty($msg)) {
         $conn = db_connect();
         if ($mode == 'modify') {
-            modify_user($conn, $user_id, $firstname, $lastname, $email,$username);
+
+            modify_user($conn, $user_id, $firstname, $lastname, $email, $username);
+
         } else if ($mode == 'new') {
-            insert_new_user($conn,$firstname, $lastname, $username, $email, $login_user['user_id']);
+
+            insert_new_user($conn, $firstname, $lastname, $username, $email, $login_user['user_id']);
+
         }
 
         mysqli_close($conn);
@@ -84,14 +92,14 @@ if (isset($_POST['btnSave'])) {
 
         $user_info = get_user_by_id($conn, $user_id);
 
-        $firstname  = $user_info['firstname'];
+        $firstname = $user_info['firstname'];
         $lastname = $user_info['lastname'];
         $email = $user_info['email'];
-		$username=$user_info['username'];
+        $username = $user_info['username'];
         $active_status = $user_info['active_status'];
 
         // get site allocation
-        $is_allocated = is_site_allocated($conn, $user_id);
+        $is_allocated = is_user_allocated($conn, $user_id);
 
         mysqli_close($conn);
     }
@@ -108,112 +116,135 @@ if (isset($_POST['btnSave'])) {
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Sites Management</title>
+    <title><?php if ($mode == 'new') echo 'Add User'; else echo 'Modify User';?></title>
 </head>
 <body>
-<?php include_once 'header.php';?>
-<?php include_once 'nav.php';?>
-
-
+<?php include_once 'header.php'; ?>
+<?php include_once 'nav.php'; ?>
 
 
 <section class="main-content">
     <div class="container">
-        <div class="col-xs-12 col-md-9 col-md-push-3">
+        <div class="col-xs-12 col-md-9 col-md-push-2">
             <div class="right-panel">
-                <div class="page-title"><span>Add User</span></div>
+                <div class="page-title"><span><?php if ($mode == 'new') echo 'Add User'; else echo 'Modify User';?></span></div>
                 <div class="page-content">
                     <form action="user_modify.php" class="form-horizontal" method="post">
-                        <div class="form-group <?php if (!empty($msg['firstname'])) echo "has-error";?>">
+                        <div class="form-group <?php if (!empty($msg['fist_name'])) echo "has-error"; ?>">
                             <label for="txtFirstName" class="col-sm-3 control-label">First Name</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtFirstName" name="txtFirstName" value="<?php echo $firstname ?>"/>
+                                <input type="text" class="form-control" id="txtFirstName" name="txtFirstName"
+                                       value="<?php echo $firstname ?>"/>
                             </div>
-                            <?php if (!empty($msg['firstname'])) {?>
+                            <?php if (!empty($msg['fist_name'])) { ?>
                                 <div class="col-sm-offset-3 col-sm-8">
-                                    <span class="help-block"><?php echo $msg['firstname']?></span>
+                                    <span class="help-block"><?php echo $msg['fist_name'] ?></span>
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="form-group <?php if (!empty($msg['lastname'])) echo "has-error";?>">
+                        <div class="form-group <?php if (!empty($msg['lastname'])) echo "has-error"; ?>">
                             <label for="txtLastName" class="col-sm-3 control-label">Last Name</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtLastName" name="txtLastName" value="<?php echo $lastname ?>"/>
+                                <input type="text" class="form-control" id="txtLastName" name="txtLastName"
+                                       value="<?php echo $lastname ?>"/>
                             </div>
-							
-                            
+                            <?php if (!empty($msg['lastname'])) { ?>
+                                <div class="col-sm-offset-3 col-sm-8">
+                                    <span class="help-block"><?php echo $msg['lastname'] ?></span>
+                                </div>
+                            <?php } ?>
+
                         </div>
-						
-						<div class="form-group <?php if (!empty($msg['email'])) echo "has-error";?>">
+
+                        <div class="form-group <?php if (!empty($msg['email'])) echo "has-error"; ?>">
                             <label for="txtEmail" class="col-sm-3 control-label">Email</label>
-						
-						<div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtEmail" name="txtEmail" value="<?php echo $email ?>"/>
-                            </div>
-                       </div>
-					   
-					   
-					   
-					   <?php if ($mode=='new') { ?>
-					   
-					   <div class="form-group">
-					   <label for="txtUsername" class="col-sm-3 control-label">Username</label>
-					   <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtUsername" name="txtUsername"/>
-                            </div>
-					    </div>
-						
-						 <div class="form-group button-group">
-                                <div class="col-sm-offset-2 col-sm-3 col-xs-offset-3 col-xs-3">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnSave">Add User</button>
-                                </div>
 
-                                
-                                <div class="col-sm-3  col-xs-3">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="txtEmail" name="txtEmail"
+                                       value="<?php echo $email ?>"/>
+                            </div>
+
+                            <?php if (!empty($msg['email'])) { ?>
+                                <div class="col-sm-offset-3 col-sm-8">
+                                    <span class="help-block"><?php echo $msg['email'] ?></span>
                                 </div>
-                            </div>
-						
-					   
-					   <?php }?>
-					   
-					   <?php if ($mode=='modify'){ ?>
-					   
-                        <?php if ($is_allocated) { ?>
-                        <div class="form-group button-group">
-                            <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
-                                <button type="submit" class="btn btn-default btn-block" name="btnSave">Save</button>
-                            </div>
-                            <div class="col-sm-3  col-xs-4">
-                                <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
-                            </div>
+                            <?php } ?>
                         </div>
-                        <?php } else { ?>
+
+
+                        <?php if ($mode == 'new') { ?>
+
+                            <div class="form-group <?php if (!empty($msg['username'])) echo "has-error"; ?>">
+                                <label for="txtUsername" class="col-sm-3 control-label">Username</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtUsername" name="txtUsername"/>
+                                </div>
+                                <?php if (!empty($msg['username'])) { ?>
+                                    <div class="col-sm-offset-3 col-sm-8">
+                                        <span class="help-block"><?php echo $msg['username'] ?></span>
+                                    </div>
+                                <?php } ?>
+                            </div>
+
                             <div class="form-group button-group">
-                                <div class="col-sm-offset-2 col-sm-3 col-xs-offset-3 col-xs-3">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnSave">Save</button>
+                                <div class="col-sm-offset-5 col-sm-3 col-xs-offset-3 col-xs-3">
+                                    <button type="submit" class="btn btn-primary btn-block" name="btnSave">Save</button>
                                 </div>
 
-                                <div class="col-sm-3 col-xs-3">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnRemove">Remove</button>
-                                </div>
 
                                 <div class="col-sm-3  col-xs-3">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
+                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel
+                                    </button>
                                 </div>
                             </div>
-                        <?php } ?>
-						
-					   <?php } ?>
 
-                        <input type="hidden" name="mode" value="<?php echo $mode;?>"/>
-                        <input type="hidden" name="user_id" value="<?php echo $user_id;?>"/>
+
+                        <?php } ?>
+
+                        <?php if ($mode == 'modify') { ?>
+
+                            <?php if ($is_allocated) { ?>
+                                <div class="form-group button-group">
+                                    <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
+                                        <button type="submit" class="btn btn-primary btn-block" name="btnSave">Save
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-3  col-xs-4">
+                                        <button type="submit" class="btn btn-default btn-block" name="btnCancel">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php } else { ?>
+                                <div class="form-group button-group">
+                                    <div class="col-sm-offset-2 col-sm-3 col-xs-offset-3 col-xs-3">
+                                        <button type="submit" class="btn btn-primary btn-block" name="btnSave">Save
+                                        </button>
+                                    </div>
+
+                                    <div class="col-sm-3 col-xs-3">
+                                        <button type="submit" class="btn btn-danger btn-block" name="btnRemove">Remove
+                                        </button>
+                                    </div>
+
+                                    <div class="col-sm-3  col-xs-3">
+                                        <button type="submit" class="btn btn-default btn-block" name="btnCancel">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                </div>
+                            <?php } ?>
+
+                        <?php } ?>
+
+                        <input type="hidden" name="mode" value="<?php echo $mode; ?>"/>
+                        <input type="hidden" name="user_id" value="<?php echo $user_id; ?>"/>
                     </form>
                 </div>
             </div>
         </div>
         <div class="col-xs-12 col-md-3 col-md-pull-9">
-            <div class="left-panel text-center">
+            <div class="text-center">
 
             </div>
         </div>

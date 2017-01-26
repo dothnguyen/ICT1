@@ -126,6 +126,21 @@ function is_site_allocated($conn, $site_id) {
     return $ret->num_rows > 0;
 }
 
+/**
+ * @param $conn
+ * @param $user_id
+ * @return bool
+ */
+function is_user_allocated($conn, $user_id) {
+    $sql = "SELECT * FROM representative_allocated 
+            WHERE user_id = $user_id
+               AND site_rep_active_status = 1 ";
+
+    $ret = $conn->query($sql);
+
+    return $ret->num_rows > 0;
+}
+
 function get_user_by_id($conn, $user_id){
 	$sql= "select *from user_tbl where user_id=$user_id";
 	 $ret = $conn->query($sql);

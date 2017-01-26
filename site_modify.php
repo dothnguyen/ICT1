@@ -107,7 +107,7 @@ if (isset($_POST['btnSave'])) {
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
 
-    <title>Sites Management</title>
+    <title><?php if ($mode == 'new') echo 'Add Site'; else echo 'Modify Site';?></title>
 </head>
 <body>
 <?php include_once 'header.php';?>
@@ -117,7 +117,7 @@ if (isset($_POST['btnSave'])) {
     <div class="container">
         <div class="col-xs-12 col-md-9 col-md-push-2">
             <div class="right-panel">
-                <div class="page-title"><span>Add / Modify Site</span></div>
+                <div class="page-title"><span><?php if ($mode == 'new') echo 'Add Site'; else echo 'Modify Site';?></span></div>
                 <div class="page-content">
                     <form action="site_modify.php" class="form-horizontal" method="post">
                         <div class="form-group <?php if (!empty($msg['site_name'])) echo "has-error";?>">

@@ -99,20 +99,20 @@ mysqli_close($conn);
                     <form action="user_allocation.php" class="form-horizontal" method="post">
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">User Name:</label>
-                            <div class="col-sm-8">
-                                <span><?php echo $user_info['firstname'] . ' ' . $user_info['lastname']?></span>
+                            <div class="col-sm-8 username-label">
+                                <strong><?php echo $user_info['firstname'] . ' ' . $user_info['lastname']?></strong>
                             </div>
                         </div>
                         <?php if ($mode == 'modify') { ?>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Current Allocated Site: </label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-8 username-label">
                                 <span><?php echo $cur_allocation['site_name']?></span>
                             </div>
                         </div>
                         <?php } ?>
                         <div class="form-group">
-                            <label for="" class="col-sm-3 control-label">Allocate Sites</label>
+                            <label for="" class="col-sm-3 control-label">Allocate Site:</label>
                             <div class="col-sm-8">
                                 <select name="slSites" class="form-control">
                                     <?php foreach ($unallocated_sites as $site) { ?>
@@ -125,17 +125,17 @@ mysqli_close($conn);
                         <div class="form-group button-group">
                             <?php if ($mode == 'new') { ?>
                             <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
-                                <button type="submit" class="btn btn-default btn-block" name="btnSave">Save</button>
+                                <button type="submit" class="btn btn-primary btn-block" name="btnSave">Save</button>
                             </div>
                             <div class="col-sm-3  col-xs-4">
                                 <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
                             </div>
                             <?php } else if ($mode == 'modify') { ?>
                                 <div class="col-sm-offset-3 col-sm-3 col-xs-4">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnSave">Change</button>
+                                    <button type="submit" class="btn btn-primary btn-block" name="btnSave">Change</button>
                                 </div>
                                 <div class="col-sm-3  col-xs-4">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnRemove">Delete Allocation</button>
+                                    <button type="submit" class="btn btn-danger btn-block" name="btnRemove">Delete Allocation</button>
                                 </div>
                                 <div class="col-sm-3  col-xs-4">
                                     <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>

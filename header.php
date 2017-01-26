@@ -29,17 +29,17 @@ $is_manager = $login_user['role'] == 'manager';
     <!-- Header -->
     <div class="row header">
         <!-- Logo -->
-        <div class="col-xs-12 col-sm-6">
+        <div class="col-xs-12 col-sm-offset-1 col-sm-5">
             <img src="images/logo.png" alt="Boral" class="header-logo">
         </div>
         <!-- User profile -->
-        <div class="col-xs-12 col-sm-6 ">
+        <div class="col-xs-12 col-sm-5 ">
             <div class="pull-right">
                 <div class="user-profile">
                     <span class="fa fa-user" aria-hidden="true"></span>&nbsp;<span><?php echo $login_user['firstname']. ' ' . $login_user['lastname'];?></span>
                     &nbsp;<a href="logout.php"><span class="fa fa-sign-out"></span></a>
                 </div>
-                <div class="date-time">Date: <?php echo date('Y-m-d')?></div>
+                <div class="date-time">Date: <?php echo date('d-m-Y')?></div>
             </div>
         </div>
     </div>
