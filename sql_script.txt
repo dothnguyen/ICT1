@@ -1,8 +1,4 @@
-﻿--
--- Table structure for table `daily`
---
-
-CREATE TABLE `daily` (
+﻿CREATE TABLE `daily` (
   `daily_id` int(11) NOT NULL,
   `d_created_date` date DEFAULT NULL,
   `d_comments` varchar(60) DEFAULT NULL,
@@ -18,11 +14,6 @@ CREATE TABLE `daily` (
   `site_alloc_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `monthly`
---
 
 CREATE TABLE `monthly` (
   `monthly_id` int(11) NOT NULL,
@@ -40,11 +31,6 @@ CREATE TABLE `monthly` (
   `site_alloc_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `representative_allocated`
---
 
 CREATE TABLE `representative_allocated` (
   `site_alloc_id` int(11) NOT NULL,
@@ -54,11 +40,6 @@ CREATE TABLE `representative_allocated` (
   `user_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `site`
---
 
 CREATE TABLE `site` (
   `site_id` int(11) NOT NULL,
@@ -69,11 +50,6 @@ CREATE TABLE `site` (
   `manager_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- --------------------------------------------------------
-
---
--- Table structure for table `User_tbl`
---
 
 CREATE TABLE `User_tbl` (
   `user_id` int(11) NOT NULL,
@@ -88,20 +64,12 @@ CREATE TABLE `User_tbl` (
   `created_date` date DEFAULT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `User_tbl`
---
 
 INSERT INTO `User_tbl` (`user_id`, `firstname`, `lastname`, `username`, `password`, `email`, `role`, `manager_id`, `last_login`, `created_date`) VALUES
 (5, 'Ravi', 'Malapati', 'ravi', '88a9c0747954ee74cdeade4075e0d1b8', 'ravitejamalapati@gmail.com', 'manager', NULL, NULL, '2017-01-10'),
 (6, 'Shanil', 'Frank', 'shane', '4318de693209a2ffa147ee056f54a943', 'shanilfrank@gmail.com', 'user', 5, NULL, '2017-01-10'),
 (7, 'Sukhbir', 'Singbal', 'sukhbir', '0d57046b583ab6a64ea1eae5080f0626', 'sukhbirsinghbal@gmail.com', 'user', 5, NULL, '2017-01-10');
 
--- --------------------------------------------------------
-
---
--- Table structure for table `weekly`
---
 
 CREATE TABLE `weekly` (
   `weekly_id` int(11) NOT NULL,
@@ -119,139 +87,70 @@ CREATE TABLE `weekly` (
   `site_alloc_id` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Indexes for dumped tables
---
-
---
--- Indexes for table `daily`
---
 ALTER TABLE `daily`
   ADD PRIMARY KEY (`daily_id`),
   ADD KEY `daily_representative_allocated_FK` (`site_alloc_id`);
 
---
--- Indexes for table `monthly`
---
 ALTER TABLE `monthly`
   ADD PRIMARY KEY (`monthly_id`),
   ADD KEY `monthly_representative_allocated_FK` (`site_alloc_id`);
 
---
--- Indexes for table `representative_allocated`
---
 ALTER TABLE `representative_allocated`
   ADD PRIMARY KEY (`site_alloc_id`),
   ADD KEY `representative_allocated_site_FK` (`site_id`),
   ADD KEY `representative_allocated_user_FK` (`user_id`);
 
---
--- Indexes for table `site`
---
 ALTER TABLE `site`
   ADD PRIMARY KEY (`site_id`),
   ADD KEY `site_user_FK` (`manager_id`);
 
---
--- Indexes for table `User_tbl`
---
 ALTER TABLE `User_tbl`
   ADD PRIMARY KEY (`user_id`),
   ADD KEY `user_user_FK` (`manager_id`);
 
---
--- Indexes for table `weekly`
---
 ALTER TABLE `weekly`
   ADD PRIMARY KEY (`weekly_id`),
   ADD KEY `weekly_representative_allocated_FK` (`site_alloc_id`);
 
---
--- AUTO_INCREMENT for dumped tables
---
 
---
--- AUTO_INCREMENT for table `daily`
---
 ALTER TABLE `daily`
   MODIFY `daily_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `monthly`
---
+
 ALTER TABLE `monthly`
   MODIFY `monthly_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `representative_allocated`
---
+
 ALTER TABLE `representative_allocated`
   MODIFY `site_alloc_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `site`
---
+
 ALTER TABLE `site`
   MODIFY `site_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- AUTO_INCREMENT for table `User_tbl`
---
+
 ALTER TABLE `User_tbl`
   MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `weekly`
---
+
 ALTER TABLE `weekly`
   MODIFY `weekly_id` int(11) NOT NULL AUTO_INCREMENT;
---
--- Constraints for dumped tables
---
 
---
--- Constraints for table `daily`
---
 ALTER TABLE `daily`
   ADD CONSTRAINT `daily_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
---
--- Constraints for table `monthly`
---
 ALTER TABLE `monthly`
   ADD CONSTRAINT `monthly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
---
--- Constraints for table `representative_allocated`
---
 ALTER TABLE `representative_allocated`
   ADD CONSTRAINT `representative_allocated_site_FK` FOREIGN KEY (`site_id`) REFERENCES `site` (`site_id`),
-  ADD CONSTRAINT `representative_allocated_user_FK` FOREIGN KEY (`user_id`) REFERENCES `user_tbl` (`user_id`);
+  ADD CONSTRAINT `representative_allocated_user_FK` FOREIGN KEY (`user_id`) REFERENCES `User_tbl` (`user_id`);
 
---
--- Constraints for table `site`
---
 ALTER TABLE `site`
   ADD CONSTRAINT `site_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `user_tbl` (`user_id`);
 
---
--- Constraints for table `User_tbl`
---
 ALTER TABLE `User_tbl`
   ADD CONSTRAINT `user_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `user_tbl` (`user_id`);
 
---
--- Constraints for table `weekly`
---
 ALTER TABLE `weekly`
   ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
 
 
--- add active status to the tables
 ALTER TABLE `User_tbl` ADD `active_status` INT(1) NOT NULL DEFAULT '1' AFTER `manager_id`;
 
 ALTER TABLE `site` ADD `active_status` INT(1) NOT NULL DEFAULT '1' AFTER `manager_id`;
-
-
-// get all user managed by a manager, with allocation information if any
-SELECT * FROM User_tbl a
-   LEFT JOIN (SELECT s.*, ra.user_id FROM site s, representative_allocated ra
-             WHERE s.site_id = ra.site_id
-             and ra.site_rep_active_status = 1) b
-   on a.user_id = b.user_id
-WHERE a.manager_id = 5

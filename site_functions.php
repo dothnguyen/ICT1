@@ -43,7 +43,7 @@ function get_allocation_info($conn, $allocate_id) {
 
     $ret = $conn->query($sql);
 
-    return $ret->fetch_assoc();
+    return mysqli_fetch_assoc($ret);
 }
 
 /**
@@ -88,11 +88,16 @@ return $conn->query($sql);
  * @return mixed
  */
 function get_allusers($conn,$managerId){
-	$sql= "SELECT * FROM user_tbl where manager_id= $managerId and active_status = 1";
+	$sql= "SELECT * FROM User_tbl where manager_id= $managerId and active_status = 1";
 
 return $conn->query($sql);
 }
 
+/**
+ * @param $conn
+ * @param $managerId
+ * @return mixed
+ */
 function get_allsites($conn,$managerId){
 	$sql= "SELECT * FROM site";
 
@@ -109,7 +114,7 @@ function get_site_by_id($conn, $site_id) {
 
     $ret = $conn->query($sql);
 
-    return $ret->fetch_assoc();
+    return mysqli_fetch_assoc($ret);
 }
 
 /**
@@ -142,10 +147,10 @@ function is_user_allocated($conn, $user_id) {
 }
 
 function get_user_by_id($conn, $user_id){
-	$sql= "select *from user_tbl where user_id=$user_id";
+	$sql= "select *from User_tbl where user_id=$user_id";
 	 $ret = $conn->query($sql);
 
-    return $ret->fetch_assoc();
+    return mysqli_fetch_assoc($ret);
 }
 
 /**
@@ -162,8 +167,16 @@ function modify_site($conn, $site_id, $site_name, $site_address, $site_tel) {
     return mysqli_query($conn, $sql);
 }
 
+/**
+ * @param $conn
+ * @param $user_id
+ * @param $firstname
+ * @param $lastname
+ * @param $email
+ * @return bool|mysqli_result
+ */
 function modify_user($conn, $user_id, $firstname, $lastname, $email) {
-    $sql = "UPDATE user_tbl SET firstname='$firstname', lastname='$lastname', email='$email'
+    $sql = "UPDATE User_tbl SET firstname='$firstname', lastname='$lastname', email='$email'
             WHERE user_id=$user_id";
 
    return mysqli_query($conn, $sql);
@@ -182,17 +195,40 @@ function insert_site($conn, $site_name, $site_address, $site_tel, $manager_id) {
 
     return mysqli_query($conn, $sql);
 }
+
+/**
+ * @param $conn
+ * @param $firstname
+ * @param $lastname
+ * @param $email
+ * @param $manager_id
+ * @return bool|mysqli_result
+ */
 function insert_user($conn, $firstname, $lastname, $email, $manager_id) {
-    $sql = "INSERT INTO user_tbl(firstname, lastname, email, manager_id, site_created_date) 
+    $sql = "INSERT INTO User_tbl(firstname, lastname, email, manager_id, site_created_date) 
                       VALUES('$firstname', '$lastname', '$email', $manager_id, NOW());";
 
     return mysqli_query($conn, $sql);
 }
 
+/**
+ * @param $conn
+ * @param $firstname
+ * @param $lastname
+ * @param $email
+ * @param $username
+ * @param $manager_id
+ */
 function insert_new_user($conn, $firstname, $lastname, $email, $username, $manager_id){
-	
-	$sql="INSERT INTO user_tbl (user_id,firstname, lastname, username,email, manager_id, created_date)
-	values ('default','$firstname', '$lastname', '$username', '$email', $manager_id ,NOW());";
+
+    $encryptPwd = md5('boral01');
+
+	$sql="INSERT INTO User_tbl (firstname, lastname, username,email, password, manager_id, created_date)
+	values ('$firstname', '$lastname', '$username', '$email', '$encryptPwd', $manager_id , NOW());";
+
+
+    return mysqli_query($conn, $sql);
+
 }
 
 
