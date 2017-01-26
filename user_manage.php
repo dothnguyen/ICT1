@@ -103,6 +103,8 @@ mysqli_close($conn);
             </div>
         </div>
     </div>
+	&nbsp;
+	&nbsp;
 </section>
 
 
