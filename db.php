@@ -1,9 +1,23 @@
 <?php
 //define constants for connection info
+
+// For remote host
+//define("MYSQLUSER","boral");
+//define("MYSQLPASS","boral01");
+//define("HOSTNAME","localhost");
+//define("MYSQLDB","boral");
+
+// remote test  host
+//define("MYSQLUSER","boral_test");
+//define("MYSQLPASS","boral");
+//define("HOSTNAME","localhost");
+//define("MYSQLDB","boral_test");
+
+// local test
 define("MYSQLUSER","team01");
 define("MYSQLPASS","team01");
 define("HOSTNAME","localhost");
-define("MYSQLDB","boral");
+define("MYSQLDB","boral_");
 
 //make connection to database
 /**

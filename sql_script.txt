@@ -142,10 +142,10 @@ ALTER TABLE `representative_allocated`
   ADD CONSTRAINT `representative_allocated_user_FK` FOREIGN KEY (`user_id`) REFERENCES `User_tbl` (`user_id`);
 
 ALTER TABLE `site`
-  ADD CONSTRAINT `site_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `user_tbl` (`user_id`);
+  ADD CONSTRAINT `site_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `User_tbl` (`user_id`);
 
 ALTER TABLE `User_tbl`
-  ADD CONSTRAINT `user_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `user_tbl` (`user_id`);
+  ADD CONSTRAINT `user_user_FK` FOREIGN KEY (`manager_id`) REFERENCES `User_tbl` (`user_id`);
 
 ALTER TABLE `weekly`
   ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
