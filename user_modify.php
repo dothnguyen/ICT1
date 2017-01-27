@@ -27,9 +27,23 @@ $user_id = "";
 $firstname = "";
 $lastname = "";
 $email = "";
+$new_username="";
 $active_status = "1";
 $is_allocated = false;
+$generate_password="";
 
+//function to generate random 8 character password
+function generateRandomPassword($length = 8) {
+    $chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    $count = mb_strlen($chars);
+
+    for ($i = 0, $result = ''; $i < $length; $i++) {
+        $index = rand(0, $count - 1);
+        $result .= mb_substr($chars, $index, 1);
+    }
+
+    return $result;
+}
 
 // submitted
 if (isset($_POST['btnSave'])) {
@@ -38,10 +52,13 @@ if (isset($_POST['btnSave'])) {
     $email = test_input($_POST['txtEmail']);
     $username = test_input($_POST['txtUsername']);
     $user_id = test_input($_POST['user_id']);
+	$new_username= test_input($_POST['txtNewUsername']);
+	$generate_password=md5(test_input($_POST['txtPassword']));
+	
 
     // validation
     if ($firstname == "") {
-        $msg['fist_name'] = "First name can not be empty.";
+        $msg['first_name'] = "First name can not be empty.";
     }
 
     if ($lastname == "") {
@@ -52,8 +69,8 @@ if (isset($_POST['btnSave'])) {
         $msg['email'] = "Email can not be empty.";
     }
 
-    if ($mode == 'new' && $username == '') {
-        $msg['username'] = 'Username can not be empty.';
+    if ($mode == 'new' && $new_username == '') {
+        $msg['new_username'] = 'Username can not be empty.';
     }
 
     if (empty($msg)) {
@@ -64,7 +81,7 @@ if (isset($_POST['btnSave'])) {
 
         } else if ($mode == 'new') {
 
-            insert_new_user($conn, $firstname, $lastname, $username, $email, $login_user['user_id']);
+            insert_new_user($conn, $firstname, $lastname, $email, $new_username,  $generate_password, $login_user['user_id']);
 
         }
 
@@ -174,16 +191,33 @@ if (isset($_POST['btnSave'])) {
 
                         <?php if ($mode == 'new') { ?>
 
-                            <div class="form-group <?php if (!empty($msg['username'])) echo "has-error"; ?>">
-                                <label for="txtUsername" class="col-sm-3 control-label">Username</label>
+                            <div class="form-group <?php if (!empty($msg['new_username'])) echo "has-error"; ?>">
+                                <label for="txtNewUsername" class="col-sm-3 control-label">Username</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtUsername" name="txtUsername"/>
+                                    <input type="text" class="form-control" id="txtNewUsername" name="txtNewUsername"/>
                                 </div>
-                                <?php if (!empty($msg['username'])) { ?>
+                                <?php if (!empty($msg['new_username'])) { ?>
                                     <div class="col-sm-offset-3 col-sm-8">
-                                        <span class="help-block"><?php echo $msg['username'] ?></span>
+                                        <span class="help-block"><?php echo $msg['new_username'] ?></span>
                                     </div>
                                 <?php } ?>
+								
+								
+                            </div>
+							
+							<?php $generate_password=generateRandomPassword(); ?>
+							<div class="form-group <?php if (!empty($msg['generate_password'])) echo "has-error"; ?>">
+                                <label for="txtPassword" class="col-sm-3 control-label">Password</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="txtPassword" name="txtPassword" value="<?php echo $generate_password;?>"/>
+                                </div>
+                                <?php if (!empty($msg['generate_password'])) { ?>
+                                    <div class="col-sm-offset-3 col-sm-8">
+                                        <span class="help-block"><?php echo $msg['generate_password'] ?></span>
+                                    </div>
+                                <?php } ?>
+								
+								
                             </div>
 
                             <div class="form-group button-group">

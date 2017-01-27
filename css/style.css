@@ -178,3 +178,19 @@ html, body {
     padding-top: 7px;
 }
 
+.action-column .moddo {
+	background-color: #CF6870;
+}
+
+
+.action-column .allo{
+	background-color: #B0E57C;
+}
+
+.action-column .eddo{
+	background-color: #2AABD2;
+}
+
+.left-panel{
+		border-radius: 10px;
+} 
