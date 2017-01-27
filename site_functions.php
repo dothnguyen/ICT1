@@ -37,7 +37,7 @@ function get_unallocated_sites($conn, $manager_id) {
  * @param $allocated_id
  */
 function get_allocation_info($conn, $allocate_id) {
-    $sql = "SELECT * FROM Site, representative_allocated
+    $sql = "SELECT * FROM site, representative_allocated
              WHERE site.site_id = representative_allocated.site_id
               AND representative_allocated.site_alloc_id = $allocate_id";
 
