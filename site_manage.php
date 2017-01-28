@@ -8,6 +8,13 @@
 
 require_once "db.php";
 require_once "site_functions.php";
+require_once  "other_functions.php";
+
+// check if user loged in
+check_login();
+
+// check if login user has the privileges
+check_authorize(true);
 
 session_start();
 

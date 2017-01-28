@@ -10,6 +10,13 @@ require_once "db.php";
 require_once "site_functions.php";
 require_once "other_functions.php";
 
+
+// check if user loged in
+check_login();
+
+// check if user can access manager's page
+check_authorize(true);
+
 session_start();
 
 // get logged-in user info

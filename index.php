@@ -6,11 +6,8 @@ require_once "other_functions.php";
 
 session_start();
 
-// if not logged in -> redirect to login page
-if (!$_SESSION['logged_in']) {
-    header("Location:login.php");
-    exit();
-}
+// check if user loged in
+check_login();
 
 // get logged-in user info
 $login_user = $_SESSION['user_info'];

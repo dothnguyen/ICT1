@@ -6,6 +6,14 @@
  * Time: 12:17 PM
  */
 
+require_once "other_functions.php";
+
+// check if user loged in
+check_login();
+
+// check if user can access manager's page
+check_authorize(true);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
