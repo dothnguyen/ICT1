@@ -36,5 +36,11 @@ function check_authorize($is_manager_page) {
 
     if (!$is_manager && $is_manager_page) {
         header("Location:unauthorize.php");
+        exit();
+    }
+
+    if ($is_manager && !$is_manager_page) {
+        header("Location:unauthorize.php");
+        exit();
     }
 }

@@ -11,6 +11,8 @@ require_once "site_functions.php";
 require_once "user_functions.php";
 require_once "other_functions.php";
 
+session_start();
+
 // check if user loged in
 check_login();
 
@@ -20,8 +22,6 @@ check_authorize(true);
 if (isset($_POST['btnCancel'])) {
     header("Location:user_manage.php");
 }
-
-session_start();
 
 // get logged-in user info
 $login_user = $_SESSION['user_info'];

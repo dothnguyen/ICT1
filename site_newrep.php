@@ -8,8 +8,9 @@
 
 require_once "db.php";
 require_once "site_functions.php";
-
 require_once "other_functions.php";
+
+session_start();
 
 // check if user loged in
 check_login();
@@ -17,7 +18,6 @@ check_login();
 // check if user can access manager's page
 check_authorize(true);
 
-session_start();
 
 $conn = db_connect();
 

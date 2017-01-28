@@ -8,6 +8,8 @@
 
 require_once "other_functions.php";
 
+session_start();
+
 // check if user loged in
 check_login();
 
