@@ -20,7 +20,7 @@ require_once ("db.php");
 function check_user($conn, $username, $cus_pwd) {
     $encrypted_pwd = md5($cus_pwd);
 
-    $sql = "SELECT * FROM User_tbl WHERE username = '$username' AND password = '$encrypted_pwd'";
+    $sql = "SELECT * FROM user_tbl WHERE username = '$username' AND password = '$encrypted_pwd'";
 
     //echo $sql;
 
@@ -43,7 +43,7 @@ function check_user($conn, $username, $cus_pwd) {
  * @return customer row
  */
 function get_user($conn, $username) {
-    $sql = "SELECT * FROM User_tbl WHERE username = '$username'";
+    $sql = "SELECT * FROM user_tbl WHERE username = '$username'";
 
     $ret = $conn->query($sql);
 
@@ -55,7 +55,7 @@ function get_user($conn, $username) {
  * @param $user_id
  */
 function get_user_from_id($conn, $user_id) {
-    $sql = "SELECT * FROM User_tbl WHERE user_id = $user_id";
+    $sql = "SELECT * FROM user_tbl WHERE user_id = $user_id";
 
     $ret = $conn->query($sql);
 

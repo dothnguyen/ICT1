@@ -71,7 +71,7 @@ function deactivate_site_allocation($conn, $allocate_id) {
 
 
 function get_representative($conn,$managerId){
-	$sql= "SELECT a.*, b.site_name, b.site_rep_active_status, b.site_alloc_id FROM User_tbl a
+	$sql= "SELECT a.*, b.site_name, b.site_rep_active_status, b.site_alloc_id FROM user_tbl a
            LEFT JOIN (SELECT s.*, ra.user_id, ra.site_rep_active_status, ra.site_alloc_id FROM site s, representative_allocated ra
                      WHERE s.site_id = ra.site_id
                      and ra.site_rep_active_status = 1) b
@@ -88,7 +88,7 @@ return $conn->query($sql);
  * @return mixed
  */
 function get_allusers($conn,$managerId){
-	$sql= "SELECT * FROM User_tbl where manager_id= $managerId and active_status = 1";
+	$sql= "SELECT * FROM user_tbl where manager_id= $managerId and active_status = 1";
 
 return $conn->query($sql);
 }
@@ -147,7 +147,7 @@ function is_user_allocated($conn, $user_id) {
 }
 
 function get_user_by_id($conn, $user_id){
-	$sql= "select *from User_tbl where user_id=$user_id";
+	$sql= "select *from user_tbl where user_id=$user_id";
 	 $ret = $conn->query($sql);
 
     return mysqli_fetch_assoc($ret);
@@ -176,7 +176,7 @@ function modify_site($conn, $site_id, $site_name, $site_address, $site_tel) {
  * @return bool|mysqli_result
  */
 function modify_user($conn, $user_id, $firstname, $lastname, $email) {
-    $sql = "UPDATE User_tbl SET firstname='$firstname', lastname='$lastname', email='$email'
+    $sql = "UPDATE user_tbl SET firstname='$firstname', lastname='$lastname', email='$email'
             WHERE user_id=$user_id";
 
    return mysqli_query($conn, $sql);
@@ -208,7 +208,7 @@ function insert_site($conn, $site_name, $site_address, $site_tel, $manager_id) {
 
 function insert_new_user($conn, $firstname, $lastname,$username, $generatepassword,$email, $manager_id){
 	
-	$sql="INSERT INTO User_tbl (firstname, lastname, username, password, email, manager_id, created_date)
+	$sql="INSERT INTO user_tbl (firstname, lastname, username, password, email, manager_id, created_date)
 	values ('$firstname', '$lastname', '$generatepassword','$email','$username', $manager_id ,NOW());";
 	return mysqli_query($conn, $sql);
 }
