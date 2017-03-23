@@ -20,6 +20,44 @@ function get_sites_of_manager($conn, $managerId) {
 
 /**
  * @param $conn
+ * @param $managerId
+ * @param $skip
+ * @param $count
+ */
+function get_sites_of_manager_with_paging($conn, $managerId, $search, $skip, $count) {
+    $sql = "SELECT * FROM site WHERE manager_id = $managerId
+            and active_status = 1";
+
+    if (!empty($search)) {
+        $sql .= " and site_name LIKE %$search% ";
+    }
+
+    $sql .=  " LIMIT $skip, $count";
+
+    return $conn->query($sql);
+}
+
+/**
+ * @param $conn
+ * @param $managerId
+ * @param $search
+ * @return mixed
+ */
+function count_sites_of_manager_with_criteria($conn, $managerId, $search) {
+    $sql = "SELECT COUNT(*) as c FROM site WHERE manager_id = $managerId
+            and active_status = 1";
+
+    if (!empty($search)) {
+        $sql .= " and site_name LIKE %$search% ";
+    }
+
+    $ret = mysqli_fetch_assoc($conn->query($sql));
+
+    return $ret['c'];
+}
+
+/**
+ * @param $conn
  * @param $manager_id
  */
 function get_unallocated_sites($conn, $manager_id) {

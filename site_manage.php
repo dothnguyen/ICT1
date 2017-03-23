@@ -18,14 +18,41 @@ check_login();
 // check if login user has the privileges
 check_authorize(true);
 
-
-
-$conn = db_connect();
-
 // get logged-in user info
 $login_user = $_SESSION['user_info'];
 
-$sites = get_sites_of_manager($conn, $login_user['user_id']);
+$conn = db_connect();
+
+
+////////////// ADD PAGING AND SEARCHING FEATURE /////////
+// 10 row per page
+$item_per_page = 5;
+$page = 0;
+
+// get search criteria
+$search_criteria = "";
+
+if (isset($_POST['search_criteria'])) {
+    $search_criteria = test_input($_POST['search_criteria']);
+}
+
+if (isset($_REQUEST['page'])) {
+    $page = intval($_REQUEST['page']);
+}
+
+// calculate number of pages
+$count = count_sites_of_manager_with_criteria($conn, $login_user['user_id'], $search_criteria);
+
+////////////// ADD PAGING AND SEARCHING FEATURE /////////
+
+$sites = null;
+if ($count > 0) {
+
+    $num_page = ceil($count / $item_per_page);
+
+    $sites = get_sites_of_manager_with_paging($conn, $login_user['user_id'], $search_criteria, $page * $item_per_page, $item_per_page);
+
+}
 
 $idx = 0;
 
@@ -59,6 +86,11 @@ mysqli_close($conn);
                 <div class="right-panel">
                     <div class="page-title"><span>Site List</span></div>
                     <div class="page-content">
+                        <div class="search-form">
+                            <form action="site_manage.php" method="get">
+
+                            </form>
+                        </div>
                         <div class="site-list-container">
                             <table class="table-bordered table-striped table-hover table-responsive site-table">
                                 <thead>
@@ -67,27 +99,52 @@ mysqli_close($conn);
                                     <td>Action</td>
                                 </thead>
                                 <?php
-                                    foreach ($sites as $site) {
-                                ?>
-                                        <tr>
-                                            <td class="index-column"><?php echo ($idx + 1)?></td>
-                                            <td class="site-info-column">
-                                                <div>
-                                                    <div><strong><?php echo $site['site_name'];?></strong> - <span>Tel: <?php echo $site['telephone'];?></span></div>
-                                                    <div><spa>Address: <?php echo $site['address'];?></spa></div>
-                                                </div>
-                                            </td>
-                                            <td class="action-column">
-                                                <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id']?>" class="btn btn-block btn-default eddo">Edit</a>
+                                    if (!empty($sites)) {
+                                        foreach ($sites as $site) {
+                                            ?>
+                                            <tr>
+                                                <td class="index-column"><?php echo($idx + 1) ?></td>
+                                                <td class="site-info-column">
+                                                    <div>
+                                                        <div><strong><?php echo $site['site_name']; ?></strong> - <span>Tel: <?php echo $site['telephone']; ?></span>
+                                                        </div>
+                                                        <div>
+                                                            <spa>Address: <?php echo $site['address']; ?></spa>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td class="action-column">
+                                                    <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id'] ?>"
+                                                       class="btn btn-block btn-default eddo">Edit</a>
 
-                                            </td>
-                                        </tr>
-                                <?php
-                                        $idx++;
-                                    }
+                                                </td>
+                                            </tr>
+                                            <?php
+                                            $idx++;
+                                        }
+                                    } else {
                                 ?>
+                                <tr><td colspan="3">No data found.</td></tr>
+                                <?php } ?>
                             </table>
                         </div>
+                        <?php if ($num_page > 1) { ?>
+                            <div class="pagination-container">
+                            <ul class="pagination">
+                            <?php for ($i = 0; $i < $num_page; $i++) {
+                                if ($i == $page) {
+                                    ?>
+                                    <li class="active"><a href="#"><?php echo($i + 1); ?></a></li>
+                                <?php } else { ?>
+                                    <li>
+                                        <a href="site_manage.php?search_criteria=<?php echo $search_criteria; ?>&page=<?php echo $i; ?>"><?php echo($i + 1); ?></a>
+                                    </li>
+                                <?php }
+                            }?>
+                            </ul>
+                            </div>
+                            <?php
+                        } ?>
                     </div>
                 </div>
             </div>
