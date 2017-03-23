@@ -29,7 +29,7 @@ function get_sites_of_manager_with_paging($conn, $managerId, $search, $skip, $co
             and active_status = 1";
 
     if (!empty($search)) {
-        $sql .= " and site_name LIKE %$search% ";
+        $sql .= " and (site_name LIKE '%$search%' or address like '%$search%' )";
     }
 
     $sql .=  " LIMIT $skip, $count";
@@ -48,7 +48,7 @@ function count_sites_of_manager_with_criteria($conn, $managerId, $search) {
             and active_status = 1";
 
     if (!empty($search)) {
-        $sql .= " and site_name LIKE %$search% ";
+        $sql .= " and (site_name LIKE '%$search%' or address like '%$search%' )";
     }
 
     $ret = mysqli_fetch_assoc($conn->query($sql));

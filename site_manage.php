@@ -32,8 +32,8 @@ $page = 0;
 // get search criteria
 $search_criteria = "";
 
-if (isset($_POST['search_criteria'])) {
-    $search_criteria = test_input($_POST['search_criteria']);
+if (isset($_REQUEST['search_criteria'])) {
+    $search_criteria = test_input($_REQUEST['search_criteria']);
 }
 
 if (isset($_REQUEST['page'])) {
@@ -87,8 +87,12 @@ mysqli_close($conn);
                     <div class="page-title"><span>Site List</span></div>
                     <div class="page-content">
                         <div class="search-form">
-                            <form action="site_manage.php" method="get">
-
+                            <form class="form-inline" action="site_manage.php" method="get">
+                                <div class="form-group">
+                                    <label for="search_criteria">Search for </label>
+                                    <input type="text" class="form-control" id="search_criteria" name="search_criteria" value="<?php echo $search_criteria; ?>">
+                                    <button type="submit" class="btn btn-default" id="search">Search</button>
+                                </div>
                             </form>
                         </div>
                         <div class="site-list-container">
