@@ -61,10 +61,26 @@ $page_name = basename($_SERVER['PHP_SELF']);
         <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
 
             <ul class = "nav navbar-nav">
-                <li class = "active"><a href = "#">Daily</a></li>
-                <li><a href = "#">Weekly</a></li>
-
-                <li><a href = "#">Monthly</a></li>
+                <?php if ($page_name == 'rep_home.php') {?>
+                    <li class = "active"><a href = "#">Home</a></li>
+                <?php } else {?>
+                    <li><a href = "rep_home.php">Home</a></li>
+                <?php }?>
+                <?php if ($page_name == 'rep_daily_chklist.php') {?>
+                    <li class = "active"><a href = "#">Daily</a></li>
+                <?php } else {?>
+                    <li><a href = "rep_daily_chklist.php">Daily</a></li>
+                <?php }?>
+                <?php if ($page_name == 'rep_weekly_chklist.php') {?>
+                    <li class = "active"><a href = "#">Weekly</a></li>
+                <?php } else {?>
+                    <li><a href = "#">Weekly</a></li>
+                <?php }?>
+                <?php if ($page_name == 'rep_monthly_chklist.php') {?>
+                    <li class = "active"><a href = "#">Monthly</a></li>
+                <?php } else {?>
+                    <li><a href = "#">Monthly</a></li>
+                <?php }?>
 
             </ul>
         </div>
