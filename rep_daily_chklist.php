@@ -27,6 +27,7 @@ check_authorize(false);
     <link rel="stylesheet" href="css/font-awesome.min.css">
     <link rel="stylesheet" href="css/style.css">
 
+
     <title>Reports</title>
 </head>
 <body>
@@ -34,22 +35,22 @@ check_authorize(false);
 <?php include_once 'nav.php';?>
 
 <section class="main-content">
-    <form action="">
-    <div class="container">
+    <form action="" enctype="multipart/form-data">
+    <div class="container checklist-wrapper">
         <div  class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8"><span class="title">Daily Checklist for: <strong>2017/03/28</strong></span></div>
         </div>
-        <div class="row">
+        <div class="row checklist-title">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <span>Checklist</span>
+                <span class="">Checklist</span>
             </div>
         </div>
-        <div class="row">
+        <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <div class="row">
+                <div class="row control-wrapper">
                     <div class="col-md-4">
                         <input type="checkbox" name="check1" id="check1"> <label for="check1">Check 1</label>
                     </div>
@@ -80,31 +81,38 @@ check_authorize(false);
                 </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row checklist-title">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <span>Comment</span>
             </div>
         </div>
-        <div class="row">
+        <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <textarea name="comment" id="comment" cols="102" rows="10"></textarea>
             </div>
         </div>
-        <div class="row">
+        <div class="row checklist-title">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <span>Attachments</span>
             </div>
         </div>
-        <div class="row">
+        <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-
+                <div class="row control-wrapper">
+                    <div class="col-xs-12 file-wrapper">
+                        <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
+                    </div>
+                    <div class="col-xs-12">
+                        <a href="#" class="btn btn-primary add-file"><span class="fa fa-plus"></span></a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="row">
+        <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
                 <button type="submit" name="submit" class="btn btn-primary pull-right">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
@@ -117,5 +125,6 @@ check_authorize(false);
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/script.js"></script>
+
 </body>
 </html>
