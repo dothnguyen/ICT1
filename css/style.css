@@ -193,4 +193,41 @@ html, body {
 
 .left-panel{
 		border-radius: 10px;
-} 
+}
+
+
+.checklist-wrapper .checklist-title {
+    padding-top: 20px;
+}
+
+.checklist-wrapper .checklist-title span {
+    text-decoration: underline;
+}
+
+.checklist-wrapper .checklist-controls {
+    padding-top: 10px;
+}
+
+.checklist-wrapper .checklist-controls .control-wrapper {
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 15px;
+    border: 1px solid #999999;
+}
+
+.checklist-wrapper .checklist-controls .control-wrapper input[type='checkbox'],
+.checklist-wrapper .checklist-controls .control-wrapper label {
+    padding: 10px;
+}
+
+input[type="file"] {
+    display: inline-block;
+}
+
+.file-wrapper {
+    margin-bottom: 10px;
+}
+
+.file-wrapper img {
+    margin-left: 40px;
+}

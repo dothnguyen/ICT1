@@ -106,6 +106,12 @@ check_authorize(false);
                     <div class="col-xs-12 file-wrapper">
                         <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
                     </div>
+                    <div class="col-xs-12 file-wrapper">
+                        <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
+                    </div>
+                    <div class="col-xs-12 file-wrapper">
+                        <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
+                    </div>
                     <div class="col-xs-12">
                         <a href="#" class="btn btn-primary add-file"><span class="fa fa-plus"></span></a>
                     </div>
