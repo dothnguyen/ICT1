@@ -305,3 +305,17 @@ ALTER TABLE `user_tbl`
 --
 ALTER TABLE `weekly`
   ADD CONSTRAINT `weekly_representative_allocated_FK` FOREIGN KEY (`site_alloc_id`) REFERENCES `representative_allocated` (`site_alloc_id`);
+
+
+
+
+-- NguyenDo modified 1/4/2017
+-- change created date of the checklists to DATETIME
+ALTER TABLE `daily` CHANGE `d_created_date` `d_created_date` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `weekly` CHANGE `w_created_date` `w_created_date` DATETIME NULL DEFAULT NULL;
+ALTER TABLE `monthly` CHANGE `m_created_date` `m_created_date` DATETIME NULL DEFAULT NULL;
+
+-- increase the number of characters for comments
+ALTER TABLE `daily` CHANGE `d_comments` `d_comments` VARCHAR(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `weekly` CHANGE `w_comments` `d_comments` VARCHAR(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+ALTER TABLE `monthly` CHANGE `m_comments` `d_comments` VARCHAR(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;

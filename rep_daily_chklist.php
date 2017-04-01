@@ -24,6 +24,20 @@ $has_allocation = true;
 $site_alloc_id = 0;
 $site_name = "";
 
+$checklist1 = 0;
+$checklist2 = 0;
+$checklist3 = 0;
+$checklist4 = 0;
+$checklist5 = 0;
+$checklist6 = 0;
+$checklist7 = 0;
+$checklist8 = 0;
+$checklist9 = 0;
+$comment = "";
+$uploaded_images = array();
+
+$chklist_date = "";
+
 // handle form submission
 if (isset($_REQUEST['submit'])) {
 
@@ -90,16 +104,18 @@ if (isset($_REQUEST['submit'])) {
 
     mysqli_close($conn);
 
+    header("Location:rep_daily_chklist.php");
+
 } else {
+    $conn = db_connect();
 
-    $mode = $_REQUEST['mode'];
+    $mode = "";
 
-    // new mode
-    if ($mode != 'view') {
+    // get current check list
+    $current_checklist = get_current_daily_chklist($conn, $login_user['user_id']);
 
+    if (empty($current_checklist)) {
         // get the current allocation of the user
-        $conn = db_connect();
-
         $user_allocation = get_user_allocation($conn, $login_user['user_id']);
 
         if ($user_allocation == null) {
@@ -108,15 +124,65 @@ if (isset($_REQUEST['submit'])) {
             $site_name = $user_allocation['site_name'];
             $site_alloc_id = $user_allocation['site_alloc_id'];
         }
-
-        mysqli_close($conn);
-
     } else {
 
-    }
+        $mode = "view";
 
+        // init view mode
+        $checklist1 = $current_checklist['d_checklist1'];
+        $checklist2 = $current_checklist['d_checklist2'];
+        $checklist3 = $current_checklist['d_checklist3'];
+        $checklist4 = $current_checklist['d_checklist4'];
+        $checklist5 = $current_checklist['d_checklist5'];
+        $checklist6 = $current_checklist['d_checklist6'];
+        $checklist7 = $current_checklist['d_checklist7'];
+        $checklist8 = $current_checklist['d_checklist8'];
+        $checklist9 = $current_checklist['d_checklist9'];
+
+        $comment = $current_checklist['d_comments'];
+
+        $site_name = $current_checklist['site_name'];
+
+        $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['d_created_date']));
+
+        // get list of images
+        $uploaded_images = get_uploaded_images($conn, $current_checklist['daily_id']);
+
+    }
+    mysqli_close($conn);
 }
 
+/**
+ * @param $conn
+ * @param $chklist_id
+ */
+function get_uploaded_images($conn, $chklist_id) {
+    $sql = "SELECT * FROM upload WHERE chklist_id=$chklist_id AND chklist_type=1";
+
+    $ret = $conn->query($sql);
+
+    $images = array();
+
+    if (!empty($ret)) {
+        foreach ($ret as $upload) {
+            $images[] = $upload['file_path'];
+        }
+    }
+
+    return $images;
+}
+
+/**
+ * @param $conn
+ * @param $user_id
+ */
+function get_current_daily_chklist($conn, $user_id) {
+    $sql = "SELECT d.*, s.site_name FROM daily d, representative_allocated rep, site s WHERE d.site_alloc_id = rep.site_alloc_id 
+            AND rep.user_id=$user_id AND DATE(d.d_created_date) = DATE(NOW())
+            AND rep.site_id = s.site_id";
+
+    return mysqli_fetch_assoc($conn->query($sql));
+}
 
 /**
  */
@@ -163,10 +229,17 @@ function get_user_allocation($conn, $user_id) {
 
     <form action="rep_daily_chklist.php" method="POST" enctype="multipart/form-data">
     <div class="container checklist-wrapper">
+        <?php if ($mode == 'view') { ?>
+            <div  class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8"><span class="title">The checklist has been submitted on <strong><?php echo $chklist_date;?></strong></span></div>
+            </div>
+        <?php } else {?>
         <div  class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8"><span class="title">Daily Checklist on: <strong>2017/03/28</strong></span></div>
         </div>
+        <?php } ?>
         <div  class="row">
             <div class="col-md-2"></div>
             <div class="col-md-8"><span class="title">For site: <strong><?php echo $site_name; ?></strong></span></div>
@@ -182,31 +255,31 @@ function get_user_allocation($conn, $user_id) {
             <div class="col-md-8">
                 <div class="row control-wrapper">
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist1" value="1" id="check1"> <label for="check1">Check 1</label>
+                        <input type="checkbox" name="checklist1" value="1" id="check1" <?php if ($mode == 'view' && $checklist1 == 1) echo 'checked disabled';?>> <label for="check1">Check 1</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist2" value="1" id="check2"> <label for="check2">Check 2</label>
+                        <input type="checkbox" name="checklist2" value="1" id="check2" <?php if ($mode == 'view' && $checklist2 == 1) echo 'checked disabled';?>> <label for="check2">Check 2</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist3" value="1" id="check3"> <label for="check3">Check 3</label>
+                        <input type="checkbox" name="checklist3" value="1" id="check3" <?php if ($mode == 'view' && $checklist3 == 1) echo 'checked disabled';?>> <label for="check3">Check 3</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist4" value="1" id="check4"> <label for="check4">Check 4</label>
+                        <input type="checkbox" name="checklist4" value="1" id="check4" <?php if ($mode == 'view' && $checklist4 == 1) echo 'checked disabled';?>> <label for="check4">Check 4</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist5" value="1" id="check5"> <label for="check5">Check 5</label>
+                        <input type="checkbox" name="checklist5" value="1" id="check5" <?php if ($mode == 'view' && $checklist5 == 1) echo 'checked disabled';?>> <label for="check5">Check 5</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist6" value="1" id="check6"> <label for="check6">Check 6</label>
+                        <input type="checkbox" name="checklist6" value="1" id="check6" <?php if ($mode == 'view' && $checklist6 == 1) echo 'checked disabled';?>> <label for="check6">Check 6</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist7" value="1" id="check7"> <label for="check7">Check 7</label>
+                        <input type="checkbox" name="checklist7" value="1" id="check7" <?php if ($mode == 'view' && $checklist7 == 1) echo 'checked disabled';?>> <label for="check7">Check 7</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist8" value="1" id="check8"> <label for="check8">Check 8</label>
+                        <input type="checkbox" name="checklist8" value="1" id="check8" <?php if ($mode == 'view' && $checklist8 == 1) echo 'checked disabled';?>> <label for="check8">Check 8</label>
                     </div>
                     <div class="col-md-4">
-                        <input type="checkbox" name="checklist9" value="1" id="check9"> <label for="check9">Check 9</label>
+                        <input type="checkbox" name="checklist9" value="1" id="check9" <?php if ($mode == 'view' && $checklist9 == 1) echo 'checked disabled';?>> <label for="check9">Check 9</label>
                     </div>
                 </div>
             </div>
@@ -220,7 +293,7 @@ function get_user_allocation($conn, $user_id) {
         <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <textarea name="comment" id="comment" cols="102" rows="10"></textarea>
+                <textarea name="comment" id="comment" cols="102" rows="10" <?php if ($mode == 'view') echo 'readonly="true"';?>><?php echo $comment?></textarea>
             </div>
         </div>
         <div class="row checklist-title">
@@ -229,6 +302,7 @@ function get_user_allocation($conn, $user_id) {
                 <span>Attachments</span>
             </div>
         </div>
+        <?php if ($mode != 'view') { ?>
         <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
@@ -248,10 +322,24 @@ function get_user_allocation($conn, $user_id) {
                 </div>
             </div>
         </div>
+        <?php } else { ?>
+            <div class="row checklist-controls">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+                    <div class="row control-wrapper">
+                        <?php if (!empty($uploaded_images)) { ?>
+                            <?php foreach ($uploaded_images as $image) { ?>
+                                <img src="<?php echo $image?>"><br/>
+                            <?php } ?>
+                        <?php } ?>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
         <div class="row checklist-controls">
             <div class="col-md-2"></div>
             <div class="col-md-8">
-                <button type="submit" name="submit" class="btn btn-primary pull-right">&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
+                <button type="submit" name="submit" class="btn btn-primary pull-right <?php if ($mode == 'view') echo 'disabled';?>" >&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
             </div>
         </div>
     </div>
