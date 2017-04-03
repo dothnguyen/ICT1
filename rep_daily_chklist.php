@@ -231,101 +231,101 @@ function get_user_allocation($conn, $user_id) {
     <div class="container checklist-wrapper">
         <?php if ($mode == 'view') { ?>
             <div  class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8"><span class="title">The checklist has been submitted on <strong><?php echo $chklist_date;?></strong></span></div>
+                <div class="col-md-2 hidden-sm"></div>
+                <div class="col-md-8 col-sm-12"><span class="title">The checklist has been submitted on <strong><?php echo $chklist_date;?></strong></span></div>
             </div>
         <?php } else {?>
         <div  class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8"><span class="title">Daily Checklist on: <strong>2017/03/28</strong></span></div>
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12"><span class="title">Daily Checklist on: <strong>2017/03/28</strong></span></div>
         </div>
         <?php } ?>
         <div  class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8"><span class="title">For site: <strong><?php echo $site_name; ?></strong></span></div>
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12"><span class="title">For site: <strong><?php echo $site_name; ?></strong></span></div>
         </div>
         <div class="row checklist-title">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12">
                 <span class="">Checklist</span>
             </div>
         </div>
         <div class="row checklist-controls">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12">
                 <div class="row control-wrapper">
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist1" value="1" id="check1" <?php if ($mode == 'view' && $checklist1 == 1) echo 'checked disabled';?>> <label for="check1">Check 1</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist2" value="1" id="check2" <?php if ($mode == 'view' && $checklist2 == 1) echo 'checked disabled';?>> <label for="check2">Check 2</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist3" value="1" id="check3" <?php if ($mode == 'view' && $checklist3 == 1) echo 'checked disabled';?>> <label for="check3">Check 3</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist4" value="1" id="check4" <?php if ($mode == 'view' && $checklist4 == 1) echo 'checked disabled';?>> <label for="check4">Check 4</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist5" value="1" id="check5" <?php if ($mode == 'view' && $checklist5 == 1) echo 'checked disabled';?>> <label for="check5">Check 5</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist6" value="1" id="check6" <?php if ($mode == 'view' && $checklist6 == 1) echo 'checked disabled';?>> <label for="check6">Check 6</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist7" value="1" id="check7" <?php if ($mode == 'view' && $checklist7 == 1) echo 'checked disabled';?>> <label for="check7">Check 7</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist8" value="1" id="check8" <?php if ($mode == 'view' && $checklist8 == 1) echo 'checked disabled';?>> <label for="check8">Check 8</label>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-xs-6 col-sm-4">
                         <input type="checkbox" name="checklist9" value="1" id="check9" <?php if ($mode == 'view' && $checklist9 == 1) echo 'checked disabled';?>> <label for="check9">Check 9</label>
                     </div>
                 </div>
             </div>
         </div>
         <div class="row checklist-title">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12">
                 <span>Comment</span>
             </div>
         </div>
         <div class="row checklist-controls">
             <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <textarea name="comment" id="comment" cols="102" rows="10" <?php if ($mode == 'view') echo 'readonly="true"';?>><?php echo $comment?></textarea>
+            <div class="col-md-8 col-sm-12">
+                <textarea name="comment" id="comment" rows="10" <?php if ($mode == 'view') echo 'readonly="true"';?>><?php echo $comment?></textarea>
             </div>
         </div>
         <div class="row checklist-title">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12">
                 <span>Attachments</span>
             </div>
         </div>
         <?php if ($mode != 'view') { ?>
         <div class="row checklist-controls">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12">
                 <div class="row control-wrapper">
                     <div class="col-xs-12 file-wrapper">
-                        <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
+                        <input type='file' name='files[]' accept='.png, .jpg, .jpeg'><a class="btn btn-sm remove"><span class=" fa fa-times"></span></a>
                     </div>
                     <div class="col-xs-12 file-wrapper">
-                        <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
+                        <input type='file' name='files[]' accept='.png, .jpg, .jpeg'><a class="btn btn-sm remove"><span class=" fa fa-times"></span></a>
                     </div>
                     <div class="col-xs-12 file-wrapper">
-                        <input type='file' name='files[]'><img src='http://images.freescale.com/shared/images/x.gif' class='remove'>
+                        <input type='file' name='files[]' accept='.png, .jpg, .jpeg'><a class="btn btn-sm remove"><span class=" fa fa-times"></span></a>
                     </div>
                     <div class="col-xs-12">
-                        <a href="#" class="btn btn-primary add-file"><span class="fa fa-plus"></span></a>
+                        <a class="btn btn-primary add-file"><span class="fa fa-plus"></span></a>
                     </div>
                 </div>
             </div>
         </div>
         <?php } else { ?>
             <div class="row checklist-controls">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-2 hidden-sm"></div>
+                <div class="col-md-8 col-sm-12">
                     <div class="row control-wrapper">
                         <?php if (!empty($uploaded_images)) { ?>
                             <?php foreach ($uploaded_images as $image) { ?>
@@ -337,8 +337,8 @@ function get_user_allocation($conn, $user_id) {
             </div>
         <?php } ?>
         <div class="row checklist-controls">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
+            <div class="col-md-2 hidden-sm"></div>
+            <div class="col-md-8 col-sm-12">
                 <button type="submit" name="submit" class="btn btn-primary pull-right <?php if ($mode == 'view') echo 'disabled';?>" >&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
             </div>
         </div>

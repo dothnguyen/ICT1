@@ -4,6 +4,7 @@
 
 html, body {
     height: 100%;
+    font-size: 16px;
 }
 
 .login-container, .login-container > .row, .login-container > .row > div {
@@ -48,11 +49,11 @@ html, body {
 
 .header .user-profile {
     line-height: 50px;
-    font-size: 1.4em;
+    /*font-size: 1.2em;*/
 }
 
 .header .date-time {
-    font-size: 1.4em;
+    /*font-size: 1.2em;*/
 }
 
 .navbar-collapse {
@@ -195,6 +196,9 @@ html, body {
 		border-radius: 10px;
 }
 
+.checklist-wrapper .row {
+    margin-bottom: 10px;
+}
 
 .checklist-wrapper .checklist-title {
     padding-top: 20px;
@@ -230,4 +234,12 @@ input[type="file"] {
 
 .file-wrapper img {
     margin-left: 40px;
+}
+
+.checklist-controls textarea {
+    width: 100%;
+}
+
+.remove {
+    font-size: 22px;
 }
