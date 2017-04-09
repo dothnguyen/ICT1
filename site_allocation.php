@@ -57,7 +57,8 @@ function get_unallocated_users($conn, $manager_id) {
 function get_current_rep_user_info($conn, $site_id) {
     $sql = "SELECT * FROM user_tbl, representative_allocated
             WHERE user_tbl.user_id = representative_allocated.user_id 
-                  AND representative_allocated.site_id = $site_id";
+                  AND representative_allocated.site_id = $site_id
+                  AND representative_allocated.site_rep_active_status=1";
 
     $ret = $conn->query($sql);
 

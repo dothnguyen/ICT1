@@ -142,7 +142,7 @@ mysqli_close($conn);
 
                                                     <?php } else { ?>
 
-                                                        <a href="site_allocation.php?mode=modify&site_id=<?php echo $site['site_id'] ?>&allocate_id=<?php echo $represent['user_alloc_id'] ?>"
+                                                        <a href="site_allocation.php?mode=modify&site_id=<?php echo $site['site_id'] ?>&allocate_id=<?php echo $site['site_alloc_id'] ?>"
                                                            class="btn btn-block btn-default moddo">Modify Allocation</a>
 
                                                     <?php } ?>
