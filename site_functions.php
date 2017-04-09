@@ -4,6 +4,8 @@
  * User: voiu
  * Date: 1/17/17
  * Time: 3:23 PM
+ * Date: 4/08/17 ngocle (teresa) edited get_sites_of_manager_with_paging, count_sites_of_manager_with_criteria
+ *
  */
 
 require_once ("db.php");
@@ -15,6 +17,7 @@ function get_sites_of_manager($conn, $managerId) {
     $sql = "SELECT * FROM site WHERE manager_id = $managerId
     and active_status = 1";
 
+
     return $conn->query($sql);
 }
 
@@ -25,8 +28,17 @@ function get_sites_of_manager($conn, $managerId) {
  * @param $count
  */
 function get_sites_of_manager_with_paging($conn, $managerId, $search, $skip, $count) {
-    $sql = "SELECT * FROM site WHERE manager_id = $managerId
+    //teresa edited
+    /**$sql = "SELECT * FROM site WHERE manager_id = $managerId
             and active_status = 1";
+     */
+
+    $sql = "SELECT a.*, b.firstname, b.lastname, b.site_rep_active_status, b.site_alloc_id 
+            FROM site a LEFT JOIN (SELECT s.*, ra.site_id, ra.site_rep_active_status, ra.site_alloc_id 
+                                    FROM user_tbl s, representative_allocated ra 
+                                    WHERE s.user_id = ra.user_id and ra.site_rep_active_status = 1) b on a.site_id = b.site_id 
+            WHERE a.manager_id =$managerId" ;
+    //end teresa edited
 
     if (!empty($search)) {
         $sql .= " and (site_name LIKE '%$search%' or address like '%$search%' )";
@@ -44,8 +56,18 @@ function get_sites_of_manager_with_paging($conn, $managerId, $search, $skip, $co
  * @return mixed
  */
 function count_sites_of_manager_with_criteria($conn, $managerId, $search) {
-    $sql = "SELECT COUNT(*) as c FROM site WHERE manager_id = $managerId
+    //teresa edited
+    /** $sql = "SELECT COUNT(*) as c FROM site WHERE manager_id = $managerId
             and active_status = 1";
+     */
+
+    $sql = "SELECT COUNT(*) as c FROM site a 
+            LEFT JOIN (SELECT s.*, ra.site_id, ra.site_rep_active_status, ra.site_alloc_id 
+                        FROM user_tbl s, representative_allocated ra 
+                        WHERE s.user_id = ra.user_id and ra.site_rep_active_status = 1) b on a.site_id = b.site_id 
+            WHERE a.manager_id = $managerId and a.active_status = 1";
+
+    //end teresa edited
 
     if (!empty($search)) {
         $sql .= " and (site_name LIKE '%$search%' or address like '%$search%' )";

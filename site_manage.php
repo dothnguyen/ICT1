@@ -4,6 +4,7 @@
  * User: voiu
  * Date: 1/15/17
  * Time: 12:17 PM
+ * Date: 4/08/17 ngocle (teresa)  added status, Modes: Allocate and Modify Allocation
  */
 
 require_once "db.php";
@@ -115,12 +116,37 @@ mysqli_close($conn);
                                                         <div>
                                                             <spa>Address: <?php echo $site['address']; ?></spa>
                                                         </div>
+                                                        <!--teresa edited-->
+                                                        <div>
+                                                            <?php if ($site['site_rep_active_status'] == '1') { ?>
+                                                                <span>Status:
+                                                                    <?php echo 'Is represented by '; ?>
+                                                                    <strong><?php echo $site['firstname'] . ' ' . $site['lastname']; ?></strong>
+                                                        </span>
+                                                            <?php } else { ?>
+                                                                <span>Status: Available for representation</span>
+                                                            <?php } ?>
+                                                        </div>
+                                                        <!--end teresa edited-->
                                                     </div>
                                                 </td>
                                                 <td class="action-column">
                                                     <a href="site_modify.php?mode=modify&site_id=<?php echo $site['site_id'] ?>"
                                                        class="btn btn-block btn-default eddo">Edit</a>
 
+                                                    <!--teresa edited-->
+                                                    <?php if ($site['site_rep_active_status'] != '1') { ?>
+
+                                                        <a href="site_allocation.php?mode=new&site_id=<?php echo $site['site_id'] ?>"
+                                                           class="btn btn-block btn-default allo">Allocate</a>
+
+                                                    <?php } else { ?>
+
+                                                        <a href="site_allocation.php?mode=modify&site_id=<?php echo $site['site_id'] ?>&allocate_id=<?php echo $represent['user_alloc_id'] ?>"
+                                                           class="btn btn-block btn-default moddo">Modify Allocation</a>
+
+                                                    <?php } ?>
+                                                    <!--end teresa edited-->
                                                 </td>
                                             </tr>
                                             <?php
