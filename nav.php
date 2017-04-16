@@ -37,9 +37,15 @@ $page_name = basename($_SERVER['PHP_SELF']);
         <div class = "collapse navbar-collapse" id = "example-navbar-collapse">
             <ul class = "nav navbar-nav">
                 <?php if ($page_name == 'manager_home.php') {?>
-                    <li class = "active"><a href = "manager_home.php">Reports</a></li>
+                    <li class = "active"><a href = "manager_home.php">Home</a></li>
                 <?php } else {?>
-                    <li><a href = "manager_home.php">Reports</a></li>
+                    <li><a href = "manager_home.php">Home</a></li>
+                <?php }?>
+
+                <?php if ($page_name == 'manager_report.php') {?>
+                    <li class = "active"><a href = "manager_report.php">Reports</a></li>
+                <?php } else {?>
+                    <li><a href = "manager_report.php">Reports</a></li>
                 <?php }?>
 
                 <?php if ($page_name == 'site_manage.php' || $page_name == 'site_modify.php') {?>

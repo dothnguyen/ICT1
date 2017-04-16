@@ -319,3 +319,8 @@ ALTER TABLE `monthly` CHANGE `m_created_date` `m_created_date` DATETIME NULL DEF
 ALTER TABLE `daily` CHANGE `d_comments` `d_comments` VARCHAR(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 ALTER TABLE `weekly` CHANGE `w_comments` `d_comments` VARCHAR(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
 ALTER TABLE `monthly` CHANGE `m_comments` `d_comments` VARCHAR(400) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL;
+
+
+-- NguyenDo modified 17/4/2017
+ALTER TABLE `user_tbl` ADD `change_pwd` INT NOT NULL DEFAULT '0' AFTER `last_login`;
+ALTER TABLE `user_tbl` CHANGE `last_login` `last_login` DATETIME NULL DEFAULT NULL;

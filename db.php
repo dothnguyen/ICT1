@@ -17,7 +17,7 @@
 define("MYSQLUSER","team01");
 define("MYSQLPASS","team01");
 define("HOSTNAME","localhost");
-define("MYSQLDB","boral_");
+define("MYSQLDB","boral");
 
 //make connection to database
 /**

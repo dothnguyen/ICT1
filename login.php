@@ -47,14 +47,15 @@
 
             if (empty($msg)) {
 
-                // check email and password
-                $conn = db_connect();
                 // get user info
                 $cus_row = get_user($conn, $username);
 
 
                 $_SESSION['logged_in'] = true;
                 $_SESSION['user_info'] = $cus_row;
+
+                // update login time
+                update_login_time($conn, $cus_row['user_id']);
 
                 // login successful
                 // redirect to home page
@@ -64,7 +65,17 @@
 
         mysqli_close($conn);
     }
+
+
+function update_login_time($conn, $user_id) {
+    $sql = "UPDATE user_tbl SET last_login=NOW() WHERE user_id=$user_id";
+
+    mysqli_query($conn, $sql);
+}
 ?>
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

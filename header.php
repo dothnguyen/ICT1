@@ -23,6 +23,19 @@ $login_user = $_SESSION['user_info'];
 
 $is_manager = $login_user['role'] == 'manager';
 
+$conn = db_connect();
+
+$last_login = get_login_time($conn, $login_user['user_id']);
+
+mysqli_close($conn);
+
+// get user login time
+function get_login_time($conn, $user_id) {
+    $sql = "SELECT last_login FROM user_tbl WHERE user_id=$user_id";
+    $ret = mysqli_fetch_assoc($conn->query($sql));
+
+    return $ret['last_login'];
+}
 ?>
 
 <div class="container">
@@ -39,7 +52,7 @@ $is_manager = $login_user['role'] == 'manager';
                     <span class="fa fa-user" aria-hidden="true"></span>&nbsp;<span><?php echo $login_user['firstname']. ' ' . $login_user['lastname'];?></span>
                     &nbsp;<a href="logout.php"><span class="fa fa-sign-out"></span></a>
                 </div>
-                <div class="date-time">Date: <?php echo date('d-m-Y')?></div>
+                <div class="date-time">Login at: <?php echo date('d-m-Y H:i', strtotime($last_login));?></div>
             </div>
         </div>
     </div>
