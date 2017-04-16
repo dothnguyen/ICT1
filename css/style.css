@@ -243,3 +243,7 @@ input[type="file"] {
 .remove {
     font-size: 22px;
 }
+
+.change-pwd-panel {
+    margin-top: 70px;
+}

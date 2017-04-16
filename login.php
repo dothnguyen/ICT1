@@ -57,9 +57,19 @@
                 // update login time
                 update_login_time($conn, $cus_row['user_id']);
 
-                // login successful
-                // redirect to home page
-               header("Location:index.php");
+
+                // 2.4. When user login for the first time, ask him to change his password.
+                // check if user login for the first time
+                if (is_first_login($conn, $cus_row['user_id'])) {
+
+                    // redirect to change_pwd page
+                    header("Location:change_pwd.php");
+                } else {
+
+                    // login successful
+                    // redirect to home page
+                    header("Location:index.php");
+                }
             }
         }
 
@@ -71,6 +81,14 @@ function update_login_time($conn, $user_id) {
     $sql = "UPDATE user_tbl SET last_login=NOW() WHERE user_id=$user_id";
 
     mysqli_query($conn, $sql);
+}
+
+
+function is_first_login($conn, $user_id) {
+    $sql = "SELECT change_pwd FROM user_tbl WHERE user_id=$user_id";
+    $ret = mysqli_fetch_assoc($conn->query($sql));
+
+    return $ret['change_pwd'] == 0;
 }
 ?>
 
