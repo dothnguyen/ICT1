@@ -8,6 +8,12 @@
 
 require_once ("db.php");
 
+function is_first_login($conn, $user_id) {
+    $sql = "SELECT change_pwd FROM user_tbl WHERE user_id=$user_id";
+    $ret = mysqli_fetch_assoc($conn->query($sql));
+
+    return $ret['change_pwd'] == 0;
+}
 
 /**
  * Check email and password to login

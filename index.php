@@ -14,11 +14,23 @@ $login_user = $_SESSION['user_info'];
 
 $is_manager = $login_user['role'] == 'manager';
 
-if ($is_manager) {
-    // redirect to manager home page
-    header("Location:manager_home.php");
+$conn = db_connect();
+// 2.4. When user login for the first time, ask him to change his password.
+// check if user login for the first time
+if (is_first_login($conn, $cus_row['user_id'])) {
+
+    // redirect to change_pwd page
+    header("Location:change_pwd.php");
 } else {
-    header("Location:rep_home.php");
+
+    if ($is_manager) {
+        // redirect to manager home page
+        header("Location:manager_home.php");
+    } else {
+        header("Location:rep_home.php");
+    }
 }
+mysqli_close($conn);
+
 
 ?>

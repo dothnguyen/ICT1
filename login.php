@@ -96,13 +96,6 @@ function update_login_time($conn, $user_id) {
     mysqli_query($conn, $sql);
 }
 
-
-function is_first_login($conn, $user_id) {
-    $sql = "SELECT change_pwd FROM user_tbl WHERE user_id=$user_id";
-    $ret = mysqli_fetch_assoc($conn->query($sql));
-
-    return $ret['change_pwd'] == 0;
-}
 ?>
 
 
