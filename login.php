@@ -9,7 +9,20 @@
     // check if user already logged in, then redirect to index page
     if (isset($_SESSION['logged_in']) && $_SESSION['logged_in'] == true) {
 
-        header("Location:index.php");
+        $conn = db_connect();
+        // 2.4. When user login for the first time, ask him to change his password.
+        // check if user login for the first time
+        if (is_first_login($conn, $cus_row['user_id'])) {
+
+            // redirect to change_pwd page
+            header("Location:change_pwd.php");
+        } else {
+
+            // login successful
+            // redirect to home page
+            header("Location:index.php");
+        }
+        mysqli_close($conn);
 
     } else {
 
