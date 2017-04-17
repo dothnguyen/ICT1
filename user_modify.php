@@ -51,6 +51,14 @@ function generateRandomPassword($length = 8) {
     return $result;
 }
 
+//function generate username
+
+function generateuser ($firstname,$lastname){
+	
+	$generateduser=$firstname.$lastname;
+	return $generateduser;
+}
+
 // submitted
 if (isset($_POST['btnSave'])) {
     $firstname = test_input($_POST['txtFirstName']);
@@ -71,13 +79,24 @@ if (isset($_POST['btnSave'])) {
         $msg['lastname'] = "Last name can not be empty.";
     }
 
+	
+	// email validation final
     if ($email == "") {
         $msg['email'] = "Email can not be empty.";
-    }
+    } else{
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+		
+		} else {
+		$msg['email'] = "Email is not a valid email address";
+		}
+	}
+	
+	
+	
 
-    if ($mode == 'new' && $new_username == '') {
-        $msg['new_username'] = 'Username can not be empty.';
-    }
+			
+		
+    
 
     if (empty($msg)) {
         $conn = db_connect();
@@ -86,9 +105,21 @@ if (isset($_POST['btnSave'])) {
             modify_user($conn, $user_id, $firstname, $lastname, $email, $username);
 
         } else if ($mode == 'new') {
+			
+			$new_username=generateuser($firstname,$lastname);
+			// the below call checks for the username taken or not.
+			
+			//$new_username=is_username_taken($conn,$temp_username);
 
             insert_new_user($conn, $firstname, $lastname, $email, $new_username,  $generate_password, $login_user['user_id']);
-
+			
+				//send email to the new user
+				
+				$email_msg="Hello $firstname $lastname. Your username is $new_username and password is $generate_password.";
+				$final_email= wordwrap($email_msg,70);
+				
+				//send email
+				mail("$email","Welcome",$final_email);
         }
 
         mysqli_close($conn);
@@ -200,7 +231,7 @@ if (isset($_POST['btnSave'])) {
                             <div class="form-group <?php if (!empty($msg['new_username'])) echo "has-error"; ?>">
                                 <label for="txtNewUsername" class="col-sm-3 control-label">Username</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtNewUsername" name="txtNewUsername"/>
+                                    <input type="text" class="form-control" id="txtNewUsername" name="txtNewUsername" value="<?php echo $new_username;?>"/>
                                 </div>
                                 <?php if (!empty($msg['new_username'])) { ?>
                                     <div class="col-sm-offset-3 col-sm-8">
