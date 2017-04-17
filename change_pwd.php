@@ -38,7 +38,7 @@ if (isset($_REQUEST['update'])) {
 
         $encode_pwd = md5($pwd1);
 
-        $sql = "UPDATE user_tbl SET password='$encode_pwd' WHERE user_id=$user_id";
+        $sql = "UPDATE user_tbl SET password='$encode_pwd', change_pwd=1 WHERE user_id=$user_id";
 
         mysqli_query($conn, $sql);
 
