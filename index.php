@@ -17,7 +17,7 @@ $is_manager = $login_user['role'] == 'manager';
 $conn = db_connect();
 // 2.4. When user login for the first time, ask him to change his password.
 // check if user login for the first time
-if (is_first_login($conn, $cus_row['user_id'])) {
+if (is_first_login($conn, $login_user['user_id'])) {
 
     // redirect to change_pwd page
     header("Location:change_pwd.php");
