@@ -216,7 +216,7 @@ if (isset($_POST['btnSave'])) {
                             <label for="txtEmail" class="col-sm-3 control-label">Email</label>
 
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtEmail" oninput="myFunction()" name="txtEmail"
+                                <input type="text" class="form-control" id="txtEmail" name="txtEmail"
                                        value="<?php echo $email ?>" />
                             </div>
 
@@ -323,17 +323,25 @@ if (isset($_POST['btnSave'])) {
         </div>
     </div>
 </section>
-<script>
-function myFunction(){
-	var x =document.getElementById("txtFirstName").value;
-	var y = document.getElementById("txtLastName").value;
- 	document.getElementById("txtNewUsername").innerHtml = x + y;
-}
 
-</script>
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/script.js"></script>
+
+
+<script>
+    function myFunction(){
+        //var x =document.getElementById("txtFirstName").value;
+        //var y = document.getElementById("txtLastName").value;
+        //document.getElementById("txtNewUsername").innerHtml = x + y;
+
+        $("#txtNewUsername").val($("#txtFirstName").val().toLowerCase() + "_" + $("#txtLastName").val().toLowerCase());
+    }
+
+    $("#txtFirstName").change(myFunction);
+    $("#txtLastName").change(myFunction);
+
+</script>
 
 </body>
 </html>
