@@ -15,7 +15,7 @@ session_start();
 check_login();
 
 // check if user can access manager's page
-check_authorize(true);
+//check_authorize(true);
 
 // get logged-in user info
 $login_user = $_SESSION['user_info'];
