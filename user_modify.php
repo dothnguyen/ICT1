@@ -4,6 +4,7 @@
  * User: voiu
  * Date: 1/23/17
  * Time: 8:31 PM
+ * User: Shanil Frank added email functionality, generateRandomPassword, generateuser
  */
 
 require_once "db.php";
@@ -114,12 +115,12 @@ if (isset($_POST['btnSave'])) {
             insert_new_user($conn, $firstname, $lastname, $email, $new_username,  $generate_password, $login_user['user_id']);
 			
 				//send email to the new user
-				
-				$email_msg="Hello $firstname $lastname. Your username is $new_username and password is $generate_password.";
+				$emailpass = md5($generate_password);
+				$email_msg="Hello $firstname $lastname. \n Username: $new_username \n Password: $emailpass";
 				$final_email= wordwrap($email_msg,70);
 				
 				//send email
-				mail("$email","Welcome",$final_email);
+				mail($email,"Welcome New User",$final_email,"Boral");
         }
 
         mysqli_close($conn);
@@ -177,6 +178,7 @@ if (isset($_POST['btnSave'])) {
 <?php include_once 'nav.php'; ?>
 
 
+
 <section class="main-content">
     <div class="container">
         <div class="col-xs-12 col-md-9 col-md-push-2">
@@ -214,8 +216,8 @@ if (isset($_POST['btnSave'])) {
                             <label for="txtEmail" class="col-sm-3 control-label">Email</label>
 
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtEmail" name="txtEmail"
-                                       value="<?php echo $email ?>"/>
+                                <input type="text" class="form-control" id="txtEmail" oninput="myFunction()" name="txtEmail"
+                                       value="<?php echo $email ?>" />
                             </div>
 
                             <?php if (!empty($msg['email'])) { ?>
@@ -321,8 +323,17 @@ if (isset($_POST['btnSave'])) {
         </div>
     </div>
 </section>
+<script>
+function myFunction(){
+	var x =document.getElementById("txtFirstName").value;
+	var y = document.getElementById("txtLastName").value;
+ 	document.getElementById("txtNewUsername").innerHtml = x + y;
+}
+
+</script>
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/script.js"></script>
+
 </body>
 </html>
