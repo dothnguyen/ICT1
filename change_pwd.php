@@ -7,6 +7,7 @@
  */
 
 require_once "db.php";
+require_once "user_functions.php";
 require_once "other_functions.php";
 
 session_start();
@@ -48,6 +49,18 @@ if (isset($_REQUEST['update'])) {
         // redirect to home page
         header("Location:index.php");
     }
+} else {
+    $conn = db_connect();
+    // 2.4. When user login for the first time, ask him to change his password.
+    // check if user login for the first time
+    if (is_first_login($conn, $login_user['user_id'])) {
+
+    } else {
+
+        header("Location:index.php");
+    }
+
+    mysqli_close($conn);
 }
 
 
