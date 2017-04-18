@@ -197,43 +197,11 @@ function is_site_allocated($conn, $site_id) {
 
 function is_username_taken($conn, $username){
 	
-$username1=$username;
+
 // find all users like username
-$sql = "SELECT username FROM user_tbl WHERE username LIKE '".$username."%' ORDER BY user_id DESC";
+$sql = "SELECT username FROM user_tbl WHERE username = '$username'";
 $result= $conn->query($sql);
-   
-
-// no users
-if ($result->num_rows == 0) {
-    // create $username
-	
-	return $username;
-}
-else {
-
-    $last_num = 0;
-
-    // find all usersnames
-    while ($row = $result->fetch_assoc()) {
-
-        // match username numbers
-        if (preg_match("/^".preg_quote($username)."+([0-9]+)$/i", $row['username'], $match)) {
-
-            // extract the number part
-            $num = (int) $match[1];
-
-            // set the highest number
-            if ($num > $last_num) $last_num = $num;
-        }
-    }
-
-    // append the highest number to the username
-    if ($last_num > 0) $username .= $last_num + 1;
-
-    return $username;
-
-	
-}
+  return $result->num_rows > 0; 
 }
 
 

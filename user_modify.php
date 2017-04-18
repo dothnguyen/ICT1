@@ -107,25 +107,37 @@ if (isset($_POST['btnSave'])) {
 
         } else if ($mode == 'new') {
 			
-			$new_username=generateuser($firstname,$lastname);
+			//$new_username=generateuser($firstname,$lastname);
 			// the below call checks for the username taken or not.
-			
-			//$new_username=is_username_taken($conn,$temp_username);
+			$temp_username= test_input($_POST['txtNewUsername']);
 
-            insert_new_user($conn, $firstname, $lastname, $email, $new_username,  $generate_password, $login_user['user_id']);
+
+			$booln=is_username_taken($conn,$temp_username);
+			
+			if($booln == 0) {
+				
+				insert_new_user($conn, $firstname, $lastname, $email, $new_username,  $generate_password, $login_user['user_id']);
 			
 				//send email to the new user
-				$emailpass = md5($generate_password);
+				$emailpass = test_input($_POST['txtPassword']);
 				$email_msg="Hello $firstname $lastname. \n Username: $new_username \n Password: $emailpass";
 				$final_email= wordwrap($email_msg,70);
 				
 				//send email
 				mail($email,"Welcome New User",$final_email,"Boral");
+				header("Location:user_manage.php");
+			}
+			// 
+			else {
+			$msg['new_username'] = "Username taken, change the username";
+			}
+			
+			
         }
 
         mysqli_close($conn);
 
-        header("Location:user_manage.php");
+        
     }
 } else if (isset($_POST['btnRemove'])) {
     // inactivate site

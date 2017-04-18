@@ -127,7 +127,7 @@ if (isset($_POST['btnSave'])) {
             <div class="right-panel">
                 <div class="page-title"><span><?php if ($mode == 'new') echo 'Add Site'; else echo 'Modify Site';?></span></div>
                 <div class="page-content">
-                    <form action="site_modify.php" class="form-horizontal" method="post">
+                    <form data-toggle="validator" action="site_modify.php" class="form-horizontal" method="post">
                         <div class="form-group <?php if (!empty($msg['site_name'])) echo "has-error";?>">
                             <label for="txtSiteName" class="col-sm-3 control-label">Site Name</label>
                             <div class="col-sm-8">
@@ -153,7 +153,7 @@ if (isset($_POST['btnSave'])) {
                         <div class="form-group <?php if (!empty($msg['site_tel'])) echo "has-error";?>">
                             <label for="txtPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo $site_tel ?>"/>
+                                <input type="number" placeholder="+61 XXX XXX XXX" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo $site_tel ?>"/>
                             </div>
                             <?php if (!empty($msg['site_tel'])) {?>
                                 <div class="col-sm-offset-3 col-sm-8">
