@@ -46,6 +46,8 @@ $count = count_users_of_manager($conn, $login_user['user_id'], $search_criteria)
 
 ////////////// ADD PAGING AND SEARCHING FEATURE /////////
 
+$start_idx = $page * $item_per_page;
+
 $represents = null;
 if ($count > 0) {
 
@@ -157,7 +159,7 @@ function get_users_of_manager_with_paging($conn, $managerId, $search, $skip, $co
                                     foreach ($represents as $represent) {
                                         ?>
                                         <tr>
-                                            <td class="index-column"><?php echo($idx + 1) ?></td>
+                                            <td class="index-column"><?php echo($start_idx + $idx + 1) ?></td>
                                             <td class="site-info-column">
                                                 <div>
 

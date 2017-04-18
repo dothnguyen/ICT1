@@ -46,6 +46,8 @@ $count = count_sites_of_manager_with_criteria($conn, $login_user['user_id'], $se
 
 ////////////// ADD PAGING AND SEARCHING FEATURE /////////
 
+$start_idx = $page * $item_per_page;
+
 $sites = null;
 if ($count > 0) {
 
@@ -108,7 +110,7 @@ mysqli_close($conn);
                                         foreach ($sites as $site) {
                                             ?>
                                             <tr>
-                                                <td class="index-column"><?php echo($idx + 1) ?></td>
+                                                <td class="index-column"><?php echo($start_idx + $idx + 1) ?></td>
                                                 <td class="site-info-column">
                                                     <div>
                                                         <div><strong><?php echo $site['site_name']; ?></strong> - <span>Tel: <?php echo $site['telephone']; ?></span>
