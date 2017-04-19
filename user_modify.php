@@ -73,7 +73,7 @@ if (isset($_POST['btnSave'])) {
 
     // validation
     if ($firstname == "") {
-        $msg['first_name'] = "First name can not be empty.";
+        $msg['firstname'] = "First name can not be empty.";
     }
 
     if ($lastname == "") {
@@ -198,17 +198,18 @@ if (isset($_POST['btnSave'])) {
                 <div class="page-title"><span><?php if ($mode == 'new') echo 'Add User'; else echo 'Modify User';?></span></div>
                 <div class="page-content">
                     <form action="user_modify.php" class="form-horizontal" method="post">
-                        <div class="form-group <?php if (!empty($msg['fist_name'])) echo "has-error"; ?>">
+                        <div class="form-group <?php if (!empty($msg['firstname'])) echo "has-error"; ?>">
                             <label for="txtFirstName" class="col-sm-3 control-label">First Name</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtFirstName" name="txtFirstName"
                                        value="<?php echo $firstname ?>"/>
                             </div>
-                            <?php if (!empty($msg['fist_name'])) { ?>
+                            <?php if (!empty($msg['firstname'])) { ?>
                                 <div class="col-sm-offset-3 col-sm-8">
-                                    <span class="help-block"><?php echo $msg['fist_name'] ?></span>
+                                    <span class="help-block"><?php echo $msg['firstname'] ?></span>
                                 </div>
                             <?php } ?>
+
                         </div>
                         <div class="form-group <?php if (!empty($msg['lastname'])) echo "has-error"; ?>">
                             <label for="txtLastName" class="col-sm-3 control-label">Last Name</label>

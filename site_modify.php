@@ -150,7 +150,8 @@ if (isset($_POST['btnSave'])) {
                                 </div>
                             <?php } ?>
                         </div>
-                        <div class="form-group <?php if (!empty($msg['site_tel'])) echo "has-error";?>">
+						
+                        <div class="form-group<?php if (!empty($msg['site_tel'])) echo "has-error";?>">
                             <label for="txtPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
                             <div class="col-sm-8">
                                 <input type="number" placeholder="+61 XXX XXX XXX" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo $site_tel ?>"/>
@@ -160,7 +161,10 @@ if (isset($_POST['btnSave'])) {
                                     <span class="help-block"><?php echo $msg['site_tel']?></span>
                                 </div>
                             <?php } ?>
+							
+						 
                         </div>
+						
                         <?php if ($is_allocated) { ?>
                         <div class="form-group button-group">
                             <div class="col-sm-offset-5 col-sm-3 col-xs-offset-4 col-xs-4">
