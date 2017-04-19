@@ -63,7 +63,8 @@ mysqli_close($conn);
 <?php include_once 'nav.php';?>
 
 <div class="container">
-    <div  class="row col-xs-12  col-md-9">
+    <div  class="row">
+        <div class="col-xs-12 col-md-offset-2 col-md-8">
         <div class="page-title"><span>List of sites has not submitted daily checklists</span></div>
             <div class="site-list-container">
                 <?php
@@ -83,6 +84,7 @@ mysqli_close($conn);
                     <p>No data found</p>
                 <?php } ?>
             </div>
+        </div>
     </div>
 </div>
 
