@@ -57,6 +57,8 @@ if (isset($_POST['btnSave'])) {
 
     if ($site_tel == "") {
         $msg['site_tel'] = "Site phone number can not be empty.";
+    } elseif (!preg_match('/^\+?([0-9]{1,4})\)?[-. ]?([0-9]{10})$/', $site_tel) ) {
+        $msg['site_tel'] = "Invalid telephone number.";
     }
 
     if (empty($msg)) {
@@ -72,6 +74,7 @@ if (isset($_POST['btnSave'])) {
 
         header("Location:site_manage.php");
     }
+
 } else if (isset($_POST['btnRemove'])) {
     // inactivate site
     $site_id = test_input($_POST['site_id']);
@@ -82,6 +85,7 @@ if (isset($_POST['btnSave'])) {
     mysqli_close($conn);
 
     header("Location:site_manage.php");
+
 } else {
     // check if mode is modify,
     // then load the current site
@@ -151,10 +155,10 @@ if (isset($_POST['btnSave'])) {
                             <?php } ?>
                         </div>
 						
-                        <div class="form-group<?php if (!empty($msg['site_tel'])) echo "has-error";?>">
+                        <div class="form-group <?php if (!empty($msg['site_tel'])) echo "has-error";?>">
                             <label for="txtPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
                             <div class="col-sm-8">
-                                <input type="number" placeholder="+61 XXX XXX XXX" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo $site_tel ?>"/>
+                                <input type="number" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo $site_tel ?>"/>
                             </div>
                             <?php if (!empty($msg['site_tel'])) {?>
                                 <div class="col-sm-offset-3 col-sm-8">
