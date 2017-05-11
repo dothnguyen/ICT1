@@ -178,7 +178,7 @@ function get_uploaded_images($conn, $chklist_id) {
  * @param $user_id
  */
 function get_current_weekly_chklist($conn, $user_id) {
-    $sql = "SELECT d.*, s.site_name FROM weekly w, representative_allocated rep, site s WHERE w.site_alloc_id = rep.site_alloc_id 
+    $sql = "SELECT w.*, s.site_name FROM weekly w, representative_allocated rep, site s WHERE w.site_alloc_id = rep.site_alloc_id 
             AND rep.user_id=$user_id AND DATE(w.w_created_date) = DATE(NOW())
             AND rep.site_id = s.site_id";
 
