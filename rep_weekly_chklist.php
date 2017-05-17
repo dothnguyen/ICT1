@@ -263,31 +263,31 @@ function get_user_allocation($conn, $user_id) {
                     <div class="col-md-8 col-sm-12">
                         <div class="row control-wrapper">
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist1" value="1" id="check1" <?php if ($mode == 'view' && $checklist1 == 1) echo 'checked disabled';?>> <label for="check1">Check 1</label>
+                                <input type="checkbox" name="checklist1" value="1" id="check1" <?php if ($mode == 'view') echo 'disabled'; if ($checklist1 == 1) echo ' checked';?>> <label for="check1">Check 1</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist2" value="1" id="check2" <?php if ($mode == 'view' && $checklist2 == 1) echo 'checked disabled';?>> <label for="check2">Check 2</label>
+                                <input type="checkbox" name="checklist2" value="1" id="check2" <?php if ($mode == 'view') echo 'disabled'; if ($checklist2 == 1) echo ' checked';?>> <label for="check2">Check 2</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist3" value="1" id="check3" <?php if ($mode == 'view' && $checklist3 == 1) echo 'checked disabled';?>> <label for="check3">Check 3</label>
+                                <input type="checkbox" name="checklist3" value="1" id="check3" <?php if ($mode == 'view') echo 'disabled'; if ($checklist3 == 1) echo ' checked';?>> <label for="check3">Check 3</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist4" value="1" id="check4" <?php if ($mode == 'view' && $checklist4 == 1) echo 'checked disabled';?>> <label for="check4">Check 4</label>
+                                <input type="checkbox" name="checklist4" value="1" id="check4" <?php if ($mode == 'view') echo 'disabled'; if ($checklist4 == 1) echo ' checked';?>> <label for="check4">Check 4</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist5" value="1" id="check5" <?php if ($mode == 'view' && $checklist5 == 1) echo 'checked disabled';?>> <label for="check5">Check 5</label>
+                                <input type="checkbox" name="checklist5" value="1" id="check5" <?php if ($mode == 'view') echo 'disabled'; if ($checklist5 == 1) echo ' checked';?>> <label for="check5">Check 5</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist6" value="1" id="check6" <?php if ($mode == 'view' && $checklist6 == 1) echo 'checked disabled';?>> <label for="check6">Check 6</label>
+                                <input type="checkbox" name="checklist6" value="1" id="check6" <?php if ($mode == 'view') echo 'disabled'; if ($checklist6 == 1) echo ' checked';?>> <label for="check6">Check 6</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist7" value="1" id="check7" <?php if ($mode == 'view' && $checklist7 == 1) echo 'checked disabled';?>> <label for="check7">Check 7</label>
+                                <input type="checkbox" name="checklist7" value="1" id="check7" <?php if ($mode == 'view') echo 'disabled'; if ($checklist7 == 1) echo ' checked';?>> <label for="check7">Check 7</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist8" value="1" id="check8" <?php if ($mode == 'view' && $checklist8 == 1) echo 'checked disabled';?>> <label for="check8">Check 8</label>
+                                <input type="checkbox" name="checklist8" value="1" id="check8" <?php if ($mode == 'view') echo 'disabled'; if ($checklist8 == 1) echo ' checked';?>> <label for="check8">Check 8</label>
                             </div>
                             <div class="col-xs-6 col-sm-4">
-                                <input type="checkbox" name="checklist9" value="1" id="check9" <?php if ($mode == 'view' && $checklist9 == 1) echo 'checked disabled';?>> <label for="check9">Check 9</label>
+                                <input type="checkbox" name="checklist9" value="1" id="check9" <?php if ($mode == 'view') echo 'disabled'; if ($checklist9 == 1) echo ' checked';?>> <label for="check9">Check 9</label>
                             </div>
                         </div>
                     </div>
@@ -347,7 +347,7 @@ function get_user_allocation($conn, $user_id) {
                 <div class="row checklist-controls">
                     <div class="col-md-2 hidden-sm"></div>
                     <div class="col-md-8 col-sm-12">
-                        <button type="submit" name="submit" class="btn btn-primary pull-right <?php if ($mode == 'view') echo 'disabled';?>" >&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
+                        <button type="submit" name="submit" class="btn btn-primary pull-right <?php if ($mode == 'view') echo 'btn-disabled';?>" <?php if ($mode == 'view') echo 'disabled';?>>&nbsp;&nbsp;Submit&nbsp;&nbsp;</button>
                     </div>
                 </div>
             </div>
