@@ -91,7 +91,7 @@ if (isset($_REQUEST['submit'])) {
     $conn = db_connect();
 
     // save data to monthly checklist
-    $sql = "INSERT INTO monthly(m_created_date, m_comments, m_checklist1, m_checklist2, m_checklist3, m_checklist4, m_checklist5, m_checklist6, m_checklist7, m_checklist8, m_checklist9, site_alloc_id)
+    $sql = "INSERT INTO monthly(m_created_date, d_comments, m_checklist1, m_checklist2, m_checklist3, m_checklist4, m_checklist5, m_checklist6, m_checklist7, m_checklist8, m_checklist9, site_alloc_id)
                   VALUES(NOW(), '$comment', $checklist1, $checklist2, $checklist3, $checklist4, $checklist5, $checklist6, $checklist7, $checklist8, $checklist9, $site_alloc_id);";
 
     // insert
@@ -142,7 +142,7 @@ if (isset($_REQUEST['submit'])) {
         $checklist8 = $current_checklist['m_checklist8'];
         $checklist9 = $current_checklist['m_checklist9'];
 
-        $comment = $current_checklist['m_comments'];
+        $comment = $current_checklist['d_comments'];
 
         $site_name = $current_checklist['site_name'];
 // must get the month

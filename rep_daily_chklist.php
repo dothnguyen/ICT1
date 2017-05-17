@@ -38,6 +38,8 @@ $uploaded_images = array();
 
 $chklist_date = "";
 
+$cur_date = "";
+
 // handle form submission
 if (isset($_REQUEST['submit'])) {
 
@@ -124,6 +126,9 @@ if (isset($_REQUEST['submit'])) {
             $site_name = $user_allocation['site_name'];
             $site_alloc_id = $user_allocation['site_alloc_id'];
         }
+
+        $cur_date = date('d/m/Y');
+
     } else {
 
         $mode = "view";
@@ -237,7 +242,7 @@ function get_user_allocation($conn, $user_id) {
         <?php } else {?>
         <div  class="row">
             <div class="col-md-2 hidden-sm"></div>
-            <div class="col-md-8 col-sm-12"><span class="title">Daily Checklist on: <strong>2017/03/28</strong></span></div>
+            <div class="col-md-8 col-sm-12"><span class="title">Daily Checklist on: <strong><?php echo $cur_date ?></strong></span></div>
         </div>
         <?php } ?>
         <div  class="row">

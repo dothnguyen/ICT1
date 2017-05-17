@@ -80,12 +80,12 @@ $page_name = basename($_SERVER['PHP_SELF']);
                 <?php if ($page_name == 'rep_weekly_chklist.php') {?>
                     <li class = "active"><a href = "#">Weekly</a></li>
                 <?php } else {?>
-                    <li><a href = "#">Weekly</a></li>
+                    <li><a href = "rep_weekly_chklist.php">Weekly</a></li>
                 <?php }?>
                 <?php if ($page_name == 'rep_monthly_chklist.php') {?>
                     <li class = "active"><a href = "#">Monthly</a></li>
                 <?php } else {?>
-                    <li><a href = "#">Monthly</a></li>
+                    <li><a href = "rep_monthly_chklist.php">Monthly</a></li>
                 <?php }?>
 
             </ul>

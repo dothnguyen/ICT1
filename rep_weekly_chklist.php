@@ -39,6 +39,9 @@ $uploaded_images = array();
 
 $chklist_date = "";
 
+$cur_date_start = "";
+$cur_date_end = "";
+
 // handle form submission
 if (isset($_REQUEST['submit'])) {
 
@@ -125,6 +128,10 @@ if (isset($_REQUEST['submit'])) {
             $site_name = $user_allocation['site_name'];
             $site_alloc_id = $user_allocation['site_alloc_id'];
         }
+
+        $cur_date_start = date('d/m/Y', strtotime('monday this week'));
+        $cur_date_end = date('d/m/Y', strtotime('sunday this week'));
+
     } else {
 
         $mode = "view";
@@ -179,7 +186,7 @@ function get_uploaded_images($conn, $chklist_id) {
  */
 function get_current_weekly_chklist($conn, $user_id) {
     $sql = "SELECT w.*, s.site_name FROM weekly w, representative_allocated rep, site s WHERE w.site_alloc_id = rep.site_alloc_id 
-            AND rep.user_id=$user_id AND DATE(w.w_created_date) = DATE(NOW())
+            AND rep.user_id=$user_id AND WEEK(w.w_created_date, 1) = WEEK(NOW(), 1)
             AND rep.site_id = s.site_id";
 
     return mysqli_fetch_assoc($conn->query($sql));
@@ -238,7 +245,7 @@ function get_user_allocation($conn, $user_id) {
                 <?php } else {?>
                     <div  class="row">
                         <div class="col-md-2 hidden-sm"></div>
-                        <div class="col-md-8 col-sm-12"><span class="title">Weekly Checklist on: <strong>2017/03/28</strong></span></div>
+                        <div class="col-md-8 col-sm-12"><span class="title">Weekly Checklist for the week: <strong>From <?php echo $cur_date_start?> - To <?php echo $cur_date_end?></strong></span></div>
                     </div>
                 <?php } ?>
                 <div  class="row">
