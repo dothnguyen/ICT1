@@ -78,75 +78,93 @@ mysqli_close($conn);
             </div>
             <div class="row">
                 <div class="col-xs-12 col-md-offset-2 col-md-8">
-                    <div class="form-group"
-                    <p><b>Of Sites: </b><span><select name="sites[]" class="selectpicker col-md-10" multiple required
-                                                      data-live-search="true">
-                                <option value="-1" <?php if(empty($selected_sites) || in_array(-1, $selected_sites)) echo 'selected'?>>All sites</option>
-                                <?php
-                                if (!empty($sites)) {
-                                    foreach ($sites as $site) { ?>
+                    <div class="form-group">
+                        <p><b>Of Sites: </b><span><select name="sites[]" class="selectpicker col-md-10" multiple
+                                                          required
+                                                          data-live-search="true">
+                                    <option
+                                        value="-1" <?php if (empty($selected_sites) || in_array(-1, $selected_sites)) echo 'selected' ?>>
+                                        All sites
+                                    </option>
+                                    <?php
+                                    if (!empty($sites)) {
+                                        foreach ($sites as $site) { ?>
 
-                                        <option
-                                            value="<?php echo $site['site_id'] ?>"
-                                            <?php if(in_array($site['site_id'], $selected_sites)) echo 'selected'?>><?php echo $site['site_name'] ?></option>
+                                            <option
+                                                value="<?php echo $site['site_id'] ?>"
+                                                <?php if (in_array($site['site_id'], $selected_sites)) echo 'selected' ?>><?php echo $site['site_name'] ?></option>
 
-                                    <?php }
-                                } ?>
-                            </select>
+                                        <?php }
+                                    } ?>
+                                </select>
                                     </span>
-                    </p>
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-xs-12 col-md-offset-2 col-md-4">
-                <div class="form-group"
-                <p><b>Checklist: </b> &nbsp;<span><select name="chklist_types[]" class="selectpicker" multiple required>
-                            <option value="1" <?php if (empty($chklist_types) || in_array(1, $chklist_types)) echo 'selected' ?>>Daily</option>
-                            <option value="2" <?php if (in_array(2, $chklist_types)) echo 'selected' ?>>Weekly</option>
-                            <option value="3" <?php if (in_array(3, $chklist_types)) echo 'selected' ?>>Monthly</option>
-                        </select>
+            <div class="row">
+                <div class="col-xs-12 col-md-offset-2 col-md-4">
+                    <div class="form-group">
+                        <p><b>Checklist: </b> &nbsp;<span><select name="chklist_types[]" class="selectpicker" multiple
+                                                                  required>
+                                    <option
+                                        value="1" <?php if (empty($chklist_types) || in_array(1, $chklist_types)) echo 'selected' ?>>
+                                        Daily
+                                    </option>
+                                    <option value="2" <?php if (in_array(2, $chklist_types)) echo 'selected' ?>>Weekly
+                                    </option>
+                                    <option value="3" <?php if (in_array(3, $chklist_types)) echo 'selected' ?>>
+                                        Monthly
+                                    </option>
+                                </select>
                                     </span>
                     <span>
 
-                </p>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group">
+                        <p><b>Report type: </b><span><select class="selectpicker" name="report_types[]" required>
+                                    <option
+                                        value="1" <?php if (empty($report_types) || in_array(1, $report_types)) echo 'selected' ?>>
+                                        Regular
+                                    </option>
+                                    <option value="2" <?php if (in_array(2, $report_types)) echo 'selected' ?>>Attention
+                                        Items
+                                    </option>
+                                </select></span>
+                        </p>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="col-xs-12 col-md-4">
-            <div class="form-group"
-            <p><b>Report type: </b><span><select class="selectpicker" name="report_types[]" required>
-                        <option value="1" <?php if (empty($report_types) || in_array(1, $report_types)) echo 'selected'?>>Regular</option>
-                        <option value="2" <?php if (in_array(2, $report_types)) echo 'selected'?>>Attention Items</option>
-                    </select></span>
-                </span>
-            </p>
-        </div>
-</div>
-</div>
+            <div class="row">
+                <div class="col-xs-12 col-md-offset-2 col-md-4">
+                    <div class="form-group">
+                        <p><span class="add-on" style="vertical-align: top;height:20px"><b>From date: </b> </span>
+                            <input class="datepicker" type="date" id="txt_fromDate"/></p>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div class="form-group">
+                        <p><span class="add-on" style="vertical-align: top;height:20px"><b>To date: </b> </span>
+                            <input class="datepicker" type="date" id="txt_toDate"/></p>
+                    </div>
+                </div>
+            </div>
 
-<div class="row form-group">
-    <div class="col-xs-12 col-md-offset-2 col-md-4">
-        <p><span class="add-on" style="vertical-align: top;height:20px"><b>From date: </b> </span>
-            <input class="datepicker" type="date" id="txt_fromDate"/></p>
+            <div class="row form-group">
+                <div class="col-xs-12 col-md-offset-2 col-md-4">
+                    <p style="text-align: right;">
+                        <button type="submit" name="search" class="btn btn-primary active" id="search">Search
+                        </button>
+                    </p>
+                </div>
+            </div>
 
-    </div>
-    <div class="col-xs-12 col-md-4">
-        <p><span class="add-on" style="vertical-align: top;height:20px"><b>To date: </b> </span>
-            <input class="datepicker" type="date" id="txt_toDate"/></p>
-    </div>
-</div>
-
-<div class="row form-group">
-    <div class="col-xs-12 col-md-offset-2 col-md-4">
-        <p style="text-align: right;">
-            <button type="submit" name="search" class="btn btn-primary active" id="search">Search</button>
-        </p>
-    </div>
-</div>
-
-</form>
+    </form>
 </div>
 
 <div class="container">
