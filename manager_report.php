@@ -30,68 +30,71 @@ $selected_sites = array();
 
 $chklist_types = array();
 
-$report_types = array();
+$report_type = 1;
 
-if (isset($_REQUEST['search'])) {
+////////////// ADD PAGING AND SEARCHING FEATURE /////////
+// 10 row per page
+$item_per_page = 5;
+$page = 0;
 
-    if (isset($_REQUEST['sites'])) {
-        $selected_sites = $_REQUEST['sites'];
+if (isset($_POST['search'])) {
+
+    if (isset($_POST['sites'])) {
+        $selected_sites = $_POST['sites'];
     }
 
-    if (isset($_REQUEST['chklist_types'])) {
-        $chklist_types = $_REQUEST['chklist_types'];
+    if (isset($_POST['chklist_types'])) {
+        $chklist_types = $_POST['chklist_types'];
     }
 
-    if (isset($_REQUEST['report_types'])) {
-        $report_types = $_REQUEST['report_types'];
-    }
-    if (isset($_REQUEST['txt_fromDate'])) {
-        $fromdate = $_REQUEST['txt_fromDate'];
-    }
-    if (isset($_REQUEST['txt_toDate'])) {
-        $todate = $_REQUEST['txt_toDate'];
+    if (isset($_POST['report_types'])) {
+        $report_type = $_POST['report_types'];
     }
 
+    if (isset($_POST['txt_fromDate'])) {
+        $fromdate = $_POST['txt_fromDate'];
+    }
 
+    if (isset($_POST['txt_toDate'])) {
+        $todate = $_POST['txt_toDate'];
+    }
+
+    // calculate number of pages
+    $count = count_reports($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate);
+
+    $start_idx = $page * $item_per_page;
+
+    $reports = null;
+    if ($count > 0) {
+
+        $num_page = ceil($count / $item_per_page);
+
+        $reports = get_reports_with_paging($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate, $page * $item_per_page, $item_per_page);
+
+    }
+
+    $idx = 0;
 }
 
 
 
 ///////////////////////////////////////////////////////////////////////////////////
 //function get_reports_with_paging($conn, $selected_sites, $chklist_types, $report_types, $fromdate, $todate, $skip, $count) {
-////////////// ADD PAGING AND SEARCHING FEATURE /////////
-// 10 row per page
-$item_per_page = 5;
-$page = 0;
-
-function count_reports($conn, $login_user,$selected_sites,$chklist_types, $report_types, $fromdate, $todate){
-    //$sql="select count (*) as c from $report_name";
-   // $ret = mysqli_fetch_assoc($conn->query($sql));
+function count_reports($conn, $login_user,$selected_sites,$chklist_types, $report_type, $fromdate, $todate){
 
     $sql_daily = "";
     if (in_array(1, $chklist_types)) {
-        $sql_daily = "SELECT COUNT(*) AS c FROM daily d, representative_allocated ra
-                      WHERE  d.site_allocate_id = ra.allocate";
-
-        // conditions
-        if (in_array(-1, $selected_sites)) {
-
-        } else {
-            $sql_daily .= " AND ra.site_id IN (" . $selected_sites . ")";
-        }
-
-        //
-
+        $sql_daily = get_sql_daily(true, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $sql_weekly = "";
     if (in_array(2, $chklist_types)) {
-        $sql_weekly = "";
+        $sql_weekly = get_sql_weekly(true, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $sql_monthly = "";
     if (in_array(3, $chklist_types)) {
-        $sql_monthly = "";
+        $sql_monthly = get_sql_monthly(true, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $final_sql = "";
@@ -119,35 +122,178 @@ function count_reports($conn, $login_user,$selected_sites,$chklist_types, $repor
         $final_sql .= "(" . $sql_monthly . ")";
     }
 
+    $ret = mysqli_fetch_assoc($conn->query($final_sql));
+
     return $ret['c'];
 }
 
-$search="weekly";
-function get_reports_with_paging($conn, $managerId, $search, $skip, $count){
 
-    $sql="select * from $search";
+function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_types, $report_type, $fromdate, $todate, $skip, $count){
 
-    return $conn->query($sql);
+    $sql_daily = "";
+    if (in_array(1, $chklist_types)) {
+        $sql_daily = get_sql_daily(false, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+    }
+
+    $sql_weekly = "";
+    if (in_array(2, $chklist_types)) {
+        $sql_weekly = get_sql_weekly(false, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+    }
+
+    $sql_monthly = "";
+    if (in_array(3, $chklist_types)) {
+        $sql_monthly = get_sql_monthly(false, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+    }
+
+    $final_sql = "";
+    if ($sql_daily != "") {
+        $final_sql = "(" . $sql_daily . ")";
+    }
+
+    if ($sql_weekly != "") {
+        if($final_sql != "") {
+
+            $final_sql .= " UNION ";
+
+        }
+
+        $final_sql .= "(" . $sql_weekly . ")";
+    }
+
+    if ($sql_monthly != "") {
+        if($final_sql != "") {
+
+            $final_sql .= " UNION ";
+
+        }
+
+        $final_sql .= "(" . $sql_monthly . ")";
+    }
+
+    $final_sql .=  " LIMIT $skip, $count";
+
+    return $conn->query($final_sql);
+}
+
+/**
+ *
+ */
+function get_sql_daily($select_count, $manager_id, $selected_sites, $report_type, $from_date, $to_date) {
+
+    $sql_daily_l = " SELECT ";
+    if ($select_count) {
+        $sql_daily_l .= " COUNT(*) AS c";
+    } else {
+        $sql_daily_l .= " * ";
+    }
+
+    $sql_daily_l .= " FROM daily d, representative_allocated ra, site s
+                      WHERE  d.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id";
+
+    // conditions
+    // selected sites
+    if (!in_array(-1, $selected_sites)) {
+        $sql_daily_l .= " AND ra.site_id IN (" . $selected_sites . ")";
+    }
+
+    // report type
+    if ($report_type == 2) { // attention reports
+        $sql_daily_l .= " AND d.d_comments <> ''";
+    }
+
+    // from date
+    if (!empty($from_date)) {
+        $sql_daily_l .= " AND DATE(d.d_created_date, '%d/%m/%Y') >= DATE('$from_date', '%d/%m/%Y')'";
+    }
+
+    // to date
+    if (!empty($to_date)) {
+        $sql_daily_l .= " AND DATE(d.d_created_date, '%d/%m/%Y') <= DATE('$to_date', '%d/%m/%Y')";
+    }
+
+    return $sql_daily_l;
 
 }
-// calculate number of pages
-$count = count_reports($conn, $login_user['user_id'], 'weekly');
 
-////////////// ADD PAGING AND SEARCHING FEATURE /////////
+/**
+ *
+ */
+function get_sql_weekly($select_count, $manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
-$start_idx = $page * $item_per_page;
+    $sql_weekly_l = " SELECT ";
+    if ($select_count) {
+        $sql_weekly_l .= " COUNT(*) AS c";
+    } else {
+        $sql_weekly_l .= " * ";
+    }
 
-$reports = null;
-if ($count > 0) {
+    $sql_weekly_l .= " FROM weekly w, representative_allocated ra, site s
+                      WHERE  w.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id";
 
-    $num_page = ceil($count / $item_per_page);
+    // conditions
+    // selected sites
+    if (!in_array(-1, $selected_sites)) {
+        $sql_weekly_l .= " AND ra.site_id IN (" . $selected_sites . ")";
+    }
 
-    $reports = get_reports_with_paging($conn, $login_user['user_id'], $search_criteria, $page * $item_per_page, $item_per_page);
+    // report type
+    if ($report_type == 2) { // attention reports
+        $sql_weekly_l .= " AND w.d_comments <> ''";
+    }
+
+    // from date
+    if (!empty($from_date)) {
+        $sql_weekly_l .= " AND DATE(w.d_created_date, '%d/%m/%Y') >= DATE('$from_date', '%d/%m/%Y')'";
+    }
+
+    // to date
+    if (!empty($to_date)) {
+        $sql_weekly_l .= " AND DATE(w.d_created_date, '%d/%m/%Y') <= DATE('$to_date', '%d/%m/%Y')";
+    }
+
+    return $sql_weekly_l;
 
 }
 
-$idx = 0;
-//////////////////////////////////////////////////////////////////////////////////////////
+/**
+ *
+ */
+function get_sql_monthly($select_count, $manager_id, $selected_sites, $report_type, $from_date, $to_date) {
+
+    $sql_monthly_l = " SELECT ";
+    if ($select_count) {
+        $sql_monthly_l .= " COUNT(*) AS c";
+    } else {
+        $sql_monthly_l .= " * ";
+    }
+
+    $sql_monthly_l .= " FROM monthly m, representative_allocated ra, site s
+                      WHERE  m.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id";
+
+    // conditions
+    // selected sites
+    if (!in_array(-1, $selected_sites)) {
+        $sql_monthly_l .= " AND ra.site_id IN (" . $selected_sites . ")";
+    }
+
+    // report type
+    if ($report_type == 2) { // attention reports
+        $sql_monthly_l .= " AND m.d_comments <> ''";
+    }
+
+    // from date
+    if (!empty($from_date)) {
+        $sql_monthly_l .= " AND DATE(m.d_created_date, '%d/%m/%Y') >= DATE('$from_date', '%d/%m/%Y')'";
+    }
+
+    // to date
+    if (!empty($to_date)) {
+        $sql_monthly_l .= " AND DATE(m.d_created_date, '%d/%m/%Y') <= DATE('$to_date', '%d/%m/%Y')";
+    }
+
+    return $sql_monthly_l;
+
+}
 
 mysqli_close($conn);
 
@@ -229,10 +375,10 @@ mysqli_close($conn);
                     <div class="form-group">
                         <p><b>Report type: </b><span><select class="selectpicker" name="report_types[]" required>
                                     <option
-                                        value="1" <?php if (empty($report_types) || in_array(1, $report_types)) echo 'selected' ?>>
+                                        value="1" <?php if (empty($report_types) || $report_types == 1) echo 'selected' ?>>
                                         Regular
                                     </option>
-                                    <option value="2" <?php if (in_array(2, $report_types)) echo 'selected' ?>>Attention
+                                    <option value="2" <?php if ($report_types == 2) echo 'selected' ?>>Attention
                                         Items
                                     </option>
                                 </select></span>
@@ -268,6 +414,7 @@ mysqli_close($conn);
     </form>
 </div>
 
+<?php if (isset($_POST['search'])) { ?>
 <div class="container">
     <div class="row form-group">
         <div class="col-xs-12 col-md-offset-2 col-md-8">
@@ -328,6 +475,7 @@ mysqli_close($conn);
         </div>
     </div>
 </div>
+<?php } ?>
 
 
 <script src="js/jquery-1.12.3.js"></script>
