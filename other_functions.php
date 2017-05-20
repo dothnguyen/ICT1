@@ -12,9 +12,13 @@
  */
 function test_input($data) {
     $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
+    //$data = stripslashes($data);
+    //$data = htmlspecialchars($data);
     return $data;
+}
+
+function html_escape($data) {
+    return htmlspecialchars($data);
 }
 
 function check_login() {

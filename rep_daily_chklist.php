@@ -43,6 +43,8 @@ $cur_date = "";
 // handle form submission
 if (isset($_REQUEST['submit'])) {
 
+    $conn = db_connect();
+
     $saved_files = array();
 
     // store the file
@@ -85,10 +87,10 @@ if (isset($_REQUEST['submit'])) {
     $checklist8 = isset($_POST['checklist8']) ? $_POST['checklist8'] : 0;
     $checklist9 = isset($_POST['checklist9']) ? $_POST['checklist9'] : 0;
 
-    $comment = test_input($_POST['comment']);
+    $comment = mysqli_real_escape_string($conn, test_input($_POST['comment']));
+
     $site_alloc_id = test_input($_POST['site_alloc_id']);
 
-    $conn = db_connect();
 
     // save data to daily checklist
     $sql = "INSERT INTO daily(d_created_date, d_comments, d_checklist1, d_checklist2, d_checklist3, d_checklist4, d_checklist5, d_checklist6, d_checklist7, d_checklist8, d_checklist9, site_alloc_id)
@@ -144,7 +146,7 @@ if (isset($_REQUEST['submit'])) {
         $checklist8 = $current_checklist['d_checklist8'];
         $checklist9 = $current_checklist['d_checklist9'];
 
-        $comment = $current_checklist['d_comments'];
+        $comment = html_escape($current_checklist['d_comments']);
 
         $site_name = $current_checklist['site_name'];
 

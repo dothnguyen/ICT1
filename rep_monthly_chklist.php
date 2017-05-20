@@ -43,6 +43,8 @@ $month = "";
 // handle form submission
 if (isset($_REQUEST['submit'])) {
 
+    $conn = db_connect();
+
     $saved_files = array();
 
     // store the file
@@ -85,10 +87,10 @@ if (isset($_REQUEST['submit'])) {
     $checklist8 = isset($_POST['checklist8']) ? $_POST['checklist8'] : 0;
     $checklist9 = isset($_POST['checklist9']) ? $_POST['checklist9'] : 0;
 
-    $comment = test_input($_POST['comment']);
+    $comment = mysqli_real_escape_string($conn, test_input($_POST['comment']));
     $site_alloc_id = test_input($_POST['site_alloc_id']);
 
-    $conn = db_connect();
+
 
     // save data to monthly checklist
     $sql = "INSERT INTO monthly(m_created_date, d_comments, m_checklist1, m_checklist2, m_checklist3, m_checklist4, m_checklist5, m_checklist6, m_checklist7, m_checklist8, m_checklist9, site_alloc_id)
@@ -142,7 +144,7 @@ if (isset($_REQUEST['submit'])) {
         $checklist8 = $current_checklist['m_checklist8'];
         $checklist9 = $current_checklist['m_checklist9'];
 
-        $comment = $current_checklist['d_comments'];
+        $comment = html_escape($current_checklist['d_comments']);
 
         $site_name = $current_checklist['site_name'];
 // must get the month
