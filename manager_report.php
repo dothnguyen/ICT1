@@ -45,8 +45,109 @@ if (isset($_REQUEST['search'])) {
     if (isset($_REQUEST['report_types'])) {
         $report_types = $_REQUEST['report_types'];
     }
+    if (isset($_REQUEST['txt_fromDate'])) {
+        $fromdate = $_REQUEST['txt_fromDate'];
+    }
+    if (isset($_REQUEST['txt_toDate'])) {
+        $todate = $_REQUEST['txt_toDate'];
+    }
+
 
 }
+
+
+
+///////////////////////////////////////////////////////////////////////////////////
+//function get_reports_with_paging($conn, $selected_sites, $chklist_types, $report_types, $fromdate, $todate, $skip, $count) {
+////////////// ADD PAGING AND SEARCHING FEATURE /////////
+// 10 row per page
+$item_per_page = 5;
+$page = 0;
+
+function count_reports($conn, $login_user,$selected_sites,$chklist_types, $report_types, $fromdate, $todate){
+    //$sql="select count (*) as c from $report_name";
+   // $ret = mysqli_fetch_assoc($conn->query($sql));
+
+    $sql_daily = "";
+    if (in_array(1, $chklist_types)) {
+        $sql_daily = "SELECT COUNT(*) AS c FROM daily d, representative_allocated ra
+                      WHERE  d.site_allocate_id = ra.allocate";
+
+        // conditions
+        if (in_array(-1, $selected_sites)) {
+
+        } else {
+            $sql_daily .= " AND ra.site_id IN (" . $selected_sites . ")";
+        }
+
+        //
+
+    }
+
+    $sql_weekly = "";
+    if (in_array(2, $chklist_types)) {
+        $sql_weekly = "";
+    }
+
+    $sql_monthly = "";
+    if (in_array(3, $chklist_types)) {
+        $sql_monthly = "";
+    }
+
+    $final_sql = "";
+    if ($sql_daily != "") {
+        $final_sql = "(" . $sql_daily . ")";
+    }
+
+    if ($sql_weekly != "") {
+        if($final_sql != "") {
+
+            $final_sql .= " UNION ";
+
+        }
+
+        $final_sql .= "(" . $sql_weekly . ")";
+    }
+
+    if ($sql_monthly != "") {
+        if($final_sql != "") {
+
+            $final_sql .= " UNION ";
+
+        }
+
+        $final_sql .= "(" . $sql_monthly . ")";
+    }
+
+    return $ret['c'];
+}
+
+$search="weekly";
+function get_reports_with_paging($conn, $managerId, $search, $skip, $count){
+
+    $sql="select * from $search";
+
+    return $conn->query($sql);
+
+}
+// calculate number of pages
+$count = count_reports($conn, $login_user['user_id'], 'weekly');
+
+////////////// ADD PAGING AND SEARCHING FEATURE /////////
+
+$start_idx = $page * $item_per_page;
+
+$reports = null;
+if ($count > 0) {
+
+    $num_page = ceil($count / $item_per_page);
+
+    $reports = get_reports_with_paging($conn, $login_user['user_id'], $search_criteria, $page * $item_per_page, $item_per_page);
+
+}
+
+$idx = 0;
+//////////////////////////////////////////////////////////////////////////////////////////
 
 mysqli_close($conn);
 
@@ -144,13 +245,13 @@ mysqli_close($conn);
                 <div class="col-xs-12 col-md-offset-2 col-md-4">
                     <div class="form-group">
                         <p><span class="add-on" style="vertical-align: top;height:20px"><b>From date: </b> </span>
-                            <input class="datepicker" type="date" id="txt_fromDate"/></p>
+                            <input class="datepicker" type="date" id="txt_fromDate" name="txt_fromDate"/></p>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group">
                         <p><span class="add-on" style="vertical-align: top;height:20px"><b>To date: </b> </span>
-                            <input class="datepicker" type="date" id="txt_toDate"/></p>
+                            <input class="datepicker" type="date" id="txt_toDate" name="txt_toDate"/></p>
                     </div>
                 </div>
             </div>
@@ -172,10 +273,39 @@ mysqli_close($conn);
         <div class="col-xs-12 col-md-offset-2 col-md-8">
             <table class="table-bordered table-striped table-hover table-responsive site-table">
                 <thead>
+                <td>No.</td>
                 <td>Checklist</td>
                 <td>Site/Prep</td>
                 <td>Type</td>
                 </thead>
+
+                <?php
+                if (!empty($reports)) {
+                foreach ($reports as $report) {
+                ?>
+                <tr>
+                    <td class="index-column"><?php echo($start_idx + $idx + 1) ?></td>
+                    <td class="checklist-column">
+
+                    </td>
+
+                    <td class="site-column">
+
+                    </td>
+
+
+                    <td class="type-column">
+
+                    </td>
+                </tr>
+                    <?php
+                    $idx++;
+                }
+                } else {
+                    ?>
+                    <tr><td colspan="4">No data found.</td></tr>
+                <?php } ?>
+            </table>
 
             </table>
             <?php if ($num_page > 1) { ?>
