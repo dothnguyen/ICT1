@@ -18,7 +18,7 @@ function test_input($data) {
 }
 
 function html_escape($data) {
-    return htmlspecialchars($data);
+    return htmlspecialchars($data, ENT_QUOTES);
 }
 
 function check_login() {

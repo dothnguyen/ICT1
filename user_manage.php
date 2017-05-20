@@ -41,7 +41,7 @@ if (isset($_REQUEST['page'])) {
 }
 
 // calculate number of pages
-$count = count_users_of_manager($conn, $login_user['user_id'], $search_criteria);
+$count = count_users_of_manager($conn, $login_user['user_id'], mysqli_real_escape_string($conn, $search_criteria));
 
 
 ////////////// ADD PAGING AND SEARCHING FEATURE /////////
@@ -53,7 +53,7 @@ if ($count > 0) {
 
     $num_page = ceil($count / $item_per_page);
 
-    $represents = get_users_of_manager_with_paging($conn, $login_user['user_id'], $search_criteria, $page * $item_per_page, $item_per_page);
+    $represents = get_users_of_manager_with_paging($conn, $login_user['user_id'], mysqli_real_escape_string($conn, $search_criteria), $page * $item_per_page, $item_per_page);
 
 }
 
@@ -142,7 +142,7 @@ function get_users_of_manager_with_paging($conn, $managerId, $search, $skip, $co
                             <form class="form-inline" action="user_manage.php" method="get">
                                 <div class="form-group">
                                     <label for="search_criteria">Search for </label>
-                                    <input type="text" class="form-control" id="search_criteria" name="search_criteria" value="<?php echo $search_criteria; ?>">
+                                    <input type="text" class="form-control" id="search_criteria" name="search_criteria" value="<?php echo html_escape($search_criteria); ?>">
                                     <button type="submit" class="btn btn-default" id="search">Search</button>
                                 </div>
                             </form>
@@ -164,16 +164,16 @@ function get_users_of_manager_with_paging($conn, $managerId, $search, $skip, $co
                                                 <div>
 
                                                     <div>
-                                                        <span>Name: <strong> <?php echo $represent['firstname']; ?>&nbsp;<?php echo $represent['lastname']; ?></strong> </span>
+                                                        <span>Name: <strong> <?php echo html_escape($represent['firstname']); ?>&nbsp;<?php echo html_escape($represent['lastname']); ?></strong> </span>
                                                     </div>
                                                     <div>
-                                                        <span>Email: <?php echo $represent['email']; ?>  </span>
+                                                        <span>Email: <?php echo html_escape($represent['email']); ?>  </span>
                                                     </div>
                                                     <div>
                                                         <?php if ($represent['site_rep_active_status'] == '1') { ?>
                                                             <span>Status:
                                                                 <?php echo 'Is allocated to '; ?>
-                                                                <strong><?php echo $represent['site_name']; ?></strong>
+                                                                <strong><?php echo html_escape($represent['site_name']); ?></strong>
                                                         </span>
                                                         <?php } else { ?>
                                                             <span>Status: Available for allocation</span>

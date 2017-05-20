@@ -65,9 +65,13 @@ if (isset($_POST['btnSave'])) {
         $conn = db_connect();
         
         if ($mode == 'modify') {
-            modify_site($conn, $site_id, $site_name, $site_addr, $site_tel);
+            modify_site($conn, $site_id, mysqli_real_escape_string($conn, $site_name),
+                mysqli_real_escape_string($conn, $site_addr),
+                mysqli_real_escape_string($conn, $site_tel));
         } else if ($mode == 'new') {
-            insert_site($conn, $site_name, $site_addr, $site_tel, $login_user['user_id']);
+            insert_site($conn, mysqli_real_escape_string($conn, $site_name),
+                mysqli_real_escape_string($conn, $site_addr),
+                mysqli_real_escape_string($conn, $site_tel), $login_user['user_id']);
         }
 
         mysqli_close($conn);
@@ -135,7 +139,7 @@ if (isset($_POST['btnSave'])) {
                         <div class="form-group <?php if (!empty($msg['site_name'])) echo "has-error";?>">
                             <label for="txtSiteName" class="col-sm-3 control-label">Site Name</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtSiteName" name="txtSiteName" value="<?php echo $site_name ?>"/>
+                                <input type="text" class="form-control" id="txtSiteName" name="txtSiteName" value="<?php echo html_escape($site_name); ?>" required/>
                             </div>
                             <?php if (!empty($msg['site_name'])) {?>
                                 <div class="col-sm-offset-3 col-sm-8">
@@ -146,7 +150,7 @@ if (isset($_POST['btnSave'])) {
                         <div class="form-group <?php if (!empty($msg['site_address'])) echo "has-error";?>">
                             <label for="txtAddress" class="col-sm-3 control-label">Site Address</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="txtAddress" name="txtAddress" value="<?php echo $site_addr ?>"/>
+                                <input type="text" class="form-control" id="txtAddress" name="txtAddress" value="<?php echo html_escape($site_addr); ?>" required/>
                             </div>
                             <?php if (!empty($msg['site_address'])) {?>
                                 <div class="col-sm-offset-3 col-sm-8">
@@ -158,7 +162,7 @@ if (isset($_POST['btnSave'])) {
                         <div class="form-group <?php if (!empty($msg['site_tel'])) echo "has-error";?>">
                             <label for="txtPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo $site_tel ?>"/>
+                                <input type="number" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo html_escape($site_tel); ?>" required/>
                             </div>
                             <?php if (!empty($msg['site_tel'])) {?>
                                 <div class="col-sm-offset-3 col-sm-8">

@@ -49,7 +49,7 @@
                 // check username and password
 
 
-                $ret = check_user($conn, $username, $pwd);
+                $ret = check_user($conn, mysqli_real_escape_string($conn, $username), mysqli_real_escape_string($conn, $pwd));
 
                 if (!$ret) {
                     array_push($msg, "Invalid username or password.");
@@ -61,7 +61,7 @@
             if (empty($msg)) {
 
                 // get user info
-                $cus_row = get_user($conn, $username);
+                $cus_row = get_user($conn, mysqli_real_escape_string($conn, $username));
 
 
                 $_SESSION['logged_in'] = true;
