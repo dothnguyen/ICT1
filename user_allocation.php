@@ -105,21 +105,21 @@ mysqli_close($conn);
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">User Name:</label>
                             <div class="col-sm-8 username-label">
-                                <strong><?php echo $user_info['firstname'] . ' ' . $user_info['lastname']?></strong>
+                                <strong><?php echo html_escape($user_info['firstname']) . ' ' . html_escape($user_info['lastname'])?></strong>
                             </div>
                         </div>
                         <?php if ($mode == 'modify') { ?>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Current Allocated Site: </label>
                             <div class="col-sm-8 username-label">
-                                <span><?php echo $cur_allocation['site_name']?></span>
+                                <span><?php echo html_escape($cur_allocation['site_name'])?></span>
                             </div>
                         </div>
                         <?php } ?>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Allocate Site:</label>
                             <div class="col-sm-8">
-                                <select name="slSites" class="form-control">
+                                <select name="slSites" class="form-control" required>
                                     <?php foreach ($unallocated_sites as $site) { ?>
                                         <option value="<?php echo $site['site_id'];?>"><?php echo $site['site_name'];?></option>
                                     <?php } ?>

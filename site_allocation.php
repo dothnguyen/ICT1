@@ -170,17 +170,17 @@ mysqli_close($conn);
                             <div class="form-group">
                                 <label for="" class="col-sm-3 control-label">Current Allocated User: </label>
                                 <div class="col-sm-8 username-label">
-                                    <strong><?php echo $cur_user['firstname'] . ' ' . $cur_user['lastname']?></strong>
+                                    <strong><?php echo html_escape($cur_user['firstname']) . ' ' . html_escape($cur_user['lastname'])?></strong>
                                 </div>
                             </div>
                         <?php } ?>
                         <div class="form-group">
                             <label for="" class="col-sm-3 control-label">Allocate User:</label>
                             <div class="col-sm-8">
-                                <select name="slUser" class="form-control">
+                                <select name="slUser" class="form-control" required>
 
                                     <?php foreach ($unallocated_users as $user) { ?>
-                                        <option value="<?php echo $user['user_id'];?>"><?php echo $user['firstname'] . ' ' . $user['lastname'];?></option>
+                                        <option value="<?php echo $user['user_id'];?>"><?php echo html_escape($user['firstname']) . ' ' . html_escape($user['lastname']);?></option>
                                     <?php } ?>
                                 </select>
                             </div>

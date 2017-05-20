@@ -42,7 +42,7 @@ if (isset($_REQUEST['page'])) {
 }
 
 // calculate number of pages
-$count = count_sites_of_manager_with_criteria($conn, $login_user['user_id'], $search_criteria);
+$count = count_sites_of_manager_with_criteria($conn, $login_user['user_id'], mysqli_real_escape_string($conn, $search_criteria));
 
 ////////////// ADD PAGING AND SEARCHING FEATURE /////////
 
@@ -53,7 +53,7 @@ if ($count > 0) {
 
     $num_page = ceil($count / $item_per_page);
 
-    $sites = get_sites_of_manager_with_paging($conn, $login_user['user_id'], $search_criteria, $page * $item_per_page, $item_per_page);
+    $sites = get_sites_of_manager_with_paging($conn, $login_user['user_id'], mysqli_real_escape_string($conn, $search_criteria), $page * $item_per_page, $item_per_page);
 
 }
 
@@ -113,17 +113,17 @@ mysqli_close($conn);
                                                 <td class="index-column"><?php echo($start_idx + $idx + 1) ?></td>
                                                 <td class="site-info-column">
                                                     <div>
-                                                        <div><strong><?php echo $site['site_name']; ?></strong> - <span>Tel: <?php echo $site['telephone']; ?></span>
+                                                        <div><strong><?php echo html_escape($site['site_name']); ?></strong> - <span>Tel: <?php echo html_escape($site['telephone']); ?></span>
                                                         </div>
                                                         <div>
-                                                            <spa>Address: <?php echo $site['address']; ?></spa>
+                                                            <spa>Address: <?php echo html_escape($site['address']); ?></spa>
                                                         </div>
                                                         <!--teresa edited-->
                                                         <div>
                                                             <?php if ($site['site_rep_active_status'] == '1') { ?>
                                                                 <span>Status:
                                                                     <?php echo 'Is represented by '; ?>
-                                                                    <strong><?php echo $site['firstname'] . ' ' . $site['lastname']; ?></strong>
+                                                                    <strong><?php echo html_escape($site['firstname']) . ' ' . html_escape($site['lastname']); ?></strong>
                                                         </span>
                                                             <?php } else { ?>
                                                                 <span>Status: Available for representation</span>

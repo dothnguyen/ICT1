@@ -13,6 +13,9 @@ require_once "other_functions.php";
 
 session_start();
 
+// check if session expires
+check_session();
+
 // if not logged in -> redirect to login page
 if (!$_SESSION['logged_in']) {
     header("Location:login.php");

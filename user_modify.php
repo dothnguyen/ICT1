@@ -103,7 +103,10 @@ if (isset($_POST['btnSave'])) {
         $conn = db_connect();
         if ($mode == 'modify') {
 
-            modify_user($conn, $user_id, $firstname, $lastname, $email, $username);
+            modify_user($conn, $user_id, mysqli_real_escape_string($conn, $firstname),
+                mysqli_real_escape_string($conn, $lastname),
+                mysqli_real_escape_string($conn, $email),
+                mysqli_real_escape_string($conn, $username));
 
         } else if ($mode == 'new') {
 			
@@ -112,11 +115,14 @@ if (isset($_POST['btnSave'])) {
 			$temp_username= test_input($_POST['txtNewUsername']);
 
 
-			$booln=is_username_taken($conn,$temp_username);
+			$booln=is_username_taken($conn, mysqli_real_escape_string($conn, $temp_username));
 			
 			if($booln == 0) {
 				
-				insert_new_user($conn, $firstname, $lastname, $email, $new_username,  $generate_password, $login_user['user_id']);
+				insert_new_user($conn, mysqli_real_escape_string($conn, $firstname),
+                    mysqli_real_escape_string($conn, $lastname),
+                    mysqli_real_escape_string($conn, $email),
+                    mysqli_real_escape_string($conn, $username),  $generate_password, $login_user['user_id']);
 			
 				//send email to the new user
 				$emailpass = test_input($_POST['txtPassword']);
@@ -202,7 +208,7 @@ if (isset($_POST['btnSave'])) {
                             <label for="txtFirstName" class="col-sm-3 control-label">First Name</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtFirstName" name="txtFirstName"
-                                       value="<?php echo $firstname ?>"/>
+                                       value="<?php echo html_escape($firstname) ?>" required/>
                             </div>
                             <?php if (!empty($msg['firstname'])) { ?>
                                 <div class="col-sm-offset-3 col-sm-8">
@@ -215,7 +221,7 @@ if (isset($_POST['btnSave'])) {
                             <label for="txtLastName" class="col-sm-3 control-label">Last Name</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtLastName" name="txtLastName"
-                                       value="<?php echo $lastname ?>"/>
+                                       value="<?php echo html_escape($lastname) ?>" required/>
                             </div>
                             <?php if (!empty($msg['lastname'])) { ?>
                                 <div class="col-sm-offset-3 col-sm-8">
@@ -230,7 +236,7 @@ if (isset($_POST['btnSave'])) {
 
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="txtEmail" name="txtEmail"
-                                       value="<?php echo $email ?>" />
+                                       value="<?php echo html_escape($email) ?>" required/>
                             </div>
 
                             <?php if (!empty($msg['email'])) { ?>
@@ -246,7 +252,7 @@ if (isset($_POST['btnSave'])) {
                             <div class="form-group <?php if (!empty($msg['new_username'])) echo "has-error"; ?>">
                                 <label for="txtNewUsername" class="col-sm-3 control-label">Username</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtNewUsername" name="txtNewUsername" value="<?php echo $new_username;?>"/>
+                                    <input type="text" class="form-control" id="txtNewUsername" name="txtNewUsername" value="<?php echo html_escape($new_username);?>" required/>
                                 </div>
                                 <?php if (!empty($msg['new_username'])) { ?>
                                     <div class="col-sm-offset-3 col-sm-8">
@@ -261,7 +267,7 @@ if (isset($_POST['btnSave'])) {
 							<div class="form-group <?php if (!empty($msg['generate_password'])) echo "has-error"; ?>">
                                 <label for="txtPassword" class="col-sm-3 control-label">Password</label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="txtPassword" name="txtPassword" value="<?php echo $generate_password;?>"/>
+                                    <input type="text" class="form-control" id="txtPassword" name="txtPassword" value="<?php echo html_escape($generate_password);?>" required/>
                                 </div>
                                 <?php if (!empty($msg['generate_password'])) { ?>
                                     <div class="col-sm-offset-3 col-sm-8">

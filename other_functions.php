@@ -12,9 +12,13 @@
  */
 function test_input($data) {
     $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
+    //$data = stripslashes($data);
+    //$data = htmlspecialchars($data);
     return $data;
+}
+
+function html_escape($data) {
+    return htmlspecialchars($data, ENT_QUOTES);
 }
 
 function check_login() {
@@ -43,4 +47,20 @@ function check_authorize($is_manager_page) {
         header("Location:unauthorize.php");
         exit();
     }
+}
+
+/**
+ *
+ */
+function check_session() {
+    $now = time();
+    if (isset($_SESSION['discard_after']) && $now > $_SESSION['discard_after']) {
+        // this session has worn out its welcome; kill it and start a brand new one
+        session_unset();
+        session_destroy();
+        session_start();
+    }
+
+    // either new or old, it should live at most for another hour
+    $_SESSION['discard_after'] = $now +  3600;
 }

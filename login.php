@@ -49,7 +49,7 @@
                 // check username and password
 
 
-                $ret = check_user($conn, $username, $pwd);
+                $ret = check_user($conn, mysqli_real_escape_string($conn, $username), mysqli_real_escape_string($conn, $pwd));
 
                 if (!$ret) {
                     array_push($msg, "Invalid username or password.");
@@ -61,7 +61,7 @@
             if (empty($msg)) {
 
                 // get user info
-                $cus_row = get_user($conn, $username);
+                $cus_row = get_user($conn, mysqli_real_escape_string($conn, $username));
 
 
                 $_SESSION['logged_in'] = true;
@@ -134,13 +134,13 @@ function update_login_time($conn, $user_id) {
                         <div class="form-group">
                             <label for="inputUsername" class="col-sm-3 control-label">Username</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Username">
+                                <input type="text" class="form-control" id="inputUsername" name="inputUsername" placeholder="Username" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="inputPassword" class="col-sm-3 control-label">Password</label>
                             <div class="col-sm-9">
-                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password">
+                                <input type="password" class="form-control" id="inputPassword" name="inputPassword" placeholder="Password" required>
                             </div>
                         </div>
                         <div class="form-group">
@@ -158,5 +158,7 @@ function update_login_time($conn, $user_id) {
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
 <script src="js/script.js"></script>
+<script src="js/bootstrap-select.js"></script>
+
 </body>
 </html>
