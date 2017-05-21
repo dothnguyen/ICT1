@@ -37,8 +37,8 @@ $report_type = 1;
 $item_per_page = 5;
 $page = 0;
 
-if (isset($_GET['search'])) {
 
+if (isset($_GET['search'])) {
     if (isset($_GET['sites'])) {
         $selected_sites = $_GET['sites'];
     }
@@ -59,7 +59,11 @@ if (isset($_GET['search'])) {
         $todate = $_GET['txt_toDate'];
     }
 
-    // calculate number of pages
+    if (isset($_REQUEST['page'])) {
+        $page = intval($_GET['page']);
+    }
+
+// calculate number of pages
     $count = count_reports($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate);
 
     $start_idx = $page * $item_per_page;
@@ -74,8 +78,8 @@ if (isset($_GET['search'])) {
     }
 
     $idx = 0;
-}
 
+}
 
 
 ///////////////////////////////////////////////////////////////////////////////////
@@ -84,22 +88,22 @@ function count_reports($conn, $login_user,$selected_sites,$chklist_types, $repor
 
     $sql_daily = "";
     if (in_array(1, $chklist_types)) {
-        $sql_daily = get_sql_daily(true, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+        $sql_daily = get_sql_daily($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $sql_weekly = "";
     if (in_array(2, $chklist_types)) {
-        $sql_weekly = get_sql_weekly(true, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+        $sql_weekly = get_sql_weekly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $sql_monthly = "";
     if (in_array(3, $chklist_types)) {
-        $sql_monthly = get_sql_monthly(true, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+        $sql_monthly = get_sql_monthly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
-    $final_sql = "";
+    $final_sql = "SELECT COUNT(*) as c FROM (";
     if ($sql_daily != "") {
-        $final_sql = "(" . $sql_daily . ")";
+        $final_sql .= "(" . $sql_daily . ")";
     }
 
     if ($sql_weekly != "") {
@@ -122,6 +126,8 @@ function count_reports($conn, $login_user,$selected_sites,$chklist_types, $repor
         $final_sql .= "(" . $sql_monthly . ")";
     }
 
+    $final_sql .= ") x";
+
     $ret = mysqli_fetch_assoc($conn->query($final_sql));
 
     return $ret['c'];
@@ -132,17 +138,17 @@ function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_typ
 
     $sql_daily = "";
     if (in_array(1, $chklist_types)) {
-        $sql_daily = get_sql_daily(false, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+        $sql_daily = get_sql_daily($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $sql_weekly = "";
     if (in_array(2, $chklist_types)) {
-        $sql_weekly = get_sql_weekly(false, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+        $sql_weekly = get_sql_weekly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $sql_monthly = "";
     if (in_array(3, $chklist_types)) {
-        $sql_monthly = get_sql_monthly(false, $login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+        $sql_monthly = get_sql_monthly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
     $final_sql = "";
@@ -178,14 +184,10 @@ function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_typ
 /**
  *
  */
-function get_sql_daily($select_count, $manager_id, $selected_sites, $report_type, $from_date, $to_date) {
+function get_sql_daily($manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
     $sql_daily_l = " SELECT ";
-    if ($select_count) {
-        $sql_daily_l .= " COUNT(*) AS c";
-    } else {
-        $sql_daily_l .= " d.daily_id as chk_id, d.d_created_date as created_date, s.site_name, u.firstname, u.lastname, d.d_comments as comments, 1 as type ";
-    }
+    $sql_daily_l .= " d.daily_id as chk_id, d.d_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, d.d_comments as comments, 1 as type ";
 
     $sql_daily_l .= " FROM daily d, representative_allocated ra, site s, user_tbl u
                       WHERE  d.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id 
@@ -200,6 +202,8 @@ function get_sql_daily($select_count, $manager_id, $selected_sites, $report_type
     // report type
     if ($report_type == 2) { // attention reports
         $sql_daily_l .= " AND d.d_comments <> ''";
+    } else  if ($report_type == 3) {
+        $sql_daily_l .= " AND d.d_comments = ''";
     }
 
     // from date
@@ -219,14 +223,10 @@ function get_sql_daily($select_count, $manager_id, $selected_sites, $report_type
 /**
  *
  */
-function get_sql_weekly($select_count, $manager_id, $selected_sites, $report_type, $from_date, $to_date) {
+function get_sql_weekly($manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
     $sql_weekly_l = " SELECT ";
-    if ($select_count) {
-        $sql_weekly_l .= " COUNT(*) AS c";
-    } else {
-        $sql_weekly_l .= " w.weekly_id  as chk_id, w.w_created_date as created_date, s.site_name, u.firstname, u.lastname, w.d_comments as comments, 2 as type ";
-    }
+    $sql_weekly_l .= " w.weekly_id  as chk_id, w.w_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, w.d_comments as comments, 2 as type ";
 
     $sql_weekly_l .= " FROM weekly w, representative_allocated ra, site s, user_tbl u
                       WHERE  w.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id
@@ -241,6 +241,8 @@ function get_sql_weekly($select_count, $manager_id, $selected_sites, $report_typ
     // report type
     if ($report_type == 2) { // attention reports
         $sql_weekly_l .= " AND w.d_comments <> ''";
+    } else  if ($report_type == 3) {
+        $sql_weekly_l .= " AND w.d_comments = ''";
     }
 
     // from date
@@ -260,14 +262,10 @@ function get_sql_weekly($select_count, $manager_id, $selected_sites, $report_typ
 /**
  *
  */
-function get_sql_monthly($select_count, $manager_id, $selected_sites, $report_type, $from_date, $to_date) {
+function get_sql_monthly($manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
     $sql_monthly_l = " SELECT ";
-    if ($select_count) {
-        $sql_monthly_l .= " COUNT(*) AS c";
-    } else {
-        $sql_monthly_l .= " m.monthly_id  as chk_id, m.m_created_date as created_date, s.site_name, u.firstname, u.lastname, m.d_comments as comments, 3 as type ";
-    }
+    $sql_monthly_l .= " m.monthly_id  as chk_id, m.m_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, m.d_comments as comments, 3 as type ";
 
     $sql_monthly_l .= " FROM monthly m, representative_allocated ra, site s, user_tbl u
                       WHERE  m.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id
@@ -282,6 +280,8 @@ function get_sql_monthly($select_count, $manager_id, $selected_sites, $report_ty
     // report type
     if ($report_type == 2) { // attention reports
         $sql_monthly_l .= " AND m.d_comments <> ''";
+    } else  if ($report_type == 3) {
+        $sql_monthly_l .= " AND m.d_comments = ''";
     }
 
     // from date
@@ -379,10 +379,13 @@ mysqli_close($conn);
                         <p><b>Report type: </b><span><select class="selectpicker" name="report_type" required>
                                     <option
                                         value="1" <?php if (empty($report_type) || $report_type == 1) echo 'selected' ?>>
+                                        All
+                                    </option>
+                                    <option value="3" <?php if ($report_type == 3) echo 'selected' ?>>
                                         Regular
                                     </option>
-                                    <option value="2" <?php if ($report_type == 2) echo 'selected' ?>>Attention
-                                        Items
+                                    <option value="2" <?php if ($report_type == 2) echo 'selected' ?>>
+                                        Attention
                                     </option>
                                 </select></span>
                         </p>
@@ -484,7 +487,7 @@ mysqli_close($conn);
                                 <li class="active"><a href="#"><?php echo($i + 1); ?></a></li>
                             <?php } else { ?>
                                 <li>
-                                    <a href="site_manage.php?search_criteria=<?php echo $search_criteria; ?>&page=<?php echo $i; ?>"><?php echo($i + 1); ?></a>
+                                    <a href="manager_report.php?sites%5B%5D=<?php echo implode('&amp;sites%5B%5D=', $selected_sites)?>&chklist_types%5B%5D=<?php echo implode('&amp;chklist_types%5B%5D=', $chklist_types) ?>&report_type=<?php echo $report_type?>&page=<?php echo $i; ?>&search=1"><?php echo($i + 1); ?></a>
                                 </li>
                             <?php }
                         } ?>
