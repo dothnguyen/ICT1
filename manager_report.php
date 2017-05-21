@@ -101,7 +101,7 @@ function count_reports($conn, $login_user,$selected_sites,$chklist_types, $repor
         $sql_monthly = get_sql_monthly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
     }
 
-    $final_sql = "SELECT COUNT(*) as c FROM (";
+    $final_sql = "";
     if ($sql_daily != "") {
         $final_sql .= "(" . $sql_daily . ")";
     }
@@ -126,7 +126,7 @@ function count_reports($conn, $login_user,$selected_sites,$chklist_types, $repor
         $final_sql .= "(" . $sql_monthly . ")";
     }
 
-    $final_sql .= ") x";
+    $final_sql = "SELECT COUNT(*) as c FROM (" . $final_sql . ") x";
 
     $ret = mysqli_fetch_assoc($conn->query($final_sql));
 
