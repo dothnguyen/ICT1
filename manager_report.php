@@ -176,7 +176,7 @@ function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_typ
         $final_sql .= "(" . $sql_monthly . ")";
     }
 
-    $final_sql .=  " ORDER BY created_date LIMIT $skip, $count";
+    $final_sql .=  " ORDER BY created_date DESC LIMIT $skip, $count";
 
     return $conn->query($final_sql);
 }
@@ -208,12 +208,12 @@ function get_sql_daily($manager_id, $selected_sites, $report_type, $from_date, $
 
     // from date
     if (!empty($from_date)) {
-        $sql_daily_l .= " AND DATE(d.d_created_date, '%d/%m/%Y') >= DATE('$from_date', '%d/%m/%Y')'";
+        $sql_daily_l .= " AND DATE_FORMAT(d.d_created_date, '%Y-%m-%d') >= '$from_date'";
     }
 
     // to date
     if (!empty($to_date)) {
-        $sql_daily_l .= " AND DATE(d.d_created_date, '%d/%m/%Y') <= DATE('$to_date', '%d/%m/%Y')";
+        $sql_daily_l .= " AND DATE_FORMAT(d.d_created_date, '%Y-%m-%d') <= '$to_date'";
     }
 
     return $sql_daily_l;
@@ -247,12 +247,12 @@ function get_sql_weekly($manager_id, $selected_sites, $report_type, $from_date, 
 
     // from date
     if (!empty($from_date)) {
-        $sql_weekly_l .= " AND DATE(w.d_created_date, '%d/%m/%Y') >= DATE('$from_date', '%d/%m/%Y')'";
+        $sql_weekly_l .= " AND DATE_FORMAT(w.w_created_date, '%Y-%m-%d') >= '$from_date'";
     }
 
     // to date
     if (!empty($to_date)) {
-        $sql_weekly_l .= " AND DATE(w.d_created_date, '%d/%m/%Y') <= DATE('$to_date', '%d/%m/%Y')";
+        $sql_weekly_l .= " AND DATE_FORMAT(w.w_created_date, '%Y-%m-%d') <= '$to_date'";
     }
 
     return $sql_weekly_l;
@@ -286,12 +286,12 @@ function get_sql_monthly($manager_id, $selected_sites, $report_type, $from_date,
 
     // from date
     if (!empty($from_date)) {
-        $sql_monthly_l .= " AND DATE(m.d_created_date, '%d/%m/%Y') >= DATE('$from_date', '%d/%m/%Y')'";
+        $sql_monthly_l .= " AND DATE_FORMAT(m.m_created_date, '%Y-%m-%d') >= '$from_date'";
     }
 
     // to date
     if (!empty($to_date)) {
-        $sql_monthly_l .= " AND DATE(m.d_created_date, '%d/%m/%Y') <= DATE('$to_date', '%d/%m/%Y')";
+        $sql_monthly_l .= " AND DATE_FORMAT(m.m_created_date, '%Y-%m-%d') <= '$to_date'";
     }
 
     return $sql_monthly_l;
@@ -397,13 +397,13 @@ mysqli_close($conn);
                 <div class="col-xs-12 col-md-offset-2 col-md-4">
                     <div class="form-group">
                         <p><span class="add-on" style="vertical-align: top;height:20px"><b>From date: </b> </span>
-                            <input class="datepicker" type="date" id="txt_fromDate" name="txt_fromDate"/></p>
+                            <input class="datepicker" type="date" id="txt_fromDate" name="txt_fromDate" value="<?php echo $fromdate?>"/></p>
                     </div>
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group">
                         <p><span class="add-on" style="vertical-align: top;height:20px"><b>To date: </b> </span>
-                            <input class="datepicker" type="date" id="txt_toDate" name="txt_toDate"/></p>
+                            <input class="datepicker" type="date" id="txt_toDate" name="txt_toDate" value="<?php echo $todate?>"/></p>
                     </div>
                 </div>
             </div>
@@ -428,7 +428,7 @@ mysqli_close($conn);
                 <thead>
                 <td>No.</td>
                 <td>Checklist</td>
-                <td>Site/Prep</td>
+                <td>Site/Rep</td>
                 <td>Type</td>
                 </thead>
 
