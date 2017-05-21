@@ -15,9 +15,11 @@ session_start();
 check_login();
 
 // check if user can access manager's page
-check_authorize(false);
+//check_authorize(false);
 
 $login_user = $_SESSION['user_info'];
+
+$is_manager = $login_user['role'] == 'manager';
 
 $has_allocation = true;
 
@@ -40,122 +42,154 @@ $uploaded_images = array();
 $chklist_month = "";
 $chklist_submitted_date = "";
 $month = "";
+
+if (!$is_manager) {
 // handle form submission
-if (isset($_REQUEST['submit'])) {
+    if (isset($_REQUEST['submit'])) {
 
-    $conn = db_connect();
+        $conn = db_connect();
 
-    $saved_files = array();
+        $saved_files = array();
 
-    // store the file
-    $target_dir = 'upload/';
+        // store the file
+        $target_dir = 'upload/';
 
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0700);
-    }
-
-    foreach($_FILES['files']['name'] as $key => $tmp_name) {
-
-        // skip empty files
-        if ($_FILES['files']['error'][$key] == 4) {
-            continue; // Skip file if any error found
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0700);
         }
 
-        // get file name
-        $file_name = $_FILES['files']['name'][$key];
-        // get file extension
-        $file_ext=strtolower(end(explode('.', $file_name)));
+        foreach ($_FILES['files']['name'] as $key => $tmp_name) {
 
-        $file_tmp = $_FILES['files']['tmp_name'][$key];
+            // skip empty files
+            if ($_FILES['files']['error'][$key] == 4) {
+                continue; // Skip file if any error found
+            }
 
-        // generate upload file name
-        $upload_file_name = uniqid(rand(), true) . "." . $file_ext;
+            // get file name
+            $file_name = $_FILES['files']['name'][$key];
+            // get file extension
+            $file_ext = strtolower(end(explode('.', $file_name)));
 
-        move_uploaded_file($file_tmp, $target_dir . $upload_file_name);
+            $file_tmp = $_FILES['files']['tmp_name'][$key];
 
-        $saved_files[] = $target_dir . $upload_file_name;
-    }
+            // generate upload file name
+            $upload_file_name = uniqid(rand(), true) . "." . $file_ext;
 
-    // save data
-    $checklist1 = isset($_POST['checklist1']) ? $_POST['checklist1'] : 0;
-    $checklist2 = isset($_POST['checklist2']) ? $_POST['checklist2'] : 0;
-    $checklist3 = isset($_POST['checklist3']) ? $_POST['checklist3'] : 0;
-    $checklist4 = isset($_POST['checklist4']) ? $_POST['checklist4'] : 0;
-    $checklist5 = isset($_POST['checklist5']) ? $_POST['checklist5'] : 0;
-    $checklist6 = isset($_POST['checklist6']) ? $_POST['checklist6'] : 0;
-    $checklist7 = isset($_POST['checklist7']) ? $_POST['checklist7'] : 0;
-    $checklist8 = isset($_POST['checklist8']) ? $_POST['checklist8'] : 0;
-    $checklist9 = isset($_POST['checklist9']) ? $_POST['checklist9'] : 0;
+            move_uploaded_file($file_tmp, $target_dir . $upload_file_name);
 
-    $comment = mysqli_real_escape_string($conn, test_input($_POST['comment']));
-    $site_alloc_id = test_input($_POST['site_alloc_id']);
+            $saved_files[] = $target_dir . $upload_file_name;
+        }
+
+        // save data
+        $checklist1 = isset($_POST['checklist1']) ? $_POST['checklist1'] : 0;
+        $checklist2 = isset($_POST['checklist2']) ? $_POST['checklist2'] : 0;
+        $checklist3 = isset($_POST['checklist3']) ? $_POST['checklist3'] : 0;
+        $checklist4 = isset($_POST['checklist4']) ? $_POST['checklist4'] : 0;
+        $checklist5 = isset($_POST['checklist5']) ? $_POST['checklist5'] : 0;
+        $checklist6 = isset($_POST['checklist6']) ? $_POST['checklist6'] : 0;
+        $checklist7 = isset($_POST['checklist7']) ? $_POST['checklist7'] : 0;
+        $checklist8 = isset($_POST['checklist8']) ? $_POST['checklist8'] : 0;
+        $checklist9 = isset($_POST['checklist9']) ? $_POST['checklist9'] : 0;
+
+        $comment = mysqli_real_escape_string($conn, test_input($_POST['comment']));
+        $site_alloc_id = test_input($_POST['site_alloc_id']);
 
 
-
-    // save data to monthly checklist
-    $sql = "INSERT INTO monthly(m_created_date, d_comments, m_checklist1, m_checklist2, m_checklist3, m_checklist4, m_checklist5, m_checklist6, m_checklist7, m_checklist8, m_checklist9, site_alloc_id)
+        // save data to monthly checklist
+        $sql = "INSERT INTO monthly(m_created_date, d_comments, m_checklist1, m_checklist2, m_checklist3, m_checklist4, m_checklist5, m_checklist6, m_checklist7, m_checklist8, m_checklist9, site_alloc_id)
                   VALUES(NOW(), '$comment', $checklist1, $checklist2, $checklist3, $checklist4, $checklist5, $checklist6, $checklist7, $checklist8, $checklist9, $site_alloc_id);";
 
-    // insert
-    $conn->query($sql);
-    $last_id = $conn->insert_id;
-
-    // insert uploaded files
-    foreach ($saved_files as $file_path) {
-        $sql = "INSERT INTO upload(chklist_id, chklist_type, file_path) VALUES($last_id, 3, '$file_path');";
+        // insert
         $conn->query($sql);
+        $last_id = $conn->insert_id;
+
+        // insert uploaded files
+        foreach ($saved_files as $file_path) {
+            $sql = "INSERT INTO upload(chklist_id, chklist_type, file_path) VALUES($last_id, 3, '$file_path');";
+            $conn->query($sql);
+        }
+
+        mysqli_close($conn);
+
+        header("Location:rep_monthly_chklist.php");
+
+    } else {
+        $conn = db_connect();
+
+        $mode = "";
+
+        // get current monthly checklist
+        //$current_checklist = get_current_daily_chklist($conn, $login_user['user_id']);
+        $current_checklist = get_current_monthly_chklist($conn, $login_user['user_id']);
+
+        if (empty($current_checklist)) {
+            // get the current allocation of the user
+            $user_allocation = get_user_allocation($conn, $login_user['user_id']);
+
+            if ($user_allocation == null) {
+                $has_allocation = false;
+            } else {
+                $site_name = $user_allocation['site_name'];
+                $site_alloc_id = $user_allocation['site_alloc_id'];
+            }
+        } else {
+
+            $mode = "view";
+
+            // init view mode
+            $checklist1 = $current_checklist['m_checklist1'];
+            $checklist2 = $current_checklist['m_checklist2'];
+            $checklist3 = $current_checklist['m_checklist3'];
+            $checklist4 = $current_checklist['m_checklist4'];
+            $checklist5 = $current_checklist['m_checklist5'];
+            $checklist6 = $current_checklist['m_checklist6'];
+            $checklist7 = $current_checklist['m_checklist7'];
+            $checklist8 = $current_checklist['m_checklist8'];
+            $checklist9 = $current_checklist['m_checklist9'];
+
+            $comment = html_escape($current_checklist['d_comments']);
+
+            $site_name = $current_checklist['site_name'];
+            // must get the month
+            // $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['m_created_date']));
+            $chklist_month = date('m/Y', strtotime($current_checklist['m_created_date']));
+            $chklist_submitted_date = date('d/m/Y H:i:s', strtotime($current_checklist['m_created_date']));
+            // get list of images
+            $uploaded_images = get_uploaded_images($conn, $current_checklist['monthly_id']);
+
+        }
+        mysqli_close($conn);
     }
-
-    mysqli_close($conn);
-
-    header("Location:rep_monthly_chklist.php");
-
 } else {
     $conn = db_connect();
 
-    $mode = "";
+    $mode = "view";
 
-    // get current monthly checklist
-    //$current_checklist = get_current_daily_chklist($conn, $login_user['user_id']);
-    $current_checklist = get_current_monthly_chklist($conn, $login_user['user_id']);
+    $id = $_GET['id'];
 
-    if (empty($current_checklist)) {
-        // get the current allocation of the user
-        $user_allocation = get_user_allocation($conn, $login_user['user_id']);
+    // get current check list
+    $current_checklist = get_chklist_by_id($conn, $id);
 
-        if ($user_allocation == null) {
-            $has_allocation = false;
-        } else {
-            $site_name = $user_allocation['site_name'];
-            $site_alloc_id = $user_allocation['site_alloc_id'];
-        }
-    } else {
+    // init view mode
+    $checklist1 = $current_checklist['m_checklist1'];
+    $checklist2 = $current_checklist['m_checklist2'];
+    $checklist3 = $current_checklist['m_checklist3'];
+    $checklist4 = $current_checklist['m_checklist4'];
+    $checklist5 = $current_checklist['m_checklist5'];
+    $checklist6 = $current_checklist['m_checklist6'];
+    $checklist7 = $current_checklist['m_checklist7'];
+    $checklist8 = $current_checklist['m_checklist8'];
+    $checklist9 = $current_checklist['m_checklist9'];
 
-        $mode = "view";
+    $comment = html_escape($current_checklist['d_comments']);
 
-        // init view mode
-        $checklist1 = $current_checklist['m_checklist1'];
-        $checklist2 = $current_checklist['m_checklist2'];
-        $checklist3 = $current_checklist['m_checklist3'];
-        $checklist4 = $current_checklist['m_checklist4'];
-        $checklist5 = $current_checklist['m_checklist5'];
-        $checklist6 = $current_checklist['m_checklist6'];
-        $checklist7 = $current_checklist['m_checklist7'];
-        $checklist8 = $current_checklist['m_checklist8'];
-        $checklist9 = $current_checklist['m_checklist9'];
-
-        $comment = html_escape($current_checklist['d_comments']);
-
-        $site_name = $current_checklist['site_name'];
-// must get the month
-        // $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['m_created_date']));
-        $chklist_month = date('m/Y', strtotime($current_checklist['m_created_date']));
-        $chklist_submitted_date = date('d/m/Y H:i:s', strtotime($current_checklist['m_created_date']));
-        // get list of images
-        $uploaded_images = get_uploaded_images($conn, $current_checklist['monthly_id']);
-
-    }
-    mysqli_close($conn);
+    $site_name = $current_checklist['site_name'];
+    // must get the month
+    // $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['m_created_date']));
+    $chklist_month = date('m/Y', strtotime($current_checklist['m_created_date']));
+    $chklist_submitted_date = date('d/m/Y H:i:s', strtotime($current_checklist['m_created_date']));
+    // get list of images
+    $uploaded_images = get_uploaded_images($conn, $current_checklist['monthly_id']);
 }
 
 /**
@@ -185,6 +219,18 @@ function get_uploaded_images($conn, $chklist_id) {
 function get_current_monthly_chklist($conn, $user_id) {
     $sql = "SELECT m.*, s.site_name FROM monthly m, representative_allocated rep, site s WHERE m.site_alloc_id = rep.site_alloc_id 
             AND rep.user_id=$user_id AND MONTH(m.m_created_date) = MONTH(NOW())
+            AND rep.site_id = s.site_id";
+
+    return mysqli_fetch_assoc($conn->query($sql));
+}
+
+/**
+* @param $conn
+* @param $chk_id
+*/
+function get_chklist_by_id($conn, $chk_id) {
+    $sql = "SELECT m.*, s.site_name FROM monthly m, representative_allocated rep, site s WHERE m.site_alloc_id = rep.site_alloc_id 
+            AND m.monthly_id = $chk_id
             AND rep.site_id = s.site_id";
 
     return mysqli_fetch_assoc($conn->query($sql));

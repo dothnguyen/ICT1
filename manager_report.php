@@ -37,26 +37,26 @@ $report_type = 1;
 $item_per_page = 5;
 $page = 0;
 
-if (isset($_POST['search'])) {
+if (isset($_GET['search'])) {
 
-    if (isset($_POST['sites'])) {
-        $selected_sites = $_POST['sites'];
+    if (isset($_GET['sites'])) {
+        $selected_sites = $_GET['sites'];
     }
 
-    if (isset($_POST['chklist_types'])) {
-        $chklist_types = $_POST['chklist_types'];
+    if (isset($_GET['chklist_types'])) {
+        $chklist_types = $_GET['chklist_types'];
     }
 
-    if (isset($_POST['report_types'])) {
-        $report_type = $_POST['report_types'];
+    if (isset($_GET['report_type'])) {
+        $report_type = $_GET['report_type'];
     }
 
-    if (isset($_POST['txt_fromDate'])) {
-        $fromdate = $_POST['txt_fromDate'];
+    if (isset($_GET['txt_fromDate'])) {
+        $fromdate = $_GET['txt_fromDate'];
     }
 
-    if (isset($_POST['txt_toDate'])) {
-        $todate = $_POST['txt_toDate'];
+    if (isset($_GET['txt_toDate'])) {
+        $todate = $_GET['txt_toDate'];
     }
 
     // calculate number of pages
@@ -147,7 +147,7 @@ function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_typ
 
     $final_sql = "";
     if ($sql_daily != "") {
-        $final_sql = "(" . $sql_daily . ")";
+        $final_sql .= "(" . $sql_daily . ")";
     }
 
     if ($sql_weekly != "") {
@@ -170,7 +170,7 @@ function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_typ
         $final_sql .= "(" . $sql_monthly . ")";
     }
 
-    $final_sql .=  " LIMIT $skip, $count";
+    $final_sql .=  " ORDER BY created_date LIMIT $skip, $count";
 
     return $conn->query($final_sql);
 }
@@ -184,16 +184,17 @@ function get_sql_daily($select_count, $manager_id, $selected_sites, $report_type
     if ($select_count) {
         $sql_daily_l .= " COUNT(*) AS c";
     } else {
-        $sql_daily_l .= " * ";
+        $sql_daily_l .= " d.daily_id as chk_id, d.d_created_date as created_date, s.site_name, u.firstname, u.lastname, d.d_comments as comments, 1 as type ";
     }
 
-    $sql_daily_l .= " FROM daily d, representative_allocated ra, site s
-                      WHERE  d.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id";
+    $sql_daily_l .= " FROM daily d, representative_allocated ra, site s, user_tbl u
+                      WHERE  d.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id 
+                         AND ra.user_id = u.user_id";
 
     // conditions
     // selected sites
     if (!in_array(-1, $selected_sites)) {
-        $sql_daily_l .= " AND ra.site_id IN (" . $selected_sites . ")";
+        $sql_daily_l .= " AND ra.site_id IN (" . implode(',', $selected_sites) . ")";
     }
 
     // report type
@@ -224,16 +225,17 @@ function get_sql_weekly($select_count, $manager_id, $selected_sites, $report_typ
     if ($select_count) {
         $sql_weekly_l .= " COUNT(*) AS c";
     } else {
-        $sql_weekly_l .= " * ";
+        $sql_weekly_l .= " w.weekly_id  as chk_id, w.w_created_date as created_date, s.site_name, u.firstname, u.lastname, w.d_comments as comments, 2 as type ";
     }
 
-    $sql_weekly_l .= " FROM weekly w, representative_allocated ra, site s
-                      WHERE  w.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id";
+    $sql_weekly_l .= " FROM weekly w, representative_allocated ra, site s, user_tbl u
+                      WHERE  w.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id
+                        AND ra.user_id = u.user_id";
 
     // conditions
     // selected sites
     if (!in_array(-1, $selected_sites)) {
-        $sql_weekly_l .= " AND ra.site_id IN (" . $selected_sites . ")";
+        $sql_weekly_l .= " AND ra.site_id IN (" . implode(',', $selected_sites) . ")";
     }
 
     // report type
@@ -264,16 +266,17 @@ function get_sql_monthly($select_count, $manager_id, $selected_sites, $report_ty
     if ($select_count) {
         $sql_monthly_l .= " COUNT(*) AS c";
     } else {
-        $sql_monthly_l .= " * ";
+        $sql_monthly_l .= " m.monthly_id  as chk_id, m.m_created_date as created_date, s.site_name, u.firstname, u.lastname, m.d_comments as comments, 3 as type ";
     }
 
-    $sql_monthly_l .= " FROM monthly m, representative_allocated ra, site s
-                      WHERE  m.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id";
+    $sql_monthly_l .= " FROM monthly m, representative_allocated ra, site s, user_tbl u
+                      WHERE  m.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id
+                        AND ra.user_id = u.user_id";
 
     // conditions
     // selected sites
     if (!in_array(-1, $selected_sites)) {
-        $sql_monthly_l .= " AND ra.site_id IN (" . $selected_sites . ")";
+        $sql_monthly_l .= " AND ra.site_id IN (" . implode(',', $selected_sites) . ")";
     }
 
     // report type
@@ -316,7 +319,7 @@ mysqli_close($conn);
 <?php include_once 'header.php'; ?>
 <?php include_once 'nav.php'; ?>
 <div class="main-content">
-    <form method="post" action="manager_report.php">
+    <form method="get" action="manager_report.php">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-md-offset-2 col-md-8">
@@ -373,12 +376,12 @@ mysqli_close($conn);
                 </div>
                 <div class="col-xs-12 col-md-4">
                     <div class="form-group">
-                        <p><b>Report type: </b><span><select class="selectpicker" name="report_types[]" required>
+                        <p><b>Report type: </b><span><select class="selectpicker" name="report_type" required>
                                     <option
-                                        value="1" <?php if (empty($report_types) || $report_types == 1) echo 'selected' ?>>
+                                        value="1" <?php if (empty($report_type) || $report_type == 1) echo 'selected' ?>>
                                         Regular
                                     </option>
-                                    <option value="2" <?php if ($report_types == 2) echo 'selected' ?>>Attention
+                                    <option value="2" <?php if ($report_type == 2) echo 'selected' ?>>Attention
                                         Items
                                     </option>
                                 </select></span>
@@ -414,11 +417,11 @@ mysqli_close($conn);
     </form>
 </div>
 
-<?php if (isset($_POST['search'])) { ?>
+<?php if (isset($_GET['search'])) { ?>
 <div class="container">
-    <div class="row form-group">
+    <div class="row">
         <div class="col-xs-12 col-md-offset-2 col-md-8">
-            <table class="table-bordered table-striped table-hover table-responsive site-table">
+            <table class="table table-bordered table-striped table-hover table-responsive site-table">
                 <thead>
                 <td>No.</td>
                 <td>Checklist</td>
@@ -429,20 +432,37 @@ mysqli_close($conn);
                 <?php
                 if (!empty($reports)) {
                 foreach ($reports as $report) {
+                    $r_type = empty($report['comments']);
                 ?>
-                <tr>
+                <tr class="<?php if (!$r_type) echo "warning"?>">
                     <td class="index-column"><?php echo($start_idx + $idx + 1) ?></td>
                     <td class="checklist-column">
-
+                        <div>
+                            <?php if($report['type'] == 1) {?>
+                                <a href="rep_daily_chklist.php?mode=view&id=<?php echo $report['chk_id'] ?>">Daily</a>
+                            <?php } else if ($report['type'] == 2) { ?>
+                                <a href="rep_weekly_chklist.php?mode=view&id=<?php echo $report['chk_id'] ?>">Weekly</a>
+                            <?php } else if ($report['type'] == 3) { ?>
+                                <a href="rep_monthly_chklist.php?mode=view&id=<?php echo $report['chk_id'] ?>">Monthly</a>
+                            <?php } ?>
+                        </div>
+                        <div>
+                            <?php echo date('d/m/Y', strtotime($report['created_date'])) ?>
+                        </div>
                     </td>
 
                     <td class="site-column">
-
+                        <div>
+                            Site: <?php echo $report['site_name']?>
+                        </div>
+                        <div>
+                            Rep: <?php echo $report['firstname'] . ' ' . $report['lastname']?>
+                        </div>
                     </td>
 
-
                     <td class="type-column">
-
+                        <?php if ($r_type) echo "Regular";
+                                else echo "Attention Item" ?>
                     </td>
                 </tr>
                     <?php

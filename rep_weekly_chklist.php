@@ -16,9 +16,11 @@ session_start();
 check_login();
 
 // check if user can access manager's page
-check_authorize(false);
+//check_authorize(false);
 
 $login_user = $_SESSION['user_info'];
+
+$is_manager = $login_user['role'] == 'manager';
 
 $has_allocation = true;
 
@@ -42,123 +44,156 @@ $chklist_date = "";
 $cur_date_start = "";
 $cur_date_end = "";
 
+if (!$is_manager) {
+
 // handle form submission
-if (isset($_REQUEST['submit'])) {
+    if (isset($_REQUEST['submit'])) {
 
-    $conn = db_connect();
+        $conn = db_connect();
 
-    $saved_files = array();
+        $saved_files = array();
 
-    // store the file
-    $target_dir = 'upload/';
+        // store the file
+        $target_dir = 'upload/';
 
-    if (!is_dir($target_dir)) {
-        mkdir($target_dir, 0700);
-    }
-
-    foreach($_FILES['files']['name'] as $key => $tmp_name) {
-
-        // skip empty files
-        if ($_FILES['files']['error'][$key] == 4) {
-            continue; // Skip file if any error found
+        if (!is_dir($target_dir)) {
+            mkdir($target_dir, 0700);
         }
 
-        // get file name
-        $file_name = $_FILES['files']['name'][$key];
-        // get file extension
-        $file_ext=strtolower(end(explode('.', $file_name)));
+        foreach ($_FILES['files']['name'] as $key => $tmp_name) {
 
-        $file_tmp = $_FILES['files']['tmp_name'][$key];
+            // skip empty files
+            if ($_FILES['files']['error'][$key] == 4) {
+                continue; // Skip file if any error found
+            }
 
-        // generate upload file name
-        $upload_file_name = uniqid(rand(), true) . "." . $file_ext;
+            // get file name
+            $file_name = $_FILES['files']['name'][$key];
+            // get file extension
+            $file_ext = strtolower(end(explode('.', $file_name)));
 
-        move_uploaded_file($file_tmp, $target_dir . $upload_file_name);
+            $file_tmp = $_FILES['files']['tmp_name'][$key];
 
-        $saved_files[] = $target_dir . $upload_file_name;
-    }
+            // generate upload file name
+            $upload_file_name = uniqid(rand(), true) . "." . $file_ext;
 
-    // save data
-    $checklist1 = isset($_POST['checklist1']) ? $_POST['checklist1'] : 0;
-    $checklist2 = isset($_POST['checklist2']) ? $_POST['checklist2'] : 0;
-    $checklist3 = isset($_POST['checklist3']) ? $_POST['checklist3'] : 0;
-    $checklist4 = isset($_POST['checklist4']) ? $_POST['checklist4'] : 0;
-    $checklist5 = isset($_POST['checklist5']) ? $_POST['checklist5'] : 0;
-    $checklist6 = isset($_POST['checklist6']) ? $_POST['checklist6'] : 0;
-    $checklist7 = isset($_POST['checklist7']) ? $_POST['checklist7'] : 0;
-    $checklist8 = isset($_POST['checklist8']) ? $_POST['checklist8'] : 0;
-    $checklist9 = isset($_POST['checklist9']) ? $_POST['checklist9'] : 0;
+            move_uploaded_file($file_tmp, $target_dir . $upload_file_name);
 
-    $comment = mysqli_real_escape_string($conn, test_input($_POST['comment']));
-    $site_alloc_id = test_input($_POST['site_alloc_id']);
+            $saved_files[] = $target_dir . $upload_file_name;
+        }
+
+        // save data
+        $checklist1 = isset($_POST['checklist1']) ? $_POST['checklist1'] : 0;
+        $checklist2 = isset($_POST['checklist2']) ? $_POST['checklist2'] : 0;
+        $checklist3 = isset($_POST['checklist3']) ? $_POST['checklist3'] : 0;
+        $checklist4 = isset($_POST['checklist4']) ? $_POST['checklist4'] : 0;
+        $checklist5 = isset($_POST['checklist5']) ? $_POST['checklist5'] : 0;
+        $checklist6 = isset($_POST['checklist6']) ? $_POST['checklist6'] : 0;
+        $checklist7 = isset($_POST['checklist7']) ? $_POST['checklist7'] : 0;
+        $checklist8 = isset($_POST['checklist8']) ? $_POST['checklist8'] : 0;
+        $checklist9 = isset($_POST['checklist9']) ? $_POST['checklist9'] : 0;
+
+        $comment = mysqli_real_escape_string($conn, test_input($_POST['comment']));
+        $site_alloc_id = test_input($_POST['site_alloc_id']);
 
 
-    // save data to daily checklist
-    $sql = "INSERT INTO weekly(w_created_date, d_comments, w_checklist1, w_checklist2, w_checklist3, w_checklist4, w_checklist5, w_checklist6, w_checklist7, w_checklist8, w_checklist9, site_alloc_id)
+        // save data to daily checklist
+        $sql = "INSERT INTO weekly(w_created_date, d_comments, w_checklist1, w_checklist2, w_checklist3, w_checklist4, w_checklist5, w_checklist6, w_checklist7, w_checklist8, w_checklist9, site_alloc_id)
                   VALUES(NOW(), '$comment', $checklist1, $checklist2, $checklist3, $checklist4, $checklist5, $checklist6, $checklist7, $checklist8, $checklist9, $site_alloc_id);";
 
-    // insert
-    $conn->query($sql);
-    $last_id = $conn->insert_id;
-
-    // insert uploaded files
-    foreach ($saved_files as $file_path) {
-        $sql = "INSERT INTO upload(chklist_id, chklist_type, file_path) VALUES($last_id, 1, '$file_path');";
+        // insert
         $conn->query($sql);
-    }
+        $last_id = $conn->insert_id;
 
-    mysqli_close($conn);
-
-    header("Location:rep_weekly_chklist.php");
-
-} else {
-    $conn = db_connect();
-
-    $mode = "";
-
-    // get current check list
-    $current_checklist = get_current_weekly_chklist($conn, $login_user['user_id']);
-
-    if (empty($current_checklist)) {
-        // get the current allocation of the user
-        $user_allocation = get_user_allocation($conn, $login_user['user_id']);
-
-        if ($user_allocation == null) {
-            $has_allocation = false;
-        } else {
-            $site_name = $user_allocation['site_name'];
-            $site_alloc_id = $user_allocation['site_alloc_id'];
+        // insert uploaded files
+        foreach ($saved_files as $file_path) {
+            $sql = "INSERT INTO upload(chklist_id, chklist_type, file_path) VALUES($last_id, 1, '$file_path');";
+            $conn->query($sql);
         }
 
-        $cur_date_start = date('d/m/Y', strtotime('monday this week'));
-        $cur_date_end = date('d/m/Y', strtotime('sunday this week'));
+        mysqli_close($conn);
+
+        header("Location:rep_weekly_chklist.php");
 
     } else {
+        $conn = db_connect();
 
-        $mode = "view";
+        $mode = "";
 
-        // init view mode
-        $checklist1 = $current_checklist['w_checklist1'];
-        $checklist2 = $current_checklist['w_checklist2'];
-        $checklist3 = $current_checklist['w_checklist3'];
-        $checklist4 = $current_checklist['w_checklist4'];
-        $checklist5 = $current_checklist['w_checklist5'];
-        $checklist6 = $current_checklist['w_checklist6'];
-        $checklist7 = $current_checklist['w_checklist7'];
-        $checklist8 = $current_checklist['w_checklist8'];
-        $checklist9 = $current_checklist['w_checklist9'];
+        // get current check list
+        $current_checklist = get_current_weekly_chklist($conn, $login_user['user_id']);
 
-        $comment = html_escape($current_checklist['d_comments']);
+        if (empty($current_checklist)) {
+            // get the current allocation of the user
+            $user_allocation = get_user_allocation($conn, $login_user['user_id']);
 
-        $site_name = $current_checklist['site_name'];
+            if ($user_allocation == null) {
+                $has_allocation = false;
+            } else {
+                $site_name = $user_allocation['site_name'];
+                $site_alloc_id = $user_allocation['site_alloc_id'];
+            }
 
-        $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['w_created_date']));
+            $cur_date_start = date('d/m/Y', strtotime('monday this week'));
+            $cur_date_end = date('d/m/Y', strtotime('sunday this week'));
 
-        // get list of images
-        $uploaded_images = get_uploaded_images($conn, $current_checklist['weekly_id']);
+        } else {
 
+            $mode = "view";
+
+            // init view mode
+            $checklist1 = $current_checklist['w_checklist1'];
+            $checklist2 = $current_checklist['w_checklist2'];
+            $checklist3 = $current_checklist['w_checklist3'];
+            $checklist4 = $current_checklist['w_checklist4'];
+            $checklist5 = $current_checklist['w_checklist5'];
+            $checklist6 = $current_checklist['w_checklist6'];
+            $checklist7 = $current_checklist['w_checklist7'];
+            $checklist8 = $current_checklist['w_checklist8'];
+            $checklist9 = $current_checklist['w_checklist9'];
+
+            $comment = html_escape($current_checklist['d_comments']);
+
+            $site_name = $current_checklist['site_name'];
+
+            $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['w_created_date']));
+
+            // get list of images
+            $uploaded_images = get_uploaded_images($conn, $current_checklist['weekly_id']);
+
+        }
+        mysqli_close($conn);
     }
-    mysqli_close($conn);
+} else {
+
+    $conn = db_connect();
+
+    $mode = "view";
+
+    $id = $_GET['id'];
+
+    // get current check list
+    $current_checklist = get_chklist_by_id($conn, $id);
+
+    // init view mode
+    $checklist1 = $current_checklist['w_checklist1'];
+    $checklist2 = $current_checklist['w_checklist2'];
+    $checklist3 = $current_checklist['w_checklist3'];
+    $checklist4 = $current_checklist['w_checklist4'];
+    $checklist5 = $current_checklist['w_checklist5'];
+    $checklist6 = $current_checklist['w_checklist6'];
+    $checklist7 = $current_checklist['w_checklist7'];
+    $checklist8 = $current_checklist['w_checklist8'];
+    $checklist9 = $current_checklist['w_checklist9'];
+
+    $comment = html_escape($current_checklist['d_comments']);
+
+    $site_name = $current_checklist['site_name'];
+
+    $chklist_date = date('d/m/Y H:i:s', strtotime($current_checklist['w_created_date']));
+
+    // get list of images
+    $uploaded_images = get_uploaded_images($conn, $current_checklist['weekly_id']);
 }
 
 /**
@@ -188,6 +223,18 @@ function get_uploaded_images($conn, $chklist_id) {
 function get_current_weekly_chklist($conn, $user_id) {
     $sql = "SELECT w.*, s.site_name FROM weekly w, representative_allocated rep, site s WHERE w.site_alloc_id = rep.site_alloc_id 
             AND rep.user_id=$user_id AND WEEK(w.w_created_date, 1) = WEEK(NOW(), 1)
+            AND rep.site_id = s.site_id";
+
+    return mysqli_fetch_assoc($conn->query($sql));
+}
+
+/**
+ * @param $conn
+ * @param $chk_id
+ */
+function get_chklist_by_id($conn, $chk_id) {
+    $sql = "SELECT w.*, s.site_name FROM weekly w, representative_allocated rep, site s WHERE w.site_alloc_id = rep.site_alloc_id 
+            AND w.weekly_id = $chk_id
             AND rep.site_id = s.site_id";
 
     return mysqli_fetch_assoc($conn->query($sql));
