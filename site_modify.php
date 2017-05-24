@@ -131,29 +131,29 @@ if (isset($_POST['btnSave'])) {
 
 <section class="main-content">
     <div class="container">
-        <div class="col-xs-12 col-md-9 col-md-push-2">
+        <div class="col-xs-12 col-md-8 col-md-push-2">
             <div class="right-panel">
                 <div class="page-title"><span><?php if ($mode == 'new') echo 'Add Site'; else echo 'Modify Site';?></span></div>
                 <div class="page-content">
-                    <form data-toggle="validator" action="site_modify.php" class="form-horizontal" method="post">
+                    <form action="site_modify.php" class="form-horizontal" method="post">
                         <div class="form-group <?php if (!empty($msg['site_name'])) echo "has-error";?>">
                             <label for="txtSiteName" class="col-sm-3 control-label">Site Name</label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-9">
                                 <input type="text" class="form-control" id="txtSiteName" name="txtSiteName" value="<?php echo html_escape($site_name); ?>" required/>
                             </div>
                             <?php if (!empty($msg['site_name'])) {?>
-                                <div class="col-sm-offset-3 col-sm-8">
+                                <div class="col-sm-offset-3 col-sm-9">
                                     <span class="help-block"><?php echo $msg['site_name']?></span>
                                 </div>
                             <?php } ?>
                         </div>
                         <div class="form-group <?php if (!empty($msg['site_address'])) echo "has-error";?>">
                             <label for="txtAddress" class="col-sm-3 control-label">Site Address</label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-9">
                                 <input type="text" class="form-control" id="txtAddress" name="txtAddress" value="<?php echo html_escape($site_addr); ?>" required/>
                             </div>
                             <?php if (!empty($msg['site_address'])) {?>
-                                <div class="col-sm-offset-3 col-sm-8">
+                                <div class="col-sm-offset-3 col-sm-9">
                                     <span class="help-block"><?php echo $msg['site_address']?></span>
                                 </div>
                             <?php } ?>
@@ -161,11 +161,11 @@ if (isset($_POST['btnSave'])) {
 						
                         <div class="form-group <?php if (!empty($msg['site_tel'])) echo "has-error";?>">
                             <label for="txtPhoneNumber" class="col-sm-3 control-label">Phone Number</label>
-                            <div class="col-sm-8">
+                            <div class="col-sm-9">
                                 <input type="number" class="form-control" maxlength="12" id="txtPhoneNumber" name="txtPhoneNumber" value="<?php echo html_escape($site_tel); ?>" required/>
                             </div>
                             <?php if (!empty($msg['site_tel'])) {?>
-                                <div class="col-sm-offset-3 col-sm-8">
+                                <div class="col-sm-offset-3 col-sm-9">
                                     <span class="help-block"><?php echo $msg['site_tel']?></span>
                                 </div>
                             <?php } ?>
@@ -179,7 +179,7 @@ if (isset($_POST['btnSave'])) {
                                 <button type="submit" class="btn btn-default btn-block btn-primary" name="btnSave">Save</button>
                             </div>
                             <div class="col-sm-3  col-xs-4">
-                                <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
+                                <button type="submit" class="btn btn-default btn-block" name="btnCancel" formnovalidate="" >Cancel</button>
                             </div>
                         </div>
                         <?php } else { ?>
@@ -193,7 +193,7 @@ if (isset($_POST['btnSave'])) {
                                 </div>
 
                                 <div class="col-sm-3  col-xs-3">
-                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel">Cancel</button>
+                                    <button type="button" class="btn btn-default btn-block" name="btnCancel" formnovalidate="" >Cancel</button>
                                 </div>
                             </div>
                         <?php } ?>
@@ -204,11 +204,11 @@ if (isset($_POST['btnSave'])) {
                 </div>
             </div>
         </div>
-        <div class="col-xs-12 col-md-3 col-md-pull-9">
+        <!--<div class="col-xs-12 col-md-3 col-md-pull-9">
             <div class="text-center">
 
             </div>
-        </div>
+        </div>-->
     </div>
 </section>
 
