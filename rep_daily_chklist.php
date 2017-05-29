@@ -347,7 +347,7 @@ function get_user_allocation($conn, $user_id) {
         <div class="row checklist-title">
             <div class="col-md-2 hidden-sm"></div>
             <div class="col-md-8 col-sm-12">
-                <span>Comment</span>
+                <span>Attention Items Comments</span>
             </div>
         </div>
         <div class="row checklist-controls">
