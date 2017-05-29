@@ -91,13 +91,7 @@ if (isset($_POST['btnSave'])) {
 		$msg['email'] = "Email is not a valid email address";
 		}
 	}
-	
-	
-	
 
-			
-		
-    
 
     if (empty($msg)) {
         $conn = db_connect();
@@ -105,8 +99,9 @@ if (isset($_POST['btnSave'])) {
 
             modify_user($conn, $user_id, mysqli_real_escape_string($conn, $firstname),
                 mysqli_real_escape_string($conn, $lastname),
-                mysqli_real_escape_string($conn, $email),
-                mysqli_real_escape_string($conn, $username));
+                mysqli_real_escape_string($conn, $email));
+
+            header("Location:user_manage.php");
 
         } else if ($mode == 'new') {
 			
@@ -122,7 +117,7 @@ if (isset($_POST['btnSave'])) {
 				insert_new_user($conn, mysqli_real_escape_string($conn, $firstname),
                     mysqli_real_escape_string($conn, $lastname),
                     mysqli_real_escape_string($conn, $email),
-                    mysqli_real_escape_string($conn, $username),  $generate_password, $login_user['user_id']);
+                    mysqli_real_escape_string($conn, $temp_username),  $generate_password, $login_user['user_id']);
 			
 				//send email to the new user
 				$emailpass = test_input($_POST['txtPassword']);
@@ -135,7 +130,7 @@ if (isset($_POST['btnSave'])) {
 			}
 			// 
 			else {
-			$msg['new_username'] = "Username taken, change the username";
+			    $msg['new_username'] = "Username taken, change the username";
 			}
 			
 			

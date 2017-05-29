@@ -51,14 +51,14 @@ $page_name = basename($_SERVER['PHP_SELF']);
                 <?php if ($page_name == 'site_manage.php' || $page_name == 'site_modify.php') {?>
                     <li class = "active"><a href = "#">Site Management</a></li>
                 <?php } else {?>
-                    <li><a href = "site_manage.php">Site Manage</a></li>
+                    <li><a href = "site_manage.php">Site Management</a></li>
                 <?php }?>
 				
 				
                 <?php if ($page_name == 'user_manage.php' || $page_name == 'user_modify.php') {?>
                     <li class = "active"><a href = "#">User Management</a></li>
                 <?php } else {?>
-                    <li><a href = "user_manage.php">User Manage</a></li>
+                    <li><a href = "user_manage.php">User Management</a></li>
                 <?php }?>
 
             </ul>
