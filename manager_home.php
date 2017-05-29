@@ -65,7 +65,7 @@ mysqli_close($conn);
 <div class="container">
     <div  class="row">
         <div class="col-xs-12 col-md-offset-2 col-md-8">
-        <div class="page-title"><span>List of sites has not submitted daily checklists</span></div>
+        <div class="page-title"><span>List of sites that do not have checklist submitted</span></div>
             <div class="site-list-container">
                 <?php
                 if (!empty($sites)) {
