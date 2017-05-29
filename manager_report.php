@@ -38,7 +38,7 @@ $item_per_page = 5;
 $page = 0;
 
 
-if (isset($_GET['search'])) {
+if (isset($_GET['search']) || isset($_GET['export'])) {
     if (isset($_GET['sites'])) {
         $selected_sites = $_GET['sites'];
     }
@@ -63,7 +63,7 @@ if (isset($_GET['search'])) {
         $page = intval($_GET['page']);
     }
 
-// calculate number of pages
+    // calculate number of pages
     $count = count_reports($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate);
 
     $start_idx = $page * $item_per_page;
@@ -79,6 +79,92 @@ if (isset($_GET['search'])) {
 
     $idx = 0;
 
+
+    if (isset($_GET['export'])) {
+        $report = get_result_to_export($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate);
+
+        if (!empty($reports)) {
+
+            require_once 'Classes/PHPExcel/IOFactory.php';
+
+            $inputFileType = PHPExcel_IOFactory::identify('template/template.xlsx');
+            $objReader = PHPExcel_IOFactory::createReader($inputFileType);
+            $objPHPExcel = $objReader->load("template/template.xlsx");
+
+            $baseRow = 5;
+            $row = $baseRow;
+            foreach ($reports as $idx=>$report) {
+                $row = $baseRow + $idx;
+                $objPHPExcel->getActiveSheet()->setCellValue("B".$row, ($idx + 1));
+
+                $objPHPExcel->getActiveSheet()->setCellValue("C".$row, date('d/m/Y', strtotime($report['created_date'])));
+
+                if($report['type'] == 1) {
+                    $objPHPExcel->getActiveSheet()->setCellValue("D".$row, "Daily");
+                } else if($report['type'] == 2) {
+                    $objPHPExcel->getActiveSheet()->setCellValue("D".$row, "Weekly");
+                } else  if($report['type'] == 3) {
+                    $objPHPExcel->getActiveSheet()->setCellValue("D".$row, "Monthly");
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue("E".$row, $report['firstname'] . ' ' . $report['lastname']);
+
+                $objPHPExcel->getActiveSheet()->setCellValue("F".$row, $report['site_name']);
+
+
+                if ($report['chk1'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("G".$row, 'x');
+                }
+                if ($report['chk2'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("H".$row, 'x');
+                }
+                if ($report['chk3'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("I".$row, 'x');
+                }
+                if ($report['chk4'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("J".$row, 'x');
+                }
+                if ($report['chk5'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("K".$row, 'x');
+                }
+                if ($report['chk6'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("L".$row, 'x');
+                }
+                if ($report['chk7'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("M".$row, 'x');
+                }
+                if ($report['chk8'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("N".$row, 'x');
+                }
+                if ($report['chk9'] == '1') {
+                    $objPHPExcel->getActiveSheet()->setCellValue("O".$row, 'x');
+                }
+
+                $objPHPExcel->getActiveSheet()->setCellValue("P".$row, $report['comments']);
+            }
+
+            $border_style= array('borders' => array('allborders' => array('style' =>
+                PHPExcel_Style_Border::BORDER_THIN,'color' => array('argb' => '000000'),)));
+
+            $sheet = $objPHPExcel->getActiveSheet();
+            $sheet->getStyle("B".$baseRow . ":" . "P" . $row)->applyFromArray($border_style);
+
+            // Redirect output to a client’s web browser (Excel2007)
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="report.xlsx"');
+            header('Cache-Control: max-age=0');
+            // If you're serving to IE 9, then the following may be needed
+            header('Cache-Control: max-age=1');
+
+            $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+            ob_end_clean();
+
+            $objWriter->save('php://output');
+
+            exit;
+        }
+    }
 }
 
 
@@ -184,10 +270,60 @@ function get_reports_with_paging($conn, $login_user,$selected_sites,$chklist_typ
 /**
  *
  */
+function get_result_to_export($conn, $login_user,$selected_sites,$chklist_types, $report_type, $fromdate, $todate) {
+    $sql_daily = "";
+    if (in_array(1, $chklist_types)) {
+        $sql_daily = get_sql_daily($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+    }
+
+    $sql_weekly = "";
+    if (in_array(2, $chklist_types)) {
+        $sql_weekly = get_sql_weekly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+    }
+
+    $sql_monthly = "";
+    if (in_array(3, $chklist_types)) {
+        $sql_monthly = get_sql_monthly($login_user, $selected_sites, $report_type, mysqli_real_escape_string($conn, $fromdate), mysqli_real_escape_string($conn, $todate));
+    }
+
+    $final_sql = "";
+    if ($sql_daily != "") {
+        $final_sql .= "(" . $sql_daily . ")";
+    }
+
+    if ($sql_weekly != "") {
+        if($final_sql != "") {
+
+            $final_sql .= " UNION ";
+
+        }
+
+        $final_sql .= "(" . $sql_weekly . ")";
+    }
+
+    if ($sql_monthly != "") {
+        if($final_sql != "") {
+
+            $final_sql .= " UNION ";
+
+        }
+
+        $final_sql .= "(" . $sql_monthly . ")";
+    }
+
+    $final_sql .=  " ORDER BY created_date DESC ";
+
+    return $conn->query($final_sql);
+}
+
+/**
+ *
+ */
 function get_sql_daily($manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
     $sql_daily_l = " SELECT ";
-    $sql_daily_l .= " d.daily_id as chk_id, d.d_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, d.d_comments as comments, 1 as type ";
+    $sql_daily_l .= " d.daily_id as chk_id, d.d_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, d.d_comments as comments, 1 as type,
+                        d_checklist1 as chk1, d_checklist2 as chk2, d_checklist3 as chk3, d_checklist4 as chk4, d_checklist5 as chk5, d_checklist6 as chk6, d_checklist7 as chk7, d_checklist8 as chk8, d_checklist9 as chk9 ";
 
     $sql_daily_l .= " FROM daily d, representative_allocated ra, site s, user_tbl u
                       WHERE  d.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id 
@@ -226,7 +362,8 @@ function get_sql_daily($manager_id, $selected_sites, $report_type, $from_date, $
 function get_sql_weekly($manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
     $sql_weekly_l = " SELECT ";
-    $sql_weekly_l .= " w.weekly_id  as chk_id, w.w_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, w.d_comments as comments, 2 as type ";
+    $sql_weekly_l .= " w.weekly_id  as chk_id, w.w_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, w.d_comments as comments, 2 as type, 
+                      w_checklist1 as chk1, w_checklist2 as chk2, w_checklist3 as chk3, w_checklist4 as chk4, w_checklist5 as chk5, w_checklist6 as chk6, w_checklist7 as chk7, w_checklist8 as chk8, w_checklist9 as chk9 ";
 
     $sql_weekly_l .= " FROM weekly w, representative_allocated ra, site s, user_tbl u
                       WHERE  w.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id
@@ -265,7 +402,8 @@ function get_sql_weekly($manager_id, $selected_sites, $report_type, $from_date, 
 function get_sql_monthly($manager_id, $selected_sites, $report_type, $from_date, $to_date) {
 
     $sql_monthly_l = " SELECT ";
-    $sql_monthly_l .= " m.monthly_id  as chk_id, m.m_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, m.d_comments as comments, 3 as type ";
+    $sql_monthly_l .= " m.monthly_id  as chk_id, m.m_created_date as created_date, s.site_name as site_name, u.firstname as firstname, u.lastname as lastname, m.d_comments as comments, 3 as type, 
+                    m_checklist1 as chk1, m_checklist2 as chk2, m_checklist3 as chk3, m_checklist4 as chk4, m_checklist5 as chk5, m_checklist6 as chk6, m_checklist7 as chk7, m_checklist8 as chk8, m_checklist9 as chk9 ";
 
     $sql_monthly_l .= " FROM monthly m, representative_allocated ra, site s, user_tbl u
                       WHERE  m.site_alloc_id = ra.site_alloc_id AND ra.site_id = s.site_id AND s.manager_id = $manager_id
@@ -318,8 +456,8 @@ mysqli_close($conn);
 <body>
 <?php include_once 'header.php'; ?>
 <?php include_once 'nav.php'; ?>
+<form method="get" action="manager_report.php">
 <div class="main-content">
-    <form method="get" action="manager_report.php">
         <div class="container">
             <div class="row">
                 <div class="col-xs-12 col-md-offset-2 col-md-8">
@@ -416,11 +554,10 @@ mysqli_close($conn);
                     </p>
                 </div>
             </div>
-
-    </form>
+        </div>
 </div>
 
-<?php if (isset($_GET['search'])) { ?>
+<?php if (isset($_GET['search']) || isset($_GET['export'])) { ?>
 <div class="container">
     <div class="row">
         <div class="col-xs-12 col-md-offset-2 col-md-8">
@@ -476,8 +613,6 @@ mysqli_close($conn);
                     <tr><td colspan="4">No data found.</td></tr>
                 <?php } ?>
             </table>
-
-            </table>
             <?php if ($num_page > 1) { ?>
                 <div class="pagination-container">
                     <ul class="pagination">
@@ -497,9 +632,17 @@ mysqli_close($conn);
             } ?>
         </div>
     </div>
+    <?php if (!empty($reports)) {?>
+    <div class="row">
+        <div class="col-xs-10">
+            <button type="submit" name="export" class="btn btn-primary active pull-right" id="search">Export Excel</button>
+        </div>
+    </div>
+    <?php } ?>
 </div>
 <?php } ?>
-
+    <input type="hidden" name="page" value="<?php echo $page; ?>">
+</form>
 
 <script src="js/jquery-1.12.3.js"></script>
 <script src="js/bootstrap.js"></script>
