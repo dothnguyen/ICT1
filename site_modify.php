@@ -193,7 +193,7 @@ if (isset($_POST['btnSave'])) {
                                 </div>
 
                                 <div class="col-sm-3  col-xs-3">
-                                    <button type="button" class="btn btn-default btn-block" name="btnCancel" formnovalidate="" >Cancel</button>
+                                    <button type="submit" class="btn btn-default btn-block" name="btnCancel" formnovalidate="" >Cancel</button>
                                 </div>
                             </div>
                         <?php } ?>
