@@ -37,7 +37,8 @@ function get_sites_of_manager_with_paging($conn, $managerId, $search, $skip, $co
             FROM site a LEFT JOIN (SELECT s.*, ra.site_id, ra.site_rep_active_status, ra.site_alloc_id 
                                     FROM user_tbl s, representative_allocated ra 
                                     WHERE s.user_id = ra.user_id and ra.site_rep_active_status = 1) b on a.site_id = b.site_id 
-            WHERE a.manager_id =$managerId" ;
+            WHERE a.manager_id =$managerId
+             AND a.active_status = 1" ;
     //end teresa edited
 
     if (!empty($search)) {
