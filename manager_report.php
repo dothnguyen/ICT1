@@ -81,9 +81,10 @@ if (isset($_GET['search']) || isset($_GET['export'])) {
 
 
     if (isset($_GET['export'])) {
-        $report = get_result_to_export($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate);
 
-        if (!empty($reports)) {
+        $export_report = get_result_to_export($conn, $login_user['user_id'], $selected_sites, $chklist_types, $report_type, $fromdate, $todate);
+
+        if (!empty($export_report)) {
 
             require_once 'Classes/PHPExcel/IOFactory.php';
 
@@ -93,7 +94,7 @@ if (isset($_GET['search']) || isset($_GET['export'])) {
 
             $baseRow = 5;
             $row = $baseRow;
-            foreach ($reports as $idx=>$report) {
+            foreach ($export_report as $idx=>$report) {
                 $row = $baseRow + $idx;
                 $objPHPExcel->getActiveSheet()->setCellValue("B".$row, ($idx + 1));
 
